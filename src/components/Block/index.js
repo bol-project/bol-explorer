@@ -12,10 +12,7 @@ class Block extends Component {
         super();
 
         this.state = {
-
         };
-
-
     }
 
     componentWillMount() {
@@ -74,9 +71,9 @@ class Block extends Component {
 
         console.log("state is : " + JSON.stringify(this.state));
 
-       // const block = this.state.block;
-     //   const difficulty = parseInt(block.difficulty, 10);
-     //   const difficultyTotal = parseInt(block.totalDifficulty, 10);
+        //const block = this.state.block;
+        //const difficulty = parseInt(block.difficulty, 10);
+        //const difficultyTotal = parseInt(block.totalDifficulty, 10);
         return (
             <div className="Block">
                 <h2>Block Info</h2>
