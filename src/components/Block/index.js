@@ -93,7 +93,7 @@ class Block extends Component {
                         <tr><td className="tdLabel">previousblockhash: </td>
                             <td><Link to={`../block/${this.state.previousblockhash}`}>{this.state.previousblockhash}</Link></td></tr>
                         <tr><td className="tdLabel">nonce: </td><td>{this.state.nonce}</td></tr>
-                        <tr><td className="tdLabel">nextconsensus: </td><td>{this.state.nextconsensus}</td></tr>
+                        BlockListElement<tr><td className="tdLabel">nextconsensus: </td><td>{this.state.nextconsensus}</td></tr>
                         <tr><td className="tdLabel">nextblockhash: </td>
                             <td><Link to={`../block/${this.state.nextblockhash}`}>{this.state.nextblockhash}</Link></td></tr>
                         <tr><td className="tdLabel">merkleroot: </td><td>{this.state.merkleroot}</td></tr>

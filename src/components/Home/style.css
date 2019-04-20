@@ -1,0 +1,27 @@
+
+.table-list {
+    margin: 0px 100px 0px 100px;
+
+}
+
+.list-element{
+    margin: 0 auto 5px;
+    box-shadow: 0 6px 12px #181835;
+    background-color: #c3f7ff !important;
+    border-left: 6px solid blue;
+    border-color: blue !important;
+}
+
+table {
+
+    width: 70%;
+    padding: 100px;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
