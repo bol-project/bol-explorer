@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom'
 import './style.css';
 import BlockListElement from "./BlockListElement";
 import TransactionListElement from "./TransactionListElement";
+import WorldPopulationElement from "./WorldPopulationElement";
+import TotalCommunityElement from "./TotalCommunityElement";
+import AccountListElement from "./AccountListElement";
 import TotalActivity from "./TotalActivity";
 import MarketActivity from "./MarketActivity";
 
@@ -75,6 +78,33 @@ class Home extends Component {
             {index: 1, size: 2232, version: 1, hash: '4', time: 1551338583}, {index: 1, size: 3426, version: 1, hash: '5', time: 1551338588}];
         this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
 
+        var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
+            {dayId: 3, day: '01/03/2019', population: 88}, {dayId: 4, day: '01/04/2019', population: 7055}, {dayId: 5, day: '01/05/2019', population: 551},
+            {dayId: 6, day: '01/06/2019', population: 888}, {dayId: 7, day: '01/07/2019', population: 1001}, {dayId: 8, day: '01/08/2019', population: 1200},
+            {dayId: 9, day: '01/09/2019', population: 1500}, {dayId: 10, day: '01/10/2019', population: 1909}, {dayId: 11, day: '01/11/2019', population: 5001},
+            {dayId: 12, day: '01/12/2019', population: 1996}, {dayId: 13, day: '01/13/2019', population: 90668}, {dayId: 14, day: '01/14/2019', population: 10996},
+            {dayId: 15, day: '01/15/2019', population: 70258}, {dayId: 16, day: '01/16/2019', population: 99366}, {dayId: 17, day: '01/17/2019', population: 1000580},
+            {dayId: 18, day: '01/18/2019', population: 999999}, {dayId: 19, day: '01/19/2019', population: 1000025}, {dayId: 20, day: '01/20/2019', population: 9000000}];
+        this.state.worldPopulatonDataList = worldPopulationData.map(item => <WorldPopulationElement key={item.dayId} item={item}/>)
+
+        var totalCommunityData = [{dayId: 1, day: '01/01/2019', community: 10}, {dayId: 2, day: '01/02/2019', community: 12},
+            {dayId: 3, day: '01/03/2019', community: 88}, {dayId: 4, day: '01/04/2019', community: 7055}, {dayId: 5, day: '01/05/2019', community: 551},
+            {dayId: 6, day: '01/06/2019', community: 888}, {dayId: 7, day: '01/07/2019', community: 1001}, {dayId: 8, day: '01/08/2019', community: 1200},
+            {dayId: 9, day: '01/09/2019', community: 1500}, {dayId: 10, day: '01/10/2019', community: 1909}, {dayId: 11, day: '01/11/2019', community: 5001},
+            {dayId: 12, day: '01/12/2019', community: 1996}, {dayId: 13, day: '01/13/2019', community: 90668}, {dayId: 14, day: '01/14/2019', community: 10996},
+            {dayId: 15, day: '01/15/2019', community: 70258}, {dayId: 16, day: '01/16/2019', community: 99366}, {dayId: 17, day: '01/17/2019', community: 1000580},
+            {dayId: 18, day: '01/18/2019', community: 999999}, {dayId: 19, day: '01/19/2019', community: 1000025}, {dayId: 20, day: '01/20/2019', community: 9000000}];
+        this.state.totalCommunityDataList = totalCommunityData.map(item => <TotalCommunityElement key={item.dayId} item={item}/>)
+
+        var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {accountHash: 2, codename: 'myAccount2'}, {accountHash: 3, codename: 'myAccount3'},
+            {accountHash: 4, codename: 'myAccount4'}, {accountHash: 5, codename: 'myAccount5'}, {accountHash: 6, codename: 'myAccount6'}, {accountHash: 7, codename: 'myAccount7'},
+            {accountHash: 8, codename: 'myAccount8'}, {accountHash: 9, codename: 'myAccount9'}, {accountHash: 10, codename: 'myAccount10'}, {accountHash: 11, codename: 'myAccount11'},
+            {accountHash: 12, codename: 'myAccount12'}, {accountHash: 13, codename: 'myAccount13'}, {accountHash: 14, codename: 'myAccount14'}, {accountHash: 15, codename: 'myAccount15'},
+            {accountHash: 16, codename: 'myAccount16'}, {accountHash: 17, codename: 'myAccount17'}, {accountHash: 18, codename: 'myAccount18'}, {accountHash: 19, codename: 'myAccount19'},
+            {accountHash: 20, codename: 'myAccount20'}];
+        this.state.totalAccountsDataList = totalAccountsData.map(item => <AccountListElement key={item.accountHash} item={item}/>)
+
+
         return (
             <div className="Home">
 
@@ -100,6 +130,29 @@ class Home extends Component {
                 </div>
                 <Link to="/blocks/1">See all blocks</Link>
 
+                <br/>
+                <br/>
+                World Population by day
+                <div className="table-list">
+                    {this.state.worldPopulatonDataList}
+                </div>
+                <Link to="/worldPopulationDays/1">To all days</Link>
+
+                <br/>
+                <br/>
+                Total Community People
+                <div className="table-list">
+                    {this.state.totalCommunityDataList}
+                </div>
+                <Link to="/totalCommunityDays/1">To all days</Link>
+
+                <br/>
+                <br/>
+                Total Accounts
+                <div className="table-list">
+                    {this.state.totalAccountsDataList}
+                </div>
+                <Link to="/accounts/1">To all accounts</Link>
 
             </div>
         );

@@ -8,6 +8,10 @@ import Blocks from './../Blocks';
 import Block from './../Block';
 import Addresses from './../Addresses';
 import Address from './../Address';
+import WorldPopulationDays from './../WorldPopulationDays';
+import TotalCommunityDays from './../TotalCommunityDays';
+import Accounts from './../Accounts';
+import Account from './../Account';
 import Home from './../Home';
 import Header from './Header'
 import Footer from './Footer'
@@ -57,6 +61,27 @@ class App extends Component {
                             <Route exact path="/address" render={() => (
                                 <h3>Please select an addressHash!</h3>
                             )}/>
+
+                            <Route path="/worldPopulationDays/:page" component={WorldPopulationDays}/>
+                            <Route exact path="/worldPopulationDays" render={() => (
+                                <h3>Current page not found!</h3>
+                            )}/>
+
+                            <Route path="/totalCommunityDays/:page" component={TotalCommunityDays}/>
+                            <Route exact path="/totalCommunityDays" render={() => (
+                                <h3>Current page not found!</h3>
+                            )}/>
+
+                            <Route path="/accounts/:page" component={Accounts}/>
+                            <Route exact path="/accounts" render={() => (
+                                <h3>Accounts page not found!</h3>
+                            )}/>
+                            <Route path="/account/:accountHash" component={Account}/>
+                            <Route exact path="/account" render={() => (
+                                <h3>Please select an accountHash!</h3>
+                            )}/>
+
+
 
                         </div>
                     </Router>
