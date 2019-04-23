@@ -1,6 +1,6 @@
-import { slide, CustomIcon} from 'react-burger-menu'
+import { scaleRotate as Menu, CustomIcon} from 'react-burger-menu'
 import React, { Component } from 'react';
-import Menu from 'react-burger-menu/lib/menus/slide' //ToDo: Change the styling
+//import Menu from 'react-burger-menu/lib/menus/slide' //ToDo: Change the styling
 
 
 class Sidebar extends React.Component {
@@ -41,14 +41,16 @@ class Sidebar extends React.Component {
             isOpen={this.state.menuOpen}
             onStateChange={(state) => this.handleStateChange(state)}
             >
-            <a id="accounts" className="menu-item" href="/accounts">Accounts</a>
-            <a id="address" className="menu-item" href="/address">Address</a>
-            <a id="app" className="menu-item" href="/app">App</a>
-            <a id="blocks" className="menu-item" href="/blocks">Blocks</a>
-            <a id="home" className="menu-item" href="/home">Home</a>
-            <a id="totalcommunitydays" className="menu-item" href="/totalcommunitydays">Total community days</a>
-            <a id="transactions" className="menu-item" href="/transactions">Transactions</a>
-            <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a>
+            <main id="page-wrap">
+                <a id="accounts" className="menu-item" href="/accounts">Accounts</a>
+                <a id="address" className="menu-item" href="/address">Address</a>
+                <a id="app" className="menu-item" href="/app">App</a>
+                <a id="blocks" className="menu-item" href="/blocks">Blocks</a>
+                <a id="home" className="menu-item" href="/home">Home</a>
+                <a id="totalcommunitydays" className="menu-item" href="/totalcommunitydays">Total community days</a>
+                <a id="transactions" className="menu-item" href="/transactions">Transactions</a>
+                <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a>
+            </main>
             </Menu>
             <CustomIcon onClick={() => this.toggleMenu()} />
         </div>
