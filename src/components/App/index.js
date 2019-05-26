@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+
 import './style.css';
+
+import IndexNavbar from "components/Navbars/IndexNavbar.jsx";
+import PageHeader from "components/PageHeader/PageHeader.jsx";
+import Footer from "components/Footer/Footer.jsx";
 
 import Transactions from './../Transactions';
 import Transaction from './../Transaction';
@@ -13,83 +18,87 @@ import TotalCommunityDays from './../TotalCommunityDays';
 import Accounts from './../Accounts';
 import Account from './../Account';
 import Home from './../Home';
-import Header from './Header'
-import Footer from './Footer'
+
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 class App extends Component {
+    componentDidMount() {
+        document.body.classList.toggle("index-page");
+    }
+    componentWillUnmount() {
+        document.body.classList.toggle("index-page");
+    }
+
     render() {
         return (
             <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h2>Block Explorer</h2>
-                </div>
-
-                <Header/>
-
                 <div className="App-nav">
                     <Router>
                         <div>
 
-                            <Route exact path="/" component={Home}/>
+                            <IndexNavbar />
 
-                            <Route path="/transactions/:page" component={Transactions}/>
-                            <Route exact path="/transactions" render={() => (
-                                <h3>Transactions page not found!</h3>
-                            )}/>
-                            <Route path="/transaction/:transactionHash" component={Transaction}/>
-                            <Route exact path="/transaction" render={() => (
-                                <h3>Please select a transactionHash!</h3>
-                            )}/>
+                            <div className="wrapper">
+                                <PageHeader />
 
-                            <Route path="/blocks/:page" component={Blocks}/>
-                            <Route exact path="/blocks" render={() => (
-                                <h3>Blocks page not found!</h3>
-                            )}/>
-                            <Route path="/block/:blockHash" component={Block}/>
-                            <Route exact path="/block" render={() => (
-                                <h3>Please select a blockHash!</h3>
-                            )}/>
+                                <div className="main">
 
-                            <Route path="/addresses/:page" component={Addresses}/>
-                            <Route exact path="/addresses" render={() => (
-                                <h3>Addresses page not found!</h3>
-                            )}/>
-                            <Route path="/address/:addressHash" component={Address}/>
-                            <Route exact path="/address" render={() => (
-                                <h3>Please select an addressHash!</h3>
-                            )}/>
+                                    <Route exact path="/" component={Home}/>
 
-                            <Route path="/worldPopulationDays/:page" component={WorldPopulationDays}/>
-                            <Route exact path="/worldPopulationDays" render={() => (
-                                <h3>Current page not found!</h3>
-                            )}/>
+                                    <Route path="/transactions/:page" component={Transactions}/>
+                                    <Route exact path="/transactions" render={() => (
+                                        <h3>Transactions page not found!</h3>
+                                    )}/>
+                                    <Route path="/transaction/:transactionHash" component={Transaction}/>
+                                    <Route exact path="/transaction" render={() => (
+                                        <h3>Please select a transactionHash!</h3>
+                                    )}/>
 
-                            <Route path="/totalCommunityDays/:page" component={TotalCommunityDays}/>
-                            <Route exact path="/totalCommunityDays" render={() => (
-                                <h3>Current page not found!</h3>
-                            )}/>
+                                    <Route path="/blocks/:page" component={Blocks}/>
+                                    <Route exact path="/blocks" render={() => (
+                                        <h3>Blocks page not found!</h3>
+                                    )}/>
+                                    <Route path="/block/:blockHash" component={Block}/>
+                                    <Route exact path="/block" render={() => (
+                                        <h3>Please select a blockHash!</h3>
+                                    )}/>
 
-                            <Route path="/accounts/:page" component={Accounts}/>
-                            <Route exact path="/accounts" render={() => (
-                                <h3>Accounts page not found!</h3>
-                            )}/>
-                            <Route path="/account/:accountHash" component={Account}/>
-                            <Route exact path="/account" render={() => (
-                                <h3>Please select an accountHash!</h3>
-                            )}/>
+                                    <Route path="/addresses/:page" component={Addresses}/>
+                                    <Route exact path="/addresses" render={() => (
+                                        <h3>Addresses page not found!</h3>
+                                    )}/>
+                                    <Route path="/address/:addressHash" component={Address}/>
+                                    <Route exact path="/address" render={() => (
+                                        <h3>Please select an addressHash!</h3>
+                                    )}/>
 
+                                    <Route path="/worldPopulationDays/:page" component={WorldPopulationDays}/>
+                                    <Route exact path="/worldPopulationDays" render={() => (
+                                        <h3>Current page not found!</h3>
+                                    )}/>
 
+                                    <Route path="/totalCommunityDays/:page" component={TotalCommunityDays}/>
+                                    <Route exact path="/totalCommunityDays" render={() => (
+                                        <h3>Current page not found!</h3>
+                                    )}/>
+
+                                    <Route path="/accounts/:page" component={Accounts}/>
+                                    <Route exact path="/accounts" render={() => (
+                                        <h3>Accounts page not found!</h3>
+                                    )}/>
+                                    <Route path="/account/:accountHash" component={Account}/>
+                                    <Route exact path="/account" render={() => (
+                                        <h3>Please select an accountHash!</h3>
+                                    )}/>
+                                </div>
+
+                                <Footer/>
+                            </div>
 
                         </div>
                     </Router>
                 </div>
-
-                <br/>
-                <br/>
-                <Footer/>
             </div>
         );
     }
