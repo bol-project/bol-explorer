@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "BOL_EXPLORER",
+      "name": "BOL_EXPLORER_UI",
       "script": "npm",
       "args": "start"
     }
