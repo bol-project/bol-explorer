@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "BOL_EXPLORER",
+      "script": "npm",
+      "args": "start"
+    }
+  ]
+}
