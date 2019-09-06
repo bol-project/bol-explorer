@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 
-class AccountListElement extends React.Component {
+class DistributionListElement extends React.Component {
 
     constructor(){
         super();
@@ -17,12 +17,10 @@ class AccountListElement extends React.Component {
             <div className="list-element">
                 <Row>
                     <Col sm>
-                        <span>{this.props.item.codename}</span>
+                        <span>{this.props.item.personId}</span>
                     </Col>
                     <Col sm>
-                        <Link to={"/account/" + this.props.item.accountHash}>
-                            <span>{this.props.item.accountHash}</span>
-                        </Link>
+                        <span>{this.props.item.day}</span>
                     </Col>
                 </Row>
             </div>
@@ -31,4 +29,4 @@ class AccountListElement extends React.Component {
 
 }
 
-export default AccountListElement
+export default DistributionListElement

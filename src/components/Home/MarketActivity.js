@@ -19,20 +19,20 @@ class MarketActivity extends React.Component {
                     <tbody>
                         <tr>
                             <th>
-                                <p>NEO</p>
-                                <p>{this.props.neoCoinPrice}</p>
+                                <h3>NEO</h3>
+                                <h2>{this.props.neoCoinPrice}</h2>
                             </th>
                             <th>
-                                <p>Current market cap</p>
-                                <p>{this.props.currentMarketCap}</p>
+                                <h3>Current market cap</h3>
+                                <h2>{this.props.currentMarketCap}</h2>
                             </th>
                             <th>
-                                <p>24 hour changed</p>
-                                <p>{this.props.last24HourChange}</p>
+                                <h3>24 hour changed</h3>
+                                <h2>{this.props.last24HourChange}</h2>
                             </th>
                             <th>
-                                <p>24 hour volume</p>
-                                <p>{this.props.last24HourVolume}</p>
+                                <h3>24 hour volume</h3>
+                                <h2>{this.props.last24HourVolume}</h2>
                             </th>
                         </tr>
                     </tbody>

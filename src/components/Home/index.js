@@ -9,8 +9,12 @@ import TransactionListElement from "./TransactionListElement";
 import WorldPopulationElement from "./WorldPopulationElement";
 import TotalCommunityElement from "./TotalCommunityElement";
 import AccountListElement from "./AccountListElement";
+import DistributionListElement from "./DistributionListElement";
 import TotalActivity from "./TotalActivity";
 import MarketActivity from "./MarketActivity";
+import Row from "reactstrap/es/Row";
+import Col from "reactstrap/es/Col";
+import Button from "reactstrap/es/Button";
 
 // var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
@@ -73,9 +77,9 @@ class Home extends Component {
         this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionId} item={item}/>)
 
 
-        var blockActivityData = [{index: 1, size: 1526, version: 1, hash: '1', time: 1551338586},
-            {index: 1, size: 1526, version: 1, hash: '2', time: 1551338587}, {index: 1, size: 1526, version: 1, hash: '3', time: 1551338588},
-            {index: 1, size: 2232, version: 1, hash: '4', time: 1551338583}, {index: 1, size: 3426, version: 1, hash: '5', time: 1551338588}];
+        var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
+            {height: 343, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '2', time: 1551338587}, {height: 1, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '3', time: 1551338588},
+            {height: 2223432, size: 2232, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '4', time: 1551338583}, {height: 1, size: 3426, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '5', time: 1551338588}];
         this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
 
         var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
@@ -104,6 +108,8 @@ class Home extends Component {
             {accountHash: 20, codename: 'myAccount20'}];
         this.state.totalAccountsDataList = totalAccountsData.map(item => <AccountListElement key={item.accountHash} item={item}/>)
 
+        var totalLastDistributionsData = [{personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}];
+        this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
 
         return (
             <div className="Home">
@@ -116,43 +122,104 @@ class Home extends Component {
 
                 <br/>
                 <br/>
-                Last 5 Transactions
-                <div className="table-list">
+                <p class="semi-title">Last 5 Transactions</p>
+                <div class="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Transaction Type</span></Col>
+                        <Col sm><span>Transaction ID</span></Col>
+                        <Col sm><span>Timestamp</span></Col>
+                    </Row>
+                </div>
+                <div className="table-list" >
                     {this.state.transactionActivityList}
                 </div>
-                <Link to="/transactions/1">See all transactions</Link>
+                <Link to="/transactions/1">
+                    <Button color="info">See all transactions</Button>
+                </Link>
 
                 <br/>
                 <br/>
-                Last 5 Blocks
+                <p  class="semi-title">Last 5 Blocks</p>
+                <div className="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Height</span></Col>
+                        <Col sm><span>Size</span></Col>
+                        <Col sm><span>Transactions</span></Col>
+                        <Col sm><span>Producer</span></Col>
+                        <Col sm><span>Timestamp</span></Col>
+                    </Row>
+                </div>
                 <div className="table-list">
                     {this.state.blockActivityList}
                 </div>
-                <Link to="/blocks/1">See all blocks</Link>
+                <Link to="/blocks/1">
+                    <Button color="info">See all blocks</Button>
+                </Link>
 
                 <br/>
                 <br/>
-                World Population by day
+
+                <p class="semi-title">World Population by day</p>
+                <div className="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Day</span></Col>
+                        <Col sm><span>Population</span></Col>
+                    </Row>
+                </div>
                 <div className="table-list">
                     {this.state.worldPopulatonDataList}
                 </div>
-                <Link to="/worldPopulationDays/1">To all days</Link>
+                <Link to="/worldPopulationDays/1">
+                    <Button color="info">To all days</Button>
+                </Link>
 
                 <br/>
                 <br/>
-                Total Community People
+
+                <p  class="semi-title">Total Community People</p>
+                <div className="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Day</span></Col>
+                        <Col sm><span>Community</span></Col>
+                    </Row>
+                </div>
                 <div className="table-list">
                     {this.state.totalCommunityDataList}
                 </div>
-                <Link to="/totalCommunityDays/1">To all days</Link>
+                <Link to="/totalCommunityDays/1">
+                    <Button color="info">To all days</Button>
+                </Link>
 
                 <br/>
                 <br/>
-                Total Accounts
+
+                <p  class="semi-title">Total Accounts</p>
+                <div className="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Human accounts</span></Col>
+                        <Col sm><span>Company and institute accounts</span></Col>
+                    </Row>
+                </div>
                 <div className="table-list">
                     {this.state.totalAccountsDataList}
                 </div>
-                <Link to="/accounts/1">To all accounts</Link>
+                <Link to="/accounts/1">
+                    <Button color="info">To all accounts</Button>
+                </Link>
+
+                <p className="semi-title">Last Day Distribute Per Person</p>
+                <div className="table-header btn btn-info">
+                    <Row>
+                        <Col sm> <span>Person</span></Col>
+                        <Col sm><span>Day</span></Col>
+                    </Row>
+                </div>
+                <div className="table-list">
+                    {this.state.totalLastDistributionsDataList}
+                </div>
+                <Link to="/distributions/1">
+                    <Button color="info">To all distributions</Button>
+                </Link>
 
             </div>
         );

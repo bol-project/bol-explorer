@@ -17,6 +17,8 @@ import WorldPopulationDays from './../WorldPopulationDays';
 import TotalCommunityDays from './../TotalCommunityDays';
 import Accounts from './../Accounts';
 import Account from './../Account';
+import Distributions from './../Distributions';
+
 import Home from './../Home';
 
 
@@ -90,6 +92,11 @@ class App extends Component {
                                     <Route path="/account/:accountHash" component={Account}/>
                                     <Route exact path="/account" render={() => (
                                         <h3>Please select an accountHash!</h3>
+                                    )}/>
+
+                                    <Route path="/distributions/:page" component={Distributions}/>
+                                    <Route exact path="/distributions" render={() => (
+                                        <h3>Distributions page not found!</h3>
                                     )}/>
                                 </div>
 

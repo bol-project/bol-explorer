@@ -1,5 +1,7 @@
 import React from "react"
 import {Link} from "react-router-dom";
+import Col from "reactstrap/es/Col";
+import Row from "reactstrap/es/Row";
 
 class WorldPopulationElement extends React.Component {
 
@@ -13,9 +15,15 @@ class WorldPopulationElement extends React.Component {
 
        return (
             <div className="list-element">
-                Day: {this.props.item.day} Population: {this.props.item.population}
+                <Row>
+                    <Col sm>
+                        <span>{this.props.item.day}</span>
+                    </Col>
+                    <Col sm>
+                        <span>{this.props.item.population}</span>
+                    </Col>
+                </Row>
             </div>
-
         )
     }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import Button from "reactstrap/es/Button";
 
 class TotalActivity extends React.Component {
 
@@ -18,19 +19,25 @@ class TotalActivity extends React.Component {
                     <tbody>
                         <tr>
                             <th>
-                                <p>Total Transactions</p>
-                                <p>{this.props.totalTransactions}</p>
-                                <Link to="/transactions/1">See all transactions</Link>
+                                <h3>Total Transactions</h3>
+                                <h2>{this.props.totalTransactions}</h2>
+                                <Link to="/transactions/1">
+                                    <Button color="info">See all transactions</Button>
+                                </Link>
                             </th>
                             <th>
-                                <p>Last Block</p>
-                                <p>{this.props.totalBlocks}</p>
-                                <Link to="/blocks/1">See all blocks</Link>
+                                <h3>Last Block</h3>
+                                <h2>{this.props.totalBlocks}</h2>
+                                <Link to="/blocks/1">
+                                    <Button color="info">See all blocks</Button>
+                                </Link>
                             </th>
                             <th>
-                                <p>Wallet Addresses Created</p>
-                                <p>{this.props.totalWalletAddresses}</p>
-                                <Link to="/addresses/1">See all addresses</Link>
+                                <h3>Wallet Addresses Created</h3>
+                                <h2>{this.props.totalWalletAddresses}</h2>
+                                <Link to="/addresses/1">
+                                    <Button color="info">See all addresses</Button>
+                                </Link>
                             </th>
                         </tr>
                     </tbody>
