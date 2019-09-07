@@ -17,45 +17,30 @@ import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
 
 // var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
+// var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
+// var web3Blockslast5 = new Web3(new Web3.providers.HttpProvider('http://5d712628d3448a001411b54a.mockapi.io/blockslast5'));
+
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            block_ids: [],
-            block_hashes: [],
-            curr_block: null
         }
     }
 
+    //https://pusher.com/tutorials/consume-restful-api-react
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-
-
-       // var curr_block_no = web3.eth.blockNumber;
-      //  console.log(curr_block_no);
-      //  this.setState({
-      //      curr_block: curr_block_no
-      //  });
-
-      //  this.getBlocks(curr_block_no);
+        this.getBlocks();
     }
 
-    getBlocks(curr_block_no) {
-        const block_ids = this.state.block_ids.slice();
-        const block_hashes = this.state.block_hashes.slice();
-        var max_blocks = 10;
-        if (curr_block_no < max_blocks) max_blocks = curr_block_no;
-        for (var i = 0; i < max_blocks; i++, curr_block_no--) {
-            var currBlockObj = web3.eth.getBlock(curr_block_no);
-            block_ids.push(currBlockObj.number);
-            block_hashes.push(currBlockObj.hash);
-        }
-        this.setState({
-            block_ids: block_ids,
-            block_hashes: block_hashes
+    getBlocks() {
+        fetch('http://5d712628d3448a001411b54a.mockapi.io/blockslast5')
+        .then(res => res.json())
+        .then((data) => {                   //remove 0 index of OK result and parse data to component
+            this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
         })
+        .catch(console.log)
     }
 
     render() {
@@ -77,10 +62,10 @@ class Home extends Component {
         this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionId} item={item}/>)
 
 
-        var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
-            {height: 343, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '2', time: 1551338587}, {height: 1, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '3', time: 1551338588},
-            {height: 2223432, size: 2232, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '4', time: 1551338583}, {height: 1, size: 3426, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '5', time: 1551338588}];
-        this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
+        // var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
+        //     {height: 343, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '2', time: 1551338587}, {height: 1, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '3', time: 1551338588},
+        //     {height: 2223432, size: 2232, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '4', time: 1551338583}, {height: 1, size: 3426, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '5', time: 1551338588}];
+        // this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
 
         var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
             {dayId: 3, day: '01/03/2019', population: 88}, {dayId: 4, day: '01/04/2019', population: 7055}, {dayId: 5, day: '01/05/2019', population: 551},
