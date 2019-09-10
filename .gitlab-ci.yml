@@ -1,0 +1,23 @@
+services:
+  - docker:18.09-dind
+
+stages:
+  - build
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_DRIVER: overlay2
+
+build:
+  stage: build
+  only:
+    - ci-cd
+  script:
+    - docker info
+    - docker build -t bol-explorer .
+    - docker stop bol-explorer
+    - docker rm bol-explorer
+    - docker run -it --name bol-explorer bol-explorer -e "VIRTUAL_HOST=explorer.bolchain.net" -e "LETSENCRYPT_HOST=explorer.bolchain.net" -e "LETSENCRYPT_EMAIL=admin@bolchain.net"
+  tags:
+    - build-linux
+
