@@ -8,7 +8,7 @@ variables:
 build:
   stage: build
   only:
-    - ci-cd
+    - develop
   script:
     - docker info
     - docker build -t bol-explorer .
