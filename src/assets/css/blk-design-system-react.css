@@ -10270,7 +10270,7 @@ hr {
 
 .icon + .icon-text {
   padding-left: 1rem;
-  width: calc(100% - auto - 1); }
+  width: auto; }
 
 .icon-xl {
   width: 5rem;
@@ -10279,7 +10279,7 @@ hr {
     font-size: 4.25rem; }
 
 .icon-xl + .icon-text {
-  width: calc(100% - $icon-size-xl - 1); }
+  width: calc(100% - 5rem - 1); }
 
 .icon-lg {
   width: 3.7rem;
@@ -10288,7 +10288,7 @@ hr {
     font-size: 2.95rem; }
 
 .icon-lg + .icon-text {
-  width: calc(100% - $icon-size-lg - 1); }
+  width: calc(100% - 3.7rem - 1); }
 
 .icon-sm {
   width: 1.875rem;
@@ -10297,7 +10297,7 @@ hr {
     font-size: 1.125rem; }
 
 .icon-sm + .icon-text {
-  width: calc(100% - $icon-size-sm - 1); }
+  width: calc(100% - 1.875rem - 1); }
 
 .icon-shape {
   padding: 12px;
@@ -11640,7 +11640,7 @@ textarea.form-control {
   font-size: 1rem; }
 
 .index-page .page-header {
-  height: 100vh; }
+  height: 30vh; }
   .index-page .page-header .container > .content-center.brand .h1-seo,
   .index-page .page-header .container > .content-center.brand h3 {
     color: #ffffff;
@@ -12529,7 +12529,7 @@ hr {
     position: relative; }
 
 .page-header {
-  min-height: 100vh;
+  min-height: 30vh;
   max-height: 999px;
   padding: 0;
   color: #ffffff;
@@ -13821,7 +13821,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   border-radius: 3px;
   background: #FFF;
   cursor: default;
-  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
   -webkit-transition: 300ms ease 0s;
   -moz-transition: 300ms ease 0s;
   -ms-transition: 300ms ease 0s;

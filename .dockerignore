@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/build
+**/.git
+**/.vs
+**/obj
+**/bin
+**/*.dll
+**/Dockerfile
+**/*.yml
