@@ -1,13 +1,21 @@
 
-
 div.main{
-    padding-top: 100px;
     width: 90%;
     margin: auto;
 }
 
+div.home{
+    padding-top: 100px;
+}
+
 .btn-info {
     opacity: 0.8;
+}
+
+.page-header {
+    padding-top: 100px !important;
+    min-height: 40vh !important;;
+    max-height: 400px !important;;
 }
 
 .table-list {
@@ -19,7 +27,7 @@ div.main{
 
 .list-element{
     height: 50px;
-    background-color: #2a2b59;
+    background: radial-gradient(ellipse at bottom, #292D61 30%, #171941 80%);
     margin: 0 auto 10px;
     border: 1px solid #3d3d79;
     border-left: 6px solid #00f2c3;
@@ -33,10 +41,10 @@ div.main{
     font-family: arial, sans-serif;
 }
 
-a[href^="/"] {
-    text-decoration: underline;
-    color: #1d8cf8 !important;
-}
+/*a[href^="/"] {*/
+    /*text-decoration: underline;*/
+    /*color: #1d8cf8 !important;*/
+/*}*/
 
 .list-row {
     height: inherit;
@@ -50,7 +58,7 @@ a[href^="/"] {
 }
 
 table {
-    background-color: #2a2b59;
+    background: radial-gradient(ellipse at bottom, #292D61 30%, #171941 80%);
     width: 100%;
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -68,4 +76,9 @@ th {
 
 h1, h2, h3, body{
     color: #ffffff;
+}
+
+.text-on-back-large {
+     font-size: 4em !important;
+
 }

@@ -20,7 +20,7 @@ class Account extends Component {
          var timestamp = new Date(currentAccount.timestamp).toLocaleString();
 
         return (
-            <div >
+            <div className="view-page">
                 <h2>Account Information</h2>
                 <div>
                     <table>

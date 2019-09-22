@@ -26,15 +26,14 @@ class WorldPopulationDays extends Component {
 
 
         return(
-            <div className="table-list">
-
-                <h1>Current World Population</h1>
-
-                {this.state.worldPopulatonDataList}
-
-                <br/>
-                <br/>
-                <Link to={`/worldPopulationDays/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+            <div className="view-page">
+                <div className="table-list">
+                    <h1>Current World Population</h1>
+                    {this.state.worldPopulatonDataList}
+                    <br/>
+                    <br/>
+                    <Link to={`/worldPopulationDays/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }

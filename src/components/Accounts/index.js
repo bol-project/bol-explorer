@@ -25,15 +25,17 @@ class Accounts extends Component {
 
 
         return(
-            <div className="table-list">
+            <div className="view-page">
+                <div className="table-list">
 
-                <h1>All addresses</h1>
+                    <h1>All addresses</h1>
 
-                {this.state.totalAccountsDataList}
+                    {this.state.totalAccountsDataList}
 
-                <br/>
-                <br/>
-                <Link to={`/accounts/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                    <br/>
+                    <br/>
+                    <Link to={`/accounts/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }

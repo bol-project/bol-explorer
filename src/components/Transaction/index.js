@@ -20,7 +20,7 @@ class Transaction extends Component {
         var completedOn = new Date(currentTransaction.completedOn).toLocaleString();
 
         return (
-            <div >
+            <div className="view-page">
                 <h2>Transaction Information</h2>
                 <div>
                     <table>

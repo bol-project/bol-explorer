@@ -29,5 +29,8 @@
   to {
     transform: rotate(360deg);
   }
+}
 
+.view-page{
+  padding-top: 200px;
 }

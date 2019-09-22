@@ -30,11 +30,9 @@ class Blocks extends Component {
 
 
         return(
-            <div>
+            <div className="view-page">
                 <h1>All blocks</h1>
-
                 {this.state.blockActivityList}
-
                 <br/>
                 <br/>
                 <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>

@@ -26,15 +26,17 @@ class TotalCommunityDays extends Component {
 
 
         return(
-            <div className="table-list">
+            <div className="view-page">
+                <div className="table-list">
 
-                <h1>Total Community People</h1>
+                    <h1>Total Community People</h1>
 
-                {this.state.totalCommunityDataList}
+                    {this.state.totalCommunityDataList}
 
-                <br/>
-                <br/>
-                <Link to={`/totalCommunityDays/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                    <br/>
+                    <br/>
+                    <Link to={`/totalCommunityDays/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }
