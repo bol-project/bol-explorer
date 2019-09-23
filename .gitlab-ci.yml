@@ -14,7 +14,7 @@ build:
     - docker build -t bol-explorer .
     - docker stop bol-explorer || true
     - docker rm bol-explorer || true
-    - docker run -d --name bol-explorer --net=bol-net -e "VIRTUAL_HOST=explorer.demo.bolchain.net" -e "LETSENCRYPT_HOST=explorer.demo.bolchain.net" -e "LETSENCRYPT_EMAIL=admin@bolchain.net" bol-explorer 
+    - docker run -d --name bol-explorer --net=bol-net --restart=always -e "VIRTUAL_HOST=explorer.demo.bolchain.net" -e "LETSENCRYPT_HOST=explorer.demo.bolchain.net" -e "LETSENCRYPT_EMAIL=admin@bolchain.net" bol-explorer 
   tags:
     - internal
 
