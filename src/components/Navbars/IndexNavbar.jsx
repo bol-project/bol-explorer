@@ -125,55 +125,55 @@ class ComponentsNavbar extends React.Component {
               </Row>
             </div>
             <Nav navbar>
-                <NavItem className="active">
-                    <NavLink  onClick={e => e.preventDefault()} >
-                        <Link to="/">
-                            <p>Explorer</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink onClick={e => e.preventDefault()} >
-                        <Link to="/blocks/1">
-                            <p>Blocks</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink onClick={e => e.preventDefault()} >
-                        <Link to="/transactions/1">
-                            <p>Transactions</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink  onClick={e => e.preventDefault()} >
-                        <Link to="/worldPopulationDays/1">
-                            <p>Current World Population</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink  onClick={e => e.preventDefault()} >
-                        <Link to="/totalCommunityDays/1">
-                            <p>Total Community People</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink  onClick={e => e.preventDefault()} >
-                        <Link to="/accounts/1">
-                            <p>Total Accounts</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
-                <NavItem className="active">
-                    <NavLink  onClick={e => e.preventDefault()} >
-                        <Link to="/distributions/1">
-                            <p>Last Day Distribute Per Person</p>
-                        </Link>
-                    </NavLink>
-                </NavItem>
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink  onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/">*/}
+                            {/*<p>Explorer</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/blocks/1">*/}
+                            {/*<p>Blocks</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/transactions/1">*/}
+                            {/*<p>Transactions</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink  onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/worldPopulationDays/1">*/}
+                            {/*<p>Current World Population</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink  onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/totalCommunityDays/1">*/}
+                            {/*<p>Total Community People</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink  onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/accounts/1">*/}
+                            {/*<p>Total Accounts</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
+                {/*<NavItem className="active">*/}
+                    {/*<NavLink  onClick={e => e.preventDefault()} >*/}
+                        {/*<Link to="/distributions/1">*/}
+                            {/*<p>Last Day Distribute Per Person</p>*/}
+                        {/*</Link>*/}
+                    {/*</NavLink>*/}
+                {/*</NavItem>*/}
             </Nav>
           </Collapse>
         </Container>

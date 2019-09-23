@@ -37,7 +37,6 @@ class MarketActivity extends React.Component {
                         </tr>
                     </tbody>
                 </table>
-                <h1>Chart goes here...</h1>
             </div>
 
         );

@@ -3,7 +3,7 @@ import logo from './logo.svg';
 
 import './style.css';
 
-import IndexNavbar from "components/Navbars/IndexNavbar.jsx";
+
 import PageHeader from "components/PageHeader/PageHeader.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
@@ -23,6 +23,7 @@ import Home from './../Home';
 
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import NavbarDocs from "../Navbars/NavbarDocs";
 
 class App extends Component {
     componentDidMount() {
@@ -39,10 +40,10 @@ class App extends Component {
                     <Router>
                         <div>
 
-                            <IndexNavbar />
+                            <NavbarDocs />
 
                             <div className="wrapper">
-                                <PageHeader />
+
 
                                 <div className="main">
 

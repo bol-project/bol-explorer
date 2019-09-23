@@ -24,15 +24,14 @@ class Addresses extends Component {
 
 
         return(
-            <div className="table-list">
-
-                <h1>All addresses</h1>
-
-                {this.state.addressActivityList}
-
-                <br/>
-                <br/>
-                <Link to={`/addresses/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+            <div className="view-page">
+                <div className="table-list">
+                    <h1>All addresses</h1>
+                    {this.state.addressActivityList}
+                    <br/>
+                    <br/>
+                    <Link to={`/addresses/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }

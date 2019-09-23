@@ -22,7 +22,7 @@ class Address extends Component {
          var created = new Date(currentAddress.created).toLocaleString();
 
         return (
-            <div >
+            <div className="view-page">
                 <h2>Address Information</h2>
                 <div>
                     <table>

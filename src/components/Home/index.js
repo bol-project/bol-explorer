@@ -15,6 +15,10 @@ import MarketActivity from "./MarketActivity";
 import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
+import PageHeader from "../PageHeader/PageHeader";
+import {Card, CardBody, CardHeader, CardTitle} from "reactstrap";
+import {Line} from "react-chartjs-2";
+import bigChartData from "variables/charts.jsx";
 
 // var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 // var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
@@ -97,114 +101,135 @@ class Home extends Component {
         this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
 
         return (
-            <div className="Home">
+            <div>
+                <PageHeader />
 
-                <TotalActivity totalTransactions="889,333,158" totalBlocks="343,556,339" totalWalletAddresses="339.765.332"/>
+                <div className="home">
+                    <TotalActivity totalTransactions="889,333,158" totalBlocks="343,556,339" totalWalletAddresses="339.765.332"/>
 
-                <br/>
-                <br/>
-                <MarketActivity neoCoinPrice="$8.99" currentMarketCap="$152,222,588" last24HourChange="1.32%" last24HourVolume="$554,345,312"/>
+                    <br/>
+                    <br/>
+                    <MarketActivity neoCoinPrice="$8.99" currentMarketCap="$152,222,588" last24HourChange="1.32%" last24HourVolume="$554,345,312"/>
 
-                <br/>
-                <br/>
-                <p class="semi-title">Last 5 Transactions</p>
-                <div class="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Transaction Type</span></Col>
-                        <Col sm><span>Transaction ID</span></Col>
-                        <Col sm><span>Timestamp</span></Col>
-                    </Row>
-                </div>
-                <div className="table-list" >
-                    {this.state.transactionActivityList}
-                </div>
-                <Link to="/transactions/1">
-                    <Button color="info">See all transactions</Button>
-                </Link>
+                    <br/>
+                    <br/>
+                    <p className="semi-title">BOL Chain Progress</p>
+                    <section className="section-lg">
+                        <Col md="12">
+                            <Card className="card-chart card-plain">
+                                <CardBody>
+                                    <div className="chart-area">
+                                        <Line
+                                            data={bigChartData.data}
+                                            options={bigChartData.options}
+                                        />
+                                    </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </section>
 
-                <br/>
-                <br/>
-                <p  class="semi-title">Last 5 Blocks</p>
-                <div className="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Height</span></Col>
-                        <Col sm><span>Size</span></Col>
-                        <Col sm><span>Transactions</span></Col>
-                        <Col sm><span>Producer</span></Col>
-                        <Col sm><span>Timestamp</span></Col>
-                    </Row>
-                </div>
-                <div className="table-list">
-                    {this.state.blockActivityList}
-                </div>
-                <Link to="/blocks/1">
-                    <Button color="info">See all blocks</Button>
-                </Link>
+                    <br/>
+                    <br/>
+                    <p class="semi-title">Last 5 Transactions</p>
+                    <div class="table-header btn btn-twitter ">
+                        <Row>
+                            <Col sm> <span>Transaction Type</span></Col>
+                            <Col sm><span>Transaction ID</span></Col>
+                            <Col sm><span>Timestamp</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list" >
+                        {this.state.transactionActivityList}
+                    </div>
+                    <Link to="/transactions/1">
+                        <Button color="twitter">See all transactions</Button>
+                    </Link>
 
-                <br/>
-                <br/>
+                    <br/>
+                    <br/>
+                    <p  class="semi-title">Last 5 Blocks</p>
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Height</span></Col>
+                            <Col sm><span>Size</span></Col>
+                            <Col sm><span>Transactions</span></Col>
+                            <Col sm><span>Producer</span></Col>
+                            <Col sm><span>Timestamp</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list">
+                        {this.state.blockActivityList}
+                    </div>
+                    <Link to="/blocks/1">
+                        <Button color="twitter">See all blocks</Button>
+                    </Link>
 
-                <p class="semi-title">World Population by day</p>
-                <div className="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Day</span></Col>
-                        <Col sm><span>Population</span></Col>
-                    </Row>
-                </div>
-                <div className="table-list">
-                    {this.state.worldPopulatonDataList}
-                </div>
-                <Link to="/worldPopulationDays/1">
-                    <Button color="info">To all days</Button>
-                </Link>
+                    <br/>
+                    <br/>
 
-                <br/>
-                <br/>
+                    <p class="semi-title">World Population by day</p>
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Day</span></Col>
+                            <Col sm><span>Population</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list">
+                        {this.state.worldPopulatonDataList}
+                    </div>
+                    <Link to="/worldPopulationDays/1">
+                        <Button color="twitter">To all days</Button>
+                    </Link>
 
-                <p  class="semi-title">Total Community People</p>
-                <div className="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Day</span></Col>
-                        <Col sm><span>Community</span></Col>
-                    </Row>
-                </div>
-                <div className="table-list">
-                    {this.state.totalCommunityDataList}
-                </div>
-                <Link to="/totalCommunityDays/1">
-                    <Button color="info">To all days</Button>
-                </Link>
+                    <br/>
+                    <br/>
 
-                <br/>
-                <br/>
+                    <p  class="semi-title">Total Community People</p>
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Day</span></Col>
+                            <Col sm><span>Community</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list">
+                        {this.state.totalCommunityDataList}
+                    </div>
+                    <Link to="/totalCommunityDays/1">
+                        <Button color="twitter">To all days</Button>
+                    </Link>
 
-                <p  class="semi-title">Total Accounts</p>
-                <div className="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Human accounts</span></Col>
-                        <Col sm><span>Company and institute accounts</span></Col>
-                    </Row>
-                </div>
-                <div className="table-list">
-                    {this.state.totalAccountsDataList}
-                </div>
-                <Link to="/accounts/1">
-                    <Button color="info">To all accounts</Button>
-                </Link>
+                    <br/>
+                    <br/>
 
-                <p className="semi-title">Last Day Distribute Per Person</p>
-                <div className="table-header btn btn-info">
-                    <Row>
-                        <Col sm> <span>Person</span></Col>
-                        <Col sm><span>Day</span></Col>
-                    </Row>
+                    <p  class="semi-title">Total Accounts</p>
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Human accounts</span></Col>
+                            <Col sm><span>Company and institute accounts</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list">
+                        {this.state.totalAccountsDataList}
+                    </div>
+                    <Link to="/accounts/1">
+                        <Button color="twitter">To all accounts</Button>
+                    </Link>
+
+                    <p className="semi-title">Last Day Distribute Per Person</p>
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Person</span></Col>
+                            <Col sm><span>Day</span></Col>
+                        </Row>
+                    </div>
+                    <div className="table-list">
+                        {this.state.totalLastDistributionsDataList}
+                    </div>
+                    <Link to="/distributions/1">
+                        <Button color="twitter">To all distributions</Button>
+                    </Link>
                 </div>
-                <div className="table-list">
-                    {this.state.totalLastDistributionsDataList}
-                </div>
-                <Link to="/distributions/1">
-                    <Button color="info">To all distributions</Button>
-                </Link>
 
             </div>
         );

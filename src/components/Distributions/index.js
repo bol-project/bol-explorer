@@ -19,15 +19,14 @@ class Distributions extends Component {
         this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
 
         return(
-            <div className="table-list">
-
-                <h1>All distributions</h1>
-
-                {this.state.totalLastDistributionsDataList}
-
-                <br/>
-                <br/>
-                <Link to={`/distributions/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+            <div className="view-page">
+                <div className="table-list">
+                    <h1>All distributions</h1>
+                    {this.state.totalLastDistributionsDataList}
+                    <br/>
+                    <br/>
+                    <Link to={`/distributions/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }

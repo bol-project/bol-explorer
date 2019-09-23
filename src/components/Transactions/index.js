@@ -24,15 +24,14 @@ class Transactions extends Component {
 
 
         return(
-            <div className="table-list">
-
-                <h1>All transactions</h1>
-
-                {this.state.transactionActivityList}
-
-                <br/>
-                <br/>
-                <Link to={`/transactions/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+            <div className="view-page">
+                <div className="table-list">
+                    <h1>All transactions</h1>
+                    {this.state.transactionActivityList}
+                    <br/>
+                    <br/>
+                    <Link to={`/transactions/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                </div>
             </div>
         );
     }
