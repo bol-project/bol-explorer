@@ -35,7 +35,7 @@ class Blocks extends Component {
                 {this.state.blockActivityList}
                 <br/>
                 <br/>
-                <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate} >Next Page</Link>
 
             </div>
         );
