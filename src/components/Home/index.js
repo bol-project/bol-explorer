@@ -39,7 +39,7 @@ class Home extends Component {
     }
 
     getBlocks() {
-        fetch('http://5d712628d3448a001411b54a.mockapi.io/blockslast5')
+        fetch('https://5d712628d3448a001411b54a.mockapi.io/blockslast5')
         .then(res => res.json())
         .then((data) => {                   //remove 0 index of OK result and parse data to component
             this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
