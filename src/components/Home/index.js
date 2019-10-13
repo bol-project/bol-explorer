@@ -60,7 +60,7 @@ class Home extends Component {
     }
 
     getTotalCommunityData() {
-        fetch('http://5da3147176c28f0014bbe6f4.mockapi.io/communityPeople1')
+        fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/communityPeople1')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and keep only the 5 first
                 this.setState({ totalCommunityDataList: (data.slice(1)).slice(0,5).map(item => <TotalCommunityElement key={item.id} item={item}/>)})
