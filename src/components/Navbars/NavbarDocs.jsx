@@ -33,10 +33,16 @@ class NavbarDocs extends React.Component {
         };
     }
     componentDidMount() {
-        window.addEventListener("scroll", this.changeColor);
+        this.setState({
+            color: "bg-dark"
+        });
+        //window.addEventListener("scroll", this.changeColor);
     };
     componentWillUnmount() {
-        window.removeEventListener("scroll", this.changeColor);
+        this.setState({
+            color: "bg-dark"
+        });
+        //window.removeEventListener("scroll", this.changeColor);
     };
     changeColor = () => {
         if (
@@ -51,7 +57,7 @@ class NavbarDocs extends React.Component {
             document.body.scrollTop < 100
         ) {
             this.setState({
-                color: "navbar-transparent"
+                color: "bg-dark"        //"navbar-transparent"
             });
         }
     };
@@ -128,7 +134,7 @@ class NavbarDocs extends React.Component {
                                </NavLink>
                                 </NavItem>
                             </Nav>
-                            <Form className="form-inline ml-auto">
+                            <Form className="form-inline">
                                 <FormGroup className="no-border">
                                             <InputGroup className={this.state.focused}>
                                                 <InputGroupAddon addonType="prepend">
@@ -136,9 +142,9 @@ class NavbarDocs extends React.Component {
                                                         <i className="tim-icons icon-zoom-split" />
                                                     </InputGroupText>
                                                 </InputGroupAddon>
-                                                <Input
+                                                <Input className={'search-field'}
                                                     type="text"
-                                                    placeholder="Search by Hash"
+                                                    placeholder="Search"
                                                 />
                                             </InputGroup>
                                 </FormGroup>

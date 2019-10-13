@@ -30,7 +30,10 @@ class Addresses extends Component {
                     {this.state.addressActivityList}
                     <br/>
                     <br/>
-                    <Link to={`/addresses/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                    <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
+                          to={`/addresses/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                    <span> </span>
+                    <Link to={`/addresses/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
                 </div>
             </div>
         );

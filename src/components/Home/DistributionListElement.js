@@ -17,10 +17,10 @@ class DistributionListElement extends React.Component {
             <div className="list-element">
                 <Row>
                     <Col sm>
-                        <span>{this.props.item.personId}</span>
+                        <span>{this.props.item.day}</span>
                     </Col>
                     <Col sm>
-                        <span>{this.props.item.day}</span>
+                        <span>{this.props.item.amount}</span>
                     </Col>
                 </Row>
             </div>

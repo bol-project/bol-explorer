@@ -14,7 +14,7 @@ class TransactionListElement extends React.Component {
 
     render() {
 
-        var completedOn = new Date(this.props.item.completedOn).toLocaleString();
+        var timestamp = new Date(this.props.item.timestamp).toLocaleString();
 
 
         return (
@@ -25,12 +25,12 @@ class TransactionListElement extends React.Component {
                         <span>{this.props.item.type}</span>
                     </Col>
                     <Col sm>
-                        <Link to={"/transaction/" + this.props.item.transactionId}>
-                            <span>{this.props.item.transactionId}</span>
+                        <Link to={"/transaction/" + this.props.item.transactionID}>
+                            <span>{this.props.item.transactionID}</span>
                         </Link>
                     </Col>
                     <Col sm>
-                        <span>{completedOn}</span>
+                        <span>{timestamp}</span>
                     </Col>
                 </Row>
                </div>

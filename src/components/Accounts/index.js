@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 
 import './style.css';
 import AccountListElement from "../Home/AccountListElement";
+import Row from "reactstrap/es/Row";
+import Col from "reactstrap/es/Col";
 
 class Accounts extends Component {
 
@@ -30,11 +32,19 @@ class Accounts extends Component {
 
                     <h1>All addresses</h1>
 
+                    <div className="table-header btn btn-twitter">
+                        <Row>
+                            <Col sm> <span>Human accounts</span></Col>
+                            <Col sm><span>Company and institute accounts</span></Col>
+                        </Row>
+                    </div>
                     {this.state.totalAccountsDataList}
-
                     <br/>
                     <br/>
-                    <Link to={`/accounts/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                    <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
+                          to={`/accounts/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                    <span> </span>
+                    <Link to={`/accounts/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
                 </div>
             </div>
         );

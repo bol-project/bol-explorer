@@ -20,7 +20,7 @@ class TotalCommunityElement extends React.Component {
                         <span>{this.props.item.day}</span>
                     </Col>
                     <Col sm>
-                        <span>{this.props.item.community}</span>
+                        <span>{this.props.item.peopleCount}</span>
                     </Col>
                 </Row>
             </div>
