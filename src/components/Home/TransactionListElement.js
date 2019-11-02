@@ -25,7 +25,7 @@ class TransactionListElement extends React.Component {
                         <span>{this.props.item.type}</span>
                     </Col>
                     <Col sm>
-                        <Link to={"/transaction/" + this.props.item.transactionID}>
+                        <Link to={"/transaction/" + this.props.item.id}>
                             <span>{this.props.item.transactionID}</span>
                         </Link>
                     </Col>

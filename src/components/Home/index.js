@@ -24,6 +24,16 @@ import bigChartData from "variables/charts.jsx";
 // var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
 // var web3Blockslast5 = new Web3(new Web3.providers.HttpProvider('http://5d712628d3448a001411b54a.mockapi.io/blockslast5'));
 
+var GETHEADER = {
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Origin': '',
+        'Access-Control-Allow-Origin': '*',
+        'Host': 'http://localhost:5000'
+    },
+    };
 
 class Home extends Component {
 
@@ -35,10 +45,20 @@ class Home extends Component {
 
     //https://pusher.com/tutorials/consume-restful-api-react
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
+        this.getTransactions();
         this.getBlocks();
         this.getWorldPopulationData();
         this.getTotalCommunityData();
         this.getTotalLastDistributionsData();
+    }
+
+    getTransactions() {
+        fetch('http://localhost:5000/api/transactions', GETHEADER)
+            .then(res => res.json())
+            .then((data) => {                   //remove 0 index of OK result and parse data to component
+                this.setState({ transactionActivityList: data.map(item => <TransactionListElement key={item.id} item={item}/>)})
+            })
+            .catch(console.log)
     }
 
     getBlocks() {
@@ -49,6 +69,14 @@ class Home extends Component {
         })
         .catch(console.log)
     }
+    // getBlocks() {
+    //     fetch('http://localhost:5000/api/blocks')
+    //         .then(res => res.json())
+    //         .then((data) => {                   //remove 0 index of OK result and parse data to component
+    //             this.setState({ blockActivityList: data.map(item => <BlockListElement key={item.hash} item={item}/>)})
+    //         })
+    //         .catch(console.log)
+    // }
 
     getWorldPopulationData() {
         fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/worldPopulation1')
@@ -88,12 +116,12 @@ class Home extends Component {
                 </tr>
             )
         });
-        var transactionActivityData = [{type: 'Invocation', transactionID: '50b9ccaef0f9306eba1b34fbd9a66aa1365dbf8b9b9085e206310eff458db370', timestamp: 1551338586},
-            {type: 'Invocation', transactionID: '13e5c967c76158f4ea197094f4e7fd47ad2165f223f4131564aa6e4bcb34a069', timestamp: 1551338586},
-            {type: 'Invocation', transactionID: 'd75d22aa4fe1788e201db2f191a0459285d072ca423e429a51e6d26e2f61c3d4', timestamp: 1551338586},
-            {type: 'Invocation', transactionID: 'ada996ad33ad98fbe3524e2b46e7bff3d4e3952f37c20ec273350d9a5eae70bb', timestamp: 1551338586},
-            {type: 'Invocation', transactionID: '4d84ba1b1f9003d121fd2480420e3d36b3451d0fbb9806fde6dd62f23294ba38', timestamp: 1551338586}];
-        this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionID} item={item}/>)
+        // var transactionActivityData = [{type: 'Invocation', transactionID: '50b9ccaef0f9306eba1b34fbd9a66aa1365dbf8b9b9085e206310eff458db370', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: '13e5c967c76158f4ea197094f4e7fd47ad2165f223f4131564aa6e4bcb34a069', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: 'd75d22aa4fe1788e201db2f191a0459285d072ca423e429a51e6d26e2f61c3d4', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: 'ada996ad33ad98fbe3524e2b46e7bff3d4e3952f37c20ec273350d9a5eae70bb', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: '4d84ba1b1f9003d121fd2480420e3d36b3451d0fbb9806fde6dd62f23294ba38', timestamp: 1551338586}];
+        // this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionID} item={item}/>)
 
 
         // var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
