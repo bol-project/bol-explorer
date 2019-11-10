@@ -76,13 +76,13 @@ class App extends Component {
                                         <h3>Please select an addressHash!</h3>
                                     )}/>
 
-                                    <Route path="/worldPopulationDays/:page" component={WorldPopulationDays}/>
-                                    <Route exact path="/worldPopulationDays" render={() => (
+                                    <Route path="/WPD/:page" component={WorldPopulationDays}/>
+                                    <Route exact path="/WPD" render={() => (
                                         <h3>Current page not found!</h3>
                                     )}/>
 
-                                    <Route path="/totalCommunityDays/:page" component={TotalCommunityDays}/>
-                                    <Route exact path="/totalCommunityDays" render={() => (
+                                    <Route path="/TCP/:page" component={TotalCommunityDays}/>
+                                    <Route exact path="/TCP" render={() => (
                                         <h3>Current page not found!</h3>
                                     )}/>
 
@@ -95,9 +95,9 @@ class App extends Component {
                                         <h3>Please select an accountHash!</h3>
                                     )}/>
 
-                                    <Route path="/distributions/:page" component={Distributions}/>
-                                    <Route exact path="/distributions" render={() => (
-                                        <h3>Distributions page not found!</h3>
+                                    <Route path="/D/:page" component={Distributions}/>
+                                    <Route exact path="/D" render={() => (
+                                        <h3>D page not found!</h3>
                                     )}/>
                                 </div>
 

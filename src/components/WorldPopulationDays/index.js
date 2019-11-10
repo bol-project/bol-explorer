@@ -40,21 +40,21 @@ class WorldPopulationDays extends Component {
         return(
             <div className="view-page">
                 <div className="table-list">
-                    <h1>Current World Population</h1>
+                    <h1>CWP</h1>
 
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Population</span></Col>
+                            <Col sm><span>P</span></Col>
                         </Row>
                     </div>
                     {this.state.worldPopulatonDataList}
                     <br/>
                     <br/>
                     <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                          to={`/worldPopulationDays/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                          to={`/WPD/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
                     <span> </span>
-                    <Link to={`/worldPopulationDays/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
+                    <Link to={`/WPD/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
                 </div>
             </div>
         );

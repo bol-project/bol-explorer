@@ -125,9 +125,9 @@ class Block extends Component {
                     {/*                        <TabContent className="tab-subcategories" activeTab={"tab" + this.state.tabs}>*/}
                     {/*                            <TabPane tabId="tab1">*/}
                     {/*                                <div><h4 className="title">Number of Transactions: {this.state.numberOfTransactions}</h4></div>*/}
-                    {/*                                <div><h4 className="title">Current World Population: {this.state.currentWorldPopulation}</h4></div>*/}
+                    {/*                                <div><h4 className="title">CWP: {this.state.currentWorldPopulation}</h4></div>*/}
                     {/*                                <div><h4 className="title">New Registered People: {this.state.newRegisteredPeople}</h4></div>*/}
-                    {/*                                <div><h4 className="title">Total Community People: {this.state.totalCommunityPeople}</h4></div>*/}
+                    {/*                                <div><h4 className="title">TCP: {this.state.totalCommunityPeople}</h4></div>*/}
                     {/*                                <div><h4 className="title">Distribute per Person:{this.state.distributePerPerson}</h4></div>*/}
                     {/*                                <div><h4 className="title">World Wallet Amount: {this.state.worldWalletAmount}</h4></div>*/}
                     {/*                                <div><h4 className="title">Size: {this.state.size}</h4></div>*/}
@@ -176,14 +176,14 @@ class Block extends Component {
                             <tr><td className="tdLabel">Block Hash: </td><td>{this.state.blockHash}</td></tr>
                             <tr><td className="tdLabel">Block Height: </td><td>{this.state.blockHeight}</td></tr>
                             <tr><td className="tdLabel">Date: </td><td>{dtFormat.format(this.state.timestamp)}</td></tr>
-                            <tr><td className="tdLabel">Current World Population: </td><td>{this.state.currentWorldPopulation}</td></tr>
+                            <tr><td className="tdLabel">CWP: </td><td>{this.state.currentWorldPopulation}</td></tr>
                             <tr><td className="tdLabel">Size: </td><td>{this.state.size}</td></tr>
                             <tr><td className="tdLabel">New Registered People: </td><td>{this.state.newRegisteredPeople}</td></tr>
                             <tr><td className="tdLabel">Previous Block: </td><td><Link to={`../block/${this.state.previousBlock}`}>{this.state.previousBlock}</Link></td></tr>
                             <tr><td className="tdLabel">Merkle Root: </td><td>{this.state.merkleRoot}</td></tr>
                             <tr><td className="tdLabel">Block Producer: </td><td>{this.state.blockProducert}</td></tr>
                             <tr><td className="tdLabel">Version: </td><td>{this.state.version}</td></tr>
-                            <tr><td className="tdLabel">Total Community People: </td><td>{this.state.totalCommunityPeople}</td></tr>
+                            <tr><td className="tdLabel">TCP: </td><td>{this.state.totalCommunityPeople}</td></tr>
                             <tr><td className="tdLabel">World Wallet Amount: </td><td>{this.state.worldWalletAmount}</td></tr>
                             <tr><td className="tdLabel">Distribute per Person: </td><td>{this.state.distributePerPerson}</td></tr>
                             <tr><td className="tdLabel">Size: </td><td>{this.state.size}</td></tr>
@@ -213,14 +213,14 @@ class Block extends Component {
                     {/*        <div><span className="title">Block Hash: {this.state.blockHash}</span></div>*/}
                     {/*        <div><span className="title">Block Height: {this.state.blockHeight}</span></div>*/}
                     {/*        <div><span className="title">Date: {dtFormat.format(this.state.timestamp)}</span></div>*/}
-                    {/*        <div><span className="title">Current World Population: {this.state.currentWorldPopulation}</span></div>*/}
+                    {/*        <div><span className="title">CWP: {this.state.currentWorldPopulation}</span></div>*/}
                     {/*        <div><span className="title">Size: {this.state.size}</span></div>*/}
                     {/*        <div><span className="title">New Registered People: {this.state.newRegisteredPeople}</span></div>*/}
                     {/*        <div><span className="title">Previous Block: <Link to={`../block/${this.state.previousBlock}`}>{this.state.previousBlock}</Link></span></div>*/}
                     {/*        <div><span className="title">Merkle Root: {this.state.merkleRoot}</span></div>*/}
                     {/*        <div><span className="title">Block Producer: {this.state.blockProducer}</span></div>*/}
                     {/*        <div><span className="title">Version:{this.state.version}</span></div>*/}
-                    {/*        <div><span className="title">Total Community People: {this.state.totalCommunityPeople}</span></div>*/}
+                    {/*        <div><span className="title">TCP: {this.state.totalCommunityPeople}</span></div>*/}
                     {/*        <div><span className="title">World Wallet Amount: {this.state.worldWalletAmount}</span></div>*/}
                     {/*        <div><span className="title">Distribute per Person:{this.state.distributePerPerson}</span></div>*/}
                     {/*        <div><span className="title">Size: {this.state.size}</span></div>*/}

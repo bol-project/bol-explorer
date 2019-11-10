@@ -41,21 +41,21 @@ class TotalCommunityDays extends Component {
             <div className="view-page">
                 <div className="table-list">
 
-                    <h1>Total Community People</h1>
+                    <h1>TCP</h1>
 
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Community</span></Col>
+                            <Col sm><span>C</span></Col>
                         </Row>
                     </div>
                     {this.state.totalCommunityDataList}
                     <br/>
                     <br/>
                     <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                          to={`/totalCommunityDays/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                          to={`/TCP/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
                     <span> </span>
-                    <Link to={`/totalCommunityDays/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
+                    <Link to={`/TCP/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate}>Next</Link>
                 </div>
             </div>
         );

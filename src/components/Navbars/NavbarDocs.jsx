@@ -114,13 +114,13 @@ class NavbarDocs extends React.Component {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/worldPopulationDays/1">
-                                        Current World Population
+                                    <NavLink href="/WPD/1">
+                                        CWP
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/totalCommunityDays/1">
-                                        Total Community People
+                                    <NavLink href="/TCP/1">
+                                        TCP
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
@@ -129,8 +129,8 @@ class NavbarDocs extends React.Component {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/distributions/1">
-                                        Last Day Distribute Per Person
+                                    <NavLink href="/D/1">
+                                        LDDPP
                                </NavLink>
                                 </NavItem>
                             </Nav>

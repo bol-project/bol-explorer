@@ -222,34 +222,34 @@ class Home extends Component {
                     <br/>
                     <br/>
 
-                    <p class="semi-title">World Population by day</p>
+                    <p class="semi-title">WP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Population</span></Col>
+                            <Col sm> <span>D</span></Col>
+                            <Col sm><span>P</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
                         {this.state.worldPopulationDataList}
                     </div>
-                    <Link to="/worldPopulationDays/1">
+                    <Link to="/WPD/1">
                         <Button color="twitter">To all days</Button>
                     </Link>
 
                     <br/>
                     <br/>
 
-                    <p  class="semi-title">Total Community People</p>
+                    <p  class="semi-title">TCP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Community</span></Col>
+                            <Col sm> <span>D</span></Col>
+                            <Col sm><span>C</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
                         {this.state.totalCommunityDataList}
                     </div>
-                    <Link to="/totalCommunityDays/1">
+                    <Link to="/TCP/1">
                         <Button color="twitter">To all days</Button>
                     </Link>
 
@@ -270,18 +270,18 @@ class Home extends Component {
                         <Button color="twitter">To all accounts</Button>
                     </Link>
 
-                    <p className="semi-title">Last Day Distribute Per Person</p>
+                    <p className="semi-title">LDDPP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Person</span></Col>
-                            <Col sm><span>Day</span></Col>
+                            <Col sm> <span>P</span></Col>
+                            <Col sm><span>D</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
                         {this.state.totalLastDistributionsDataList}
                     </div>
-                    <Link to="/distributions/1">
-                        <Button color="twitter">To all distributions</Button>
+                    <Link to="/D/1">
+                        <Button color="twitter">To all d</Button>
                     </Link>
                 </div>
 

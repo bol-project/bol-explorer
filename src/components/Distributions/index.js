@@ -33,7 +33,7 @@ class Distributions extends Component {
         return(
             <div className="view-page">
                 <div className="table-list">
-                    <h1>All distributions</h1>
+                    <h1>All d</h1>
 
                     <div className="table-header btn btn-twitter">
                         <Row>
@@ -45,9 +45,9 @@ class Distributions extends Component {
                     <br/>
                     <br/>
                     <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                          to={`/distributions/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                          to={`/D/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
                     <span> </span>
-                    <Link to={`/distributions/${ parseInt(this.props.match.params.page) + 1}`}  onClick={this.forceUpdate}>Next</Link>
+                    <Link to={`/D/${ parseInt(this.props.match.params.page) + 1}`}  onClick={this.forceUpdate}>Next</Link>
                 </div>
             </div>
         );
