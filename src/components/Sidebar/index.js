@@ -47,7 +47,7 @@ class Sidebar extends React.Component {
                 <a id="app" className="menu-item" href="/app">App</a>
                 <a id="blocks" className="menu-item" href="/blocks">Blocks</a>
                 <a id="home" className="menu-item" href="/home">Home</a>
-                <a id="totalcommunitydays" className="menu-item" href="/totalcommunitydays">Total community days</a>
+                <a id="TCP" className="menu-item" href="/TCP">TCP</a>
                 <a id="transactions" className="menu-item" href="/transactions">Transactions</a>
                 <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a>
             </main>

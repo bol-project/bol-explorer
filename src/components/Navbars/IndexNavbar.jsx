@@ -148,15 +148,15 @@ class ComponentsNavbar extends React.Component {
                 {/*</NavItem>*/}
                 {/*<NavItem className="active">*/}
                     {/*<NavLink  onClick={e => e.preventDefault()} >*/}
-                        {/*<Link to="/worldPopulationDays/1">*/}
-                            {/*<p>Current World Population</p>*/}
+                        {/*<Link to="/WPD/1">*/}
+                            {/*<p>CWP</p>*/}
                         {/*</Link>*/}
                     {/*</NavLink>*/}
                 {/*</NavItem>*/}
                 {/*<NavItem className="active">*/}
                     {/*<NavLink  onClick={e => e.preventDefault()} >*/}
-                        {/*<Link to="/totalCommunityDays/1">*/}
-                            {/*<p>Total Community People</p>*/}
+                        {/*<Link to="/TCP/1">*/}
+                            {/*<p>TCP</p>*/}
                         {/*</Link>*/}
                     {/*</NavLink>*/}
                 {/*</NavItem>*/}
@@ -169,8 +169,8 @@ class ComponentsNavbar extends React.Component {
                 {/*</NavItem>*/}
                 {/*<NavItem className="active">*/}
                     {/*<NavLink  onClick={e => e.preventDefault()} >*/}
-                        {/*<Link to="/distributions/1">*/}
-                            {/*<p>Last Day Distribute Per Person</p>*/}
+                        {/*<Link to="/D/1">*/}
+                            {/*<p>LDDPP</p>*/}
                         {/*</Link>*/}
                     {/*</NavLink>*/}
                 {/*</NavItem>*/}

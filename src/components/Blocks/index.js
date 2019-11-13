@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 
 import './style.css';
 import BlockListElement from "../Home/BlockListElement";
+import Row from "reactstrap/es/Row";
+import Col from "reactstrap/es/Col";
 
 class Blocks extends Component {
 
@@ -13,7 +15,7 @@ class Blocks extends Component {
     }
 
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-        fetch('http://5d712628d3448a001411b54a.mockapi.io/blocks' + this.props.match.params.page)
+        fetch('https://5d712628d3448a001411b54a.mockapi.io/blocks' + this.props.match.params.page)
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and parse data to component
                 this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
@@ -32,15 +34,29 @@ class Blocks extends Component {
         return(
             <div className="view-page">
                 <h1>All blocks</h1>
+
+                <div className="table-header btn btn-twitter">
+                    <Row>
+                        <Col sm> <span>Height</span></Col>
+                        <Col sm><span>Size</span></Col>
+                        <Col sm><span>Transactions</span></Col>
+                        <Col sm><span>Producer</span></Col>
+                        <Col sm><span>Timestamp</span></Col>
+                    </Row>
+                </div>
                 {this.state.blockActivityList}
                 <br/>
                 <br/>
-                <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`}>Next Page</Link>
+                <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
+                      to={`/blocks/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                <span> </span>
+                <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate} >Next</Link>
 
             </div>
         );
     }
 
 }
+
 
 export default Blocks;

@@ -82,3 +82,8 @@ h1, h2, h3, body{
      font-size: 4em !important;
 
 }
+
+.search-field {
+    min-width: 200px;
+}
+

@@ -24,6 +24,16 @@ import bigChartData from "variables/charts.jsx";
 // var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
 // var web3Blockslast5 = new Web3(new Web3.providers.HttpProvider('http://5d712628d3448a001411b54a.mockapi.io/blockslast5'));
 
+var GETHEADER = {
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Origin': '',
+        'Access-Control-Allow-Origin': '*',
+        'Host': 'http://localhost:5000'
+    },
+    };
 
 class Home extends Component {
 
@@ -35,16 +45,64 @@ class Home extends Component {
 
     //https://pusher.com/tutorials/consume-restful-api-react
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
+        this.getTransactions();
         this.getBlocks();
+        this.getWorldPopulationData();
+        this.getTotalCommunityData();
+        this.getTotalLastDistributionsData();
+    }
+
+    getTransactions() {
+        fetch('http://localhost:5000/api/transactions', GETHEADER)
+            .then(res => res.json())
+            .then((data) => {                   //remove 0 index of OK result and parse data to component
+                this.setState({ transactionActivityList: data.map(item => <TransactionListElement key={item.id} item={item}/>)})
+            })
+            .catch(console.log)
     }
 
     getBlocks() {
-        fetch('http://5d712628d3448a001411b54a.mockapi.io/blockslast5')
+        fetch('https://5d712628d3448a001411b54a.mockapi.io/blockslast5')
         .then(res => res.json())
         .then((data) => {                   //remove 0 index of OK result and parse data to component
             this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
         })
         .catch(console.log)
+    }
+    // getBlocks() {
+    //     fetch('http://localhost:5000/api/blocks')
+    //         .then(res => res.json())
+    //         .then((data) => {                   //remove 0 index of OK result and parse data to component
+    //             this.setState({ blockActivityList: data.map(item => <BlockListElement key={item.hash} item={item}/>)})
+    //         })
+    //         .catch(console.log)
+    // }
+
+    getWorldPopulationData() {
+        fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/worldPopulation1')
+            .then(res => res.json())
+            .then((data) => {                   //remove 0 index of OK result and keep only the 5 first
+                this.setState({ worldPopulationDataList: (data.slice(1)).slice(0,5).map(item => <WorldPopulationElement key={item.id} item={item}/>)})
+            })
+            .catch(console.log)
+    }
+
+    getTotalCommunityData() {
+        fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/communityPeople1')
+            .then(res => res.json())
+            .then((data) => {                   //remove 0 index of OK result and keep only the 5 first
+                this.setState({ totalCommunityDataList: (data.slice(1)).slice(0,5).map(item => <TotalCommunityElement key={item.id} item={item}/>)})
+            })
+            .catch(console.log)
+    }
+
+    getTotalLastDistributionsData() {
+        fetch('https://5d8313cdc9e3410014070ff8.mockapi.io/v1/distributePerPerson1')
+            .then(res => res.json())
+            .then((data) => {                    //remove 0 index of OK result and keep only the 5 first
+                this.setState({ totalLastDistributionsDataList: (data.slice(1)).slice(0,5).map(item => <DistributionListElement key={item.id} item={item}/>)})
+            })
+            .catch(console.log)
     }
 
     render() {
@@ -58,12 +116,12 @@ class Home extends Component {
                 </tr>
             )
         });
-        var transactionActivityData = [{type: 'Invocation', transactionId: '50b9ccaef0f9306eba1b34fbd9a66aa1365dbf8b9b9085e206310eff458db370', completedOn: 1551338586},
-            {type: 'Invocation', transactionId: '13e5c967c76158f4ea197094f4e7fd47ad2165f223f4131564aa6e4bcb34a069', completedOn: 1551338586},
-            {type: 'Invocation', transactionId: 'd75d22aa4fe1788e201db2f191a0459285d072ca423e429a51e6d26e2f61c3d4', completedOn: 1551338586},
-            {type: 'Invocation', transactionId: 'ada996ad33ad98fbe3524e2b46e7bff3d4e3952f37c20ec273350d9a5eae70bb', completedOn: 1551338586},
-            {type: 'Invocation', transactionId: '4d84ba1b1f9003d121fd2480420e3d36b3451d0fbb9806fde6dd62f23294ba38', completedOn: 1551338586}];
-        this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionId} item={item}/>)
+        // var transactionActivityData = [{type: 'Invocation', transactionID: '50b9ccaef0f9306eba1b34fbd9a66aa1365dbf8b9b9085e206310eff458db370', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: '13e5c967c76158f4ea197094f4e7fd47ad2165f223f4131564aa6e4bcb34a069', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: 'd75d22aa4fe1788e201db2f191a0459285d072ca423e429a51e6d26e2f61c3d4', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: 'ada996ad33ad98fbe3524e2b46e7bff3d4e3952f37c20ec273350d9a5eae70bb', timestamp: 1551338586},
+        //     {type: 'Invocation', transactionID: '4d84ba1b1f9003d121fd2480420e3d36b3451d0fbb9806fde6dd62f23294ba38', timestamp: 1551338586}];
+        // this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionID} item={item}/>)
 
 
         // var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
@@ -71,34 +129,30 @@ class Home extends Component {
         //     {height: 2223432, size: 2232, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '4', time: 1551338583}, {height: 1, size: 3426, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '5', time: 1551338588}];
         // this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
 
-        var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
-            {dayId: 3, day: '01/03/2019', population: 88}, {dayId: 4, day: '01/04/2019', population: 7055}, {dayId: 5, day: '01/05/2019', population: 551},
-            {dayId: 6, day: '01/06/2019', population: 888}, {dayId: 7, day: '01/07/2019', population: 1001}, {dayId: 8, day: '01/08/2019', population: 1200},
-            {dayId: 9, day: '01/09/2019', population: 1500}, {dayId: 10, day: '01/10/2019', population: 1909}, {dayId: 11, day: '01/11/2019', population: 5001},
-            {dayId: 12, day: '01/12/2019', population: 1996}, {dayId: 13, day: '01/13/2019', population: 90668}, {dayId: 14, day: '01/14/2019', population: 10996},
-            {dayId: 15, day: '01/15/2019', population: 70258}, {dayId: 16, day: '01/16/2019', population: 99366}, {dayId: 17, day: '01/17/2019', population: 1000580},
-            {dayId: 18, day: '01/18/2019', population: 999999}, {dayId: 19, day: '01/19/2019', population: 1000025}, {dayId: 20, day: '01/20/2019', population: 9000000}];
-        this.state.worldPopulatonDataList = worldPopulationData.map(item => <WorldPopulationElement key={item.dayId} item={item}/>)
+        // var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
+        //     {dayId: 3, day: '01/03/2019', population: 88}, {dayId: 4, day: '01/04/2019', population: 7055}, {dayId: 5, day: '01/05/2019', population: 551},
+        //     {dayId: 6, day: '01/06/2019', population: 888}, {dayId: 7, day: '01/07/2019', population: 1001}, {dayId: 8, day: '01/08/2019', population: 1200},
+        //     {dayId: 9, day: '01/09/2019', population: 1500}, {dayId: 10, day: '01/10/2019', population: 1909}, {dayId: 11, day: '01/11/2019', population: 5001},
+        //     {dayId: 12, day: '01/12/2019', population: 1996}, {dayId: 13, day: '01/13/2019', population: 90668}, {dayId: 14, day: '01/14/2019', population: 10996},
+        //     {dayId: 15, day: '01/15/2019', population: 70258}, {dayId: 16, day: '01/16/2019', population: 99366}, {dayId: 17, day: '01/17/2019', population: 1000580},
+        //     {dayId: 18, day: '01/18/2019', population: 999999}, {dayId: 19, day: '01/19/2019', population: 1000025}, {dayId: 20, day: '01/20/2019', population: 9000000}];
+        // this.state.worldPopulatonDataList = worldPopulationData.map(item => <WorldPopulationElement key={item.dayId} item={item}/>)
 
-        var totalCommunityData = [{dayId: 1, day: '01/01/2019', community: 10}, {dayId: 2, day: '01/02/2019', community: 12},
-            {dayId: 3, day: '01/03/2019', community: 88}, {dayId: 4, day: '01/04/2019', community: 7055}, {dayId: 5, day: '01/05/2019', community: 551},
-            {dayId: 6, day: '01/06/2019', community: 888}, {dayId: 7, day: '01/07/2019', community: 1001}, {dayId: 8, day: '01/08/2019', community: 1200},
-            {dayId: 9, day: '01/09/2019', community: 1500}, {dayId: 10, day: '01/10/2019', community: 1909}, {dayId: 11, day: '01/11/2019', community: 5001},
-            {dayId: 12, day: '01/12/2019', community: 1996}, {dayId: 13, day: '01/13/2019', community: 90668}, {dayId: 14, day: '01/14/2019', community: 10996},
-            {dayId: 15, day: '01/15/2019', community: 70258}, {dayId: 16, day: '01/16/2019', community: 99366}, {dayId: 17, day: '01/17/2019', community: 1000580},
-            {dayId: 18, day: '01/18/2019', community: 999999}, {dayId: 19, day: '01/19/2019', community: 1000025}, {dayId: 20, day: '01/20/2019', community: 9000000}];
-        this.state.totalCommunityDataList = totalCommunityData.map(item => <TotalCommunityElement key={item.dayId} item={item}/>)
+        // var totalCommunityData = [{dayId: 1, day: '01/01/2019', community: 10}, {dayId: 2, day: '01/02/2019', community: 12},
+        //     {dayId: 3, day: '01/03/2019', community: 88}, {dayId: 4, day: '01/04/2019', community: 7055}, {dayId: 5, day: '01/05/2019', community: 551},
+        //     {dayId: 6, day: '01/06/2019', community: 888}, {dayId: 7, day: '01/07/2019', community: 1001}, {dayId: 8, day: '01/08/2019', community: 1200},
+        //     {dayId: 9, day: '01/09/2019', community: 1500}, {dayId: 10, day: '01/10/2019', community: 1909}, {dayId: 11, day: '01/11/2019', community: 5001},
+        //     {dayId: 12, day: '01/12/2019', community: 1996}, {dayId: 13, day: '01/13/2019', community: 90668}, {dayId: 14, day: '01/14/2019', community: 10996},
+        //     {dayId: 15, day: '01/15/2019', community: 70258}, {dayId: 16, day: '01/16/2019', community: 99366}, {dayId: 17, day: '01/17/2019', community: 1000580},
+        //     {dayId: 18, day: '01/18/2019', community: 999999}, {dayId: 19, day: '01/19/2019', community: 1000025}, {dayId: 20, day: '01/20/2019', community: 9000000}];
+        // this.state.totalCommunityDataList = totalCommunityData.map(item => <TotalCommunityElement key={item.dayId} item={item}/>)
 
         var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {accountHash: 2, codename: 'myAccount2'}, {accountHash: 3, codename: 'myAccount3'},
-            {accountHash: 4, codename: 'myAccount4'}, {accountHash: 5, codename: 'myAccount5'}, {accountHash: 6, codename: 'myAccount6'}, {accountHash: 7, codename: 'myAccount7'},
-            {accountHash: 8, codename: 'myAccount8'}, {accountHash: 9, codename: 'myAccount9'}, {accountHash: 10, codename: 'myAccount10'}, {accountHash: 11, codename: 'myAccount11'},
-            {accountHash: 12, codename: 'myAccount12'}, {accountHash: 13, codename: 'myAccount13'}, {accountHash: 14, codename: 'myAccount14'}, {accountHash: 15, codename: 'myAccount15'},
-            {accountHash: 16, codename: 'myAccount16'}, {accountHash: 17, codename: 'myAccount17'}, {accountHash: 18, codename: 'myAccount18'}, {accountHash: 19, codename: 'myAccount19'},
-            {accountHash: 20, codename: 'myAccount20'}];
+            {accountHash: 4, codename: 'myAccount4'}, {accountHash: 5, codename: 'myAccount5'}];
         this.state.totalAccountsDataList = totalAccountsData.map(item => <AccountListElement key={item.accountHash} item={item}/>)
 
-        var totalLastDistributionsData = [{personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}];
-        this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
+        // var totalLastDistributionsData = [{personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}];
+        // this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
 
         return (
             <div>
@@ -168,34 +222,34 @@ class Home extends Component {
                     <br/>
                     <br/>
 
-                    <p class="semi-title">World Population by day</p>
+                    <p class="semi-title">WP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Population</span></Col>
+                            <Col sm> <span>D</span></Col>
+                            <Col sm><span>P</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
-                        {this.state.worldPopulatonDataList}
+                        {this.state.worldPopulationDataList}
                     </div>
-                    <Link to="/worldPopulationDays/1">
+                    <Link to="/WPD/1">
                         <Button color="twitter">To all days</Button>
                     </Link>
 
                     <br/>
                     <br/>
 
-                    <p  class="semi-title">Total Community People</p>
+                    <p  class="semi-title">TCP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Day</span></Col>
-                            <Col sm><span>Community</span></Col>
+                            <Col sm> <span>D</span></Col>
+                            <Col sm><span>C</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
                         {this.state.totalCommunityDataList}
                     </div>
-                    <Link to="/totalCommunityDays/1">
+                    <Link to="/TCP/1">
                         <Button color="twitter">To all days</Button>
                     </Link>
 
@@ -216,18 +270,18 @@ class Home extends Component {
                         <Button color="twitter">To all accounts</Button>
                     </Link>
 
-                    <p className="semi-title">Last Day Distribute Per Person</p>
+                    <p className="semi-title">LDDPP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>Person</span></Col>
-                            <Col sm><span>Day</span></Col>
+                            <Col sm> <span>P</span></Col>
+                            <Col sm><span>D</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
                         {this.state.totalLastDistributionsDataList}
                     </div>
-                    <Link to="/distributions/1">
-                        <Button color="twitter">To all distributions</Button>
+                    <Link to="/D/1">
+                        <Button color="twitter">To all d</Button>
                     </Link>
                 </div>
 
