@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: __CI_BUILD_REF_SLUG__-explorer
+  namespace: __CI_BUILD_REF_SLUG__
+  labels:
+    app: __CI_BUILD_REF_SLUG__-explorer
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/scheme: "http"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http-metrics
+      port: 80
+      protocol: TCP
+  selector:
+    app: __CI_BUILD_REF_SLUG__-explorer
