@@ -10,11 +10,12 @@ class TransactionListElement extends React.Component {
         super();
 
         this.state = {};
+
     }
 
     render() {
 
-        var timestamp = new Date(this.props.item.timestamp).toLocaleString();
+        var dtFormat = Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
 
         return (
@@ -26,11 +27,11 @@ class TransactionListElement extends React.Component {
                     </Col>
                     <Col sm>
                         <Link to={"/transaction/" + this.props.item.id}>
-                            <span>{this.props.item.transactionID}</span>
+                            <span>{this.props.item.id}</span>
                         </Link>
                     </Col>
                     <Col sm>
-                        <span>{timestamp}</span>
+                        <span>{dtFormat.format(this.props.item.timestamp)}</span>
                     </Col>
                 </Row>
                </div>

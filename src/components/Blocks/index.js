@@ -15,22 +15,17 @@ class Blocks extends Component {
     }
 
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-        fetch('https://5d712628d3448a001411b54a.mockapi.io/blocks' + this.props.match.params.page)
+        //fetch('https://5d712628d3448a001411b54a.mockapi.io/blocks' + this.props.match.params.page)
+        fetch('http://localhost:5000/api/blocks?Page=' + this.props.match.params.page + '&PageSize=20')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and parse data to component
-                this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
+               // this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
+                this.setState({ blockActivityList: data.items.map(item => <BlockListElement key={item.hash} item={item}/>)})
             })
             .catch(console.log)
     }
 
     render() {
-
-        // var blockActivityData = [{index: 1, size: 1526, version: 1, hash: '1', time: 1551338586},
-        //     {index: 1, size: 1526, version: 1, hash: '2', time: 1551338587}, {index: 1, size: 1526, version: 1, hash: '3', time: 1551338588},
-        //     {index: 1, size: 2232, version: 1, hash: '4', time: 1551338583}, {index: 1, size: 3426, version: 1, hash: '5', time: 1551338588}];
-        // this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
-
-
         return(
             <div className="view-page">
                 <h1>All blocks</h1>

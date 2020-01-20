@@ -53,19 +53,21 @@ class Home extends Component {
     }
 
     getTransactions() {
-        fetch('http://localhost:5000/api/transactions', GETHEADER)
+        fetch('http://localhost:5000/api/transactions?Page=1&PageSize=5')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and parse data to component
-                this.setState({ transactionActivityList: data.map(item => <TransactionListElement key={item.id} item={item}/>)})
+                this.setState({ transactionActivityList: data.items.map(item => <TransactionListElement key={item.id} item={item}/>)})
             })
             .catch(console.log)
     }
 
     getBlocks() {
-        fetch('https://5d712628d3448a001411b54a.mockapi.io/blockslast5')
+       // fetch('https://5d712628d3448a001411b54a.mockapi.io/blockslast5')
+        fetch('http://localhost:5000/api/blocks?Page=1&PageSize=5')
         .then(res => res.json())
         .then((data) => {                   //remove 0 index of OK result and parse data to component
-            this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
+            //this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
+            this.setState({ blockActivityList: data.items.map(item => <BlockListElement key={item.hash} item={item}/>)})
         })
         .catch(console.log)
     }

@@ -20,8 +20,8 @@ class BlockListElement extends React.Component {
             <div className="list-element">
                 <Row>
                     <Col sm>
-                        <Link to={"/block/" + this.props.item.blockHash}>
-                            <span>{this.props.item.blockHeight}</span>
+                        <Link to={"/block/" + this.props.item.hash}>
+                            <span>{this.props.item.height}</span>
                         </Link>
                     </Col>
                     <Col sm>
@@ -31,7 +31,7 @@ class BlockListElement extends React.Component {
                         <span>{this.props.item.numberOfTransactions}</span>
                     </Col>
                     <Col sm>
-                        <span>{this.props.item.blockProducer}</span>
+                        <span>{this.props.item.creator}</span>
                     </Col>
                     <Col sm>
                         <span>{dtFormat.format(this.props.item.timestamp)}</span>
