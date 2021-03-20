@@ -20,11 +20,11 @@ class TransactionBlockListElement extends React.Component {
             <div className="list-element">
                 <Row>
                     <Col sm>
-                        <span>{this.props.item.value}</span>
+                        <span>{this.props.item.type}</span>
                     </Col>
                     <Col sm>
-                        <Link to={"/transaction/" + this.props.item.key}>
-                            <span>{this.props.item.key}</span>
+                        <Link to={"/transaction/" + this.props.item.txid}>
+                            <span>{this.props.item.txid}</span>
                         </Link>
                     </Col>
                 </Row>

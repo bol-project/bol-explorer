@@ -1,32 +1,94 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom'
 
 import './style.css';
 import BlockListElement from "../Home/BlockListElement";
 import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
+import JsonRpcClient from "react-jsonrpc-client";
+
+var api = new JsonRpcClient({
+    endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
+});
+var pageSize = 25;
 
 class Blocks extends Component {
+
+    _isMounted = false;
 
     constructor() {
         super();
         this.state = {
+            blockActivityList: []
         };
     }
 
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-        //fetch('https://5d712628d3448a001411b54a.mockapi.io/blocks' + this.props.match.params.page)
-        fetch('http://localhost:5000/api/blocks?Page=' + this.props.match.params.page + '&PageSize=20')
-            .then(res => res.json())
-            .then((data) => {                   //remove 0 index of OK result and parse data to component
-               // this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
-                this.setState({ blockActivityList: data.items.map(item => <BlockListElement key={item.hash} item={item}/>)})
-            })
-            .catch(console.log)
+        this._isMounted = true;
+        if (this.props.match.params.page <= 0) {
+            return;
+        }
+
+        this.getBlockCount();
+        setInterval(() => {
+            this.getBlockCount();
+        }, 10000);
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    getBlockCount() {
+
+        api.request('getblockcount').then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({blockheight: (response) ? response : 0});
+            }
+        })
+        .then(() => {
+
+            //paging
+            Array.from(Array(pageSize)).forEach((el, i) => {
+
+                let pageIndex = this.state.blockheight - i - 1 - (this.props.match.params.page - 1) * pageSize;
+
+                //max page overflow and negative positions
+                if (this.props.match.params.page <= Math.ceil(this.state.blockheight / pageSize) && pageIndex >= 0) {
+                    this.getBlock(pageIndex, i);
+                }
+            });
+        })
+    }
+
+    getBlock(height, arrayIndex) {
+
+        return api.request('getblock', height, 1).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState(function (previousState) {
+
+                    let newBlockActivityList = previousState.blockActivityList;
+                    newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
+
+                    // used in case of new block arrived and getblock calls are not in order
+                    let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+                    let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
+                    if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                        newBlockActivityList[existingBlockLineIndex] = undefined;
+                    }
+
+                    return {
+                        blockActivityList: newBlockActivityList
+                    };
+                });
+            }
+        });
     }
 
     render() {
-        return(
+        return (
             <div className="view-page">
                 <h1>All blocks</h1>
 
@@ -39,13 +101,17 @@ class Blocks extends Component {
                         <Col sm><span>Timestamp</span></Col>
                     </Row>
                 </div>
-                {this.state.blockActivityList}
+                <div className="table-list">
+                    {(this.state.blockActivityList && this.state.blockActivityList.length) ? this.state.blockActivityList : []}
+                </div>
                 <br/>
                 <br/>
-                <Link className={( (parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                      to={`/blocks/${ parseInt(this.props.match.params.page) - 1}`} onClick={this.forceUpdate}>Previous</Link>
+                <Link className={((parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
+                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}
+                      onClick={this.forceUpdate}>Previous</Link>
                 <span> </span>
-                <Link to={`/blocks/${ parseInt(this.props.match.params.page) + 1}`} onClick={this.forceUpdate} >Next</Link>
+                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}
+                      onClick={this.forceUpdate}>Next</Link>
 
             </div>
         );
