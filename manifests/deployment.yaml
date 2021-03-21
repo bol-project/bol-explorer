@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __CI_BUILD_REF_SLUG__-explorer
+  namespace: __CI_BUILD_REF_SLUG__
+  labels:
+    app: __CI_BUILD_REF_SLUG__-explorer
+    track: stable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: __CI_BUILD_REF_SLUG__-explorer
+  template:
+    metadata:
+      labels:
+        app: __CI_BUILD_REF_SLUG__-explorer
+        track: stable
+    spec:
+      imagePullSecrets:
+        - name: bol-registry-secret
+      containers:
+      - name: __CI_BUILD_REF_SLUG__-explorer
+        image: __CI_IMAGE_TAG__
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /self
+            port: 80
+          initialDelaySeconds: 3
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /ready 
+            port: 80
+          initialDelaySeconds: 3
+          timeoutSeconds: 2

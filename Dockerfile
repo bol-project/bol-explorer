@@ -23,3 +23,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./robots.txt /etc/nginx/robots.txt
