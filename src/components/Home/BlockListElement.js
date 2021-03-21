@@ -41,7 +41,8 @@ class BlockListElement extends React.Component {
                         <span>{this.props.item.creator}</span>
                     </Col>
                     <Col sm>
-                        <span>{dtFormat.format(this.props.item.time)}</span>
+                        <span>{(!this.props.item.time) ? '' :
+                            dtFormat.format(new Date(0).setUTCSeconds(this.props.item.time))}</span>
                     </Col>
                 </Row>
             </div>

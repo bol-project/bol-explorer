@@ -115,7 +115,8 @@ class Block extends Component {
                             </tr>
                             <tr>
                                 <td className="tdLabel">Date:</td>
-                                <td>{dtFormat.format(this.state.time)}</td>
+                                <td>{(!this.state.time) ? '' :
+                                    dtFormat.format(new Date(0).setUTCSeconds(this.state.time))}</td>
                             </tr>
                             <tr>
                                 <td className="tdLabel">CWP:</td>
