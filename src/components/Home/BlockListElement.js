@@ -38,7 +38,7 @@ class BlockListElement extends React.Component {
                         <span>{(this.props.item.tx && this.props.item.tx.length) ? this.props.item.tx.length : 0}</span>
                     </Col>
                     <Col sm>
-                        <span>{this.props.item.creator}</span>
+                        <span>{this.props.item.nextconsensus}</span>
                     </Col>
                     <Col sm>
                         <span>{(!this.props.item.time) ? '' :

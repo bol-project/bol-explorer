@@ -32,6 +32,12 @@ let ps = null;
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
+var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
+var ClaimIntervalStorageKey = "B3";
+var CWPStorageKey = "B7";
+var TCPStorageKey = "08";
+var WorldWalletAmountStorageKey = "B8";
+var DistributePerPersonStorageKey = "B4";
 
 class Block extends Component {
 
@@ -45,10 +51,15 @@ class Block extends Component {
     componentWillMount() {
         this._isMounted = true;
 
-        this.getBlock();
-        setInterval(() => {
+        this.getClaimInterval().then(() => {
+
             this.getBlock();
-        }, 5000);
+            // setInterval(() => {
+            //     this.getBlock();
+            // }, 5000);
+        });
+
+
     }
 
     componentDidMount() {
@@ -56,6 +67,17 @@ class Block extends Component {
     }
     componentWillUnmount() {
         this._isMounted = false;
+    }
+
+    getClaimInterval() {
+
+        return api.request('getstorage', scriptHash, ClaimIntervalStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({claimInterval: parseInt(response, 16)});
+            }
+        });
     }
 
     getBlock() {
@@ -67,7 +89,7 @@ class Block extends Component {
                     blockHash: response.hash,
                     blockHeight: response.index,
                     time: response.time,
-                    creator: response.creator,
+                    nextconsensus: response.nextconsensus,
                     size: response.size,
                     version: response.version,
                     numberOfTransactions: (response.tx && response.tx.length) ? response.tx.length : 0,
@@ -75,16 +97,115 @@ class Block extends Component {
                                                                                                        item={item}/>),
                     merkleRoot: response.merkleroot,
                     previousBlockHash: response.previousblockhash,
-                    nextBlockHash: response.nextblockhash,
-                    currentWorldPopulation: response.currentWorldPopulation,
-                    newRegisteredPeople: response.newRegisteredPeople,
-                    totalCommunityPeople: response.totalCommunityPeople,
-                    worldWalletAmount: response.worldWalletAmount,
-                    distributePerPerson: response.distributePerPerson
+                    nextBlockHash: response.nextblockhash
                 });
-            }
 
+
+                if(this.state.claimInterval && this.state.blockHeight % this.state.claimInterval === 0){
+
+                    this.getCWP();
+                    this.getTCP().then(() => {
+                        this.getNewRegisteredPeople();
+                    });
+                    this.getWorldWalletAmount();
+                    this.getDistributePerPerson();
+
+                } else {
+
+                    let unavailableAtInterval = "Available at the end of each interval"
+                    this.setState({
+                        cwp: unavailableAtInterval,
+                        tcp: unavailableAtInterval,
+                        newRegisteredPeople: unavailableAtInterval,
+                        worldWalletAmount: unavailableAtInterval,
+                        distributePerPerson: unavailableAtInterval
+                    });
+                }
+
+            }
         });
+    }
+
+    getCWP() {
+        let blockKey = this.reverseHex(this.addLeadingZeros(this.toBase16(this.state.blockHeight)));
+        api.request('getstorage', scriptHash, CWPStorageKey + blockKey).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({cwp: this.bigIntegerToInt(this.toBase10(this.reverseHex(response)), 8)})
+            }
+        });
+    }
+
+    getTCP() {
+
+        return this.getTCPByBlockHeight(this.state.blockHeight).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({tcp: this.toBase10(this.reverseHex(response))});
+            }
+        });
+    }
+
+    getNewRegisteredPeople() {
+
+        this.getTCPByBlockHeight(this.state.blockHeight - this.state.claimInterval).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({newRegisteredPeople: this.state.tcp - this.toBase10(this.reverseHex(response))});
+            }
+        });
+    }
+
+    getWorldWalletAmount() {
+
+        let blockKey = this.reverseHex(this.addLeadingZeros(this.toBase16(this.state.blockHeight)));
+        api.request('getstorage', scriptHash, WorldWalletAmountStorageKey + blockKey).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({worldWalletAmount: this.bigIntegerToInt(this.toBase10(this.reverseHex(response)), 4)});
+            }
+        });
+    }
+
+    getDistributePerPerson() {
+
+        let blockKey = this.reverseHex(this.addLeadingZeros(this.toBase16(this.state.blockHeight)));
+        api.request('getstorage', scriptHash, DistributePerPersonStorageKey + blockKey).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({distributePerPerson: this.bigIntegerToInt(this.toBase10(this.reverseHex(response)), 4)});
+            }
+        });
+    }
+
+    getTCPByBlockHeight(height) {
+
+        let blockKey = this.reverseHex(this.addLeadingZeros(this.toBase16(height)));
+        return api.request('getstorage', scriptHash, TCPStorageKey + blockKey);
+    }
+
+    toBase16(num) {
+        return num.toString(16);
+    }
+
+    toBase10(str) {
+        return parseInt(str, 16)
+    }
+
+    bigIntegerToInt(str, decimalPart) {
+        return Math.floor(Number(str/Math.pow(10, decimalPart)));
+    }
+
+    addLeadingZeros(numStr) {
+        return (numStr && numStr.length % 2 === 0) ? numStr : '0' + numStr;
+    }
+
+    reverseHex(numStr) {
+        let reversedNumStr = [];
+        for(var i = 0; i < numStr.length; i+=2){
+            reversedNumStr.push(numStr[i] + numStr[i+1]);
+        }
+        return reversedNumStr.reverse().join('');
     }
 
     render() {
@@ -120,7 +241,7 @@ class Block extends Component {
                             </tr>
                             <tr>
                                 <td className="tdLabel">CWP:</td>
-                                <td>{this.state.currentWorldPopulation}</td>
+                                <td>{this.state.cwp}</td>
                             </tr>
                             <tr>
                                 <td className="tdLabel">Size:</td>
@@ -141,7 +262,7 @@ class Block extends Component {
                             </tr>
                             <tr>
                                 <td className="tdLabel">Block Producer:</td>
-                                <td>{this.state.creator}</td>
+                                <td>{this.state.nextconsensus}</td>
                             </tr>
                             <tr>
                                 <td className="tdLabel">Version:</td>
@@ -149,7 +270,7 @@ class Block extends Component {
                             </tr>
                             <tr>
                                 <td className="tdLabel">TCP:</td>
-                                <td>{this.state.totalCommunityPeople}</td>
+                                <td>{this.state.tcp}</td>
                             </tr>
                             <tr>
                                 <td className="tdLabel">World Wallet Amount:</td>

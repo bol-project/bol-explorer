@@ -43,7 +43,7 @@ class Blocks extends Component {
         api.request('getblockcount').then((response) => {
 
             if (response && this._isMounted) {
-                this.setState({blockheight: (response) ? response : 0});
+                this.setState({blockheight: response});
             }
         })
         .then(() => {
