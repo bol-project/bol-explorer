@@ -1,47 +1,68 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 
 import './style.css';
-import TransactionBlockListElement from "../Home/TransactionBlockListElement";
+import JsonRpcClient from "react-jsonrpc-client";
 
+var api = new JsonRpcClient({
+    endpoint: process.env.REACT_APP_SERVER_URL
+});
 class Transaction extends Component {
+
+    _isMounted = false;
 
     constructor() {
         super();
-
         this.state = {
         };
     }
 
     componentWillMount() {
-        fetch('http://localhost:5000/api/transactions/' + this.props.match.params.transactionHash)
-            .then(res => res.json())
-            .then((data) => {                   //remove 0 index of OK result and parse data to component
-                console.log("data " + JSON.stringify(data));
+        this._isMounted = true;
 
-                // data = data.splice(1);
+        this.getTransaction();
+    }
+
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    getTransaction() {
+
+        api.request('getrawtransaction', this.props.match.params.transactionHash, 1).then((response) => {
+
+            if (response && this._isMounted) {
                 this.setState({
-                    transactionID: data.id,
-                    type: data.type,
-                    version: data.version,
-                    size: data.size,
-                    blockIndex: data.blockIndex,
-                    parts: data.parts,
-                    previousTransaction: data.previousTransaction,
-                    previousIndex: data.previousIndex,
-                    networkFee: data.networkFee,
-                    invocationScript: data.invocationScript,
-                    verificationScript: data.verificationScript
-                    // timestamp: 1551338586,
-                    // sentFrom: "AXAENApG4sPqmYzce9CKbbZRWWhSAAt681",
-                    // sentTo: "AbArunq3PGYmQv4xhduTKva7r2ppUqeaDi",
-                    // blockHeight: '62d945ac404d2aade4a3ddfb002293aac435b16f9e31d90f1a216f7f6f90e7b4',
-                    // systemFee: 0.001,
+                    txid: response.txid,
+                    type: response.type,
+                    version: response.version,
+                    size: response.size,
+                    blockhash: response.blockhash,
+                    parts: response.parts,
+                    previousTransaction: response.previousTransaction,
+                    previousIndex: response.previousIndex,
+                    net_fee: response.net_fee,
+                    invocationScript: response.invocationScript,
+                    verificationScript: response.verificationScript
                 });
-            })
-            .catch(console.log)
 
+                this.getBlock();
+            }
+        });
+    }
 
+    getBlock() {
+
+        api.request('getblock', this.state.blockhash, 1).then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({
+                    blockIndex: response.index
+                });
+            }
+        });
     }
 
     render() {
@@ -60,7 +81,7 @@ class Transaction extends Component {
                     <table>
                         <tbody>
 
-                        <tr><td className="tdLabel">Transaction Id: </td><td>{this.state.transactionID}</td></tr>
+                        <tr><td className="tdLabel">Transaction Id: </td><td>{this.state.txid}</td></tr>
                         <tr><td className="tdLabel">Type: </td><td>{this.state.type}</td></tr>
                         <tr><td className="tdLabel">Version: </td><td>{this.state.version}</td></tr>
                         <tr><td className="tdLabel">Size: </td><td>{this.state.size}</td></tr>
@@ -68,7 +89,7 @@ class Transaction extends Component {
                         <tr><td className="tdLabel">Parts: </td><td>{this.state.parts}</td></tr>
                         <tr><td className="tdLabel">Previous Transaction: </td><td>{this.state.previousTransaction}</td></tr>
                         <tr><td className="tdLabel">Previous Index: </td><td>{this.state.previousIndex}</td></tr>
-                        <tr><td className="tdLabel">Network Fee: </td><td>{this.state.networkFee}</td></tr>
+                        <tr><td className="tdLabel">Network Fee: </td><td>{this.state.net_fee}</td></tr>
                         <tr><td className="tdLabel">Invocation script: </td><td>{this.state.invocationScript}</td></tr>
                         <tr><td className="tdLabel">Verification script: </td><td>{this.state.verificationScript}</td></tr>
 

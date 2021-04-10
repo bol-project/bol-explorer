@@ -6,27 +6,6 @@ import Col from "reactstrap/es/Col";
 import TransactionBlockListElement from "../Home/TransactionBlockListElement";
 import JsonRpcClient from "react-jsonrpc-client";
 
-// var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-var blockUrl = "https://api.neoscan.io/api/main_net/v1/get_block/";
-
-const carouselItems = [
-    {
-        src: require("assets/img/denys.jpg"),
-        altText: "Slide 1",
-        caption: "Big City Life, United States"
-    },
-    {
-        src: require("assets/img/fabien-bazanegue.jpg"),
-        altText: "Slide 2",
-        caption: "Somewhere Beyond, United States"
-    },
-    {
-        src: require("assets/img/mark-finn.jpg"),
-        altText: "Slide 3",
-        caption: "Stocks, United States"
-    }
-];
-
 let ps = null;
 
 var api = new JsonRpcClient({
@@ -54,9 +33,6 @@ class Block extends Component {
         this.getClaimInterval().then(() => {
 
             this.getBlock();
-            // setInterval(() => {
-            //     this.getBlock();
-            // }, 5000);
         });
 
 
