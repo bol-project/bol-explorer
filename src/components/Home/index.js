@@ -27,11 +27,14 @@ var api = new JsonRpcClient({
 class Home extends Component {
 
     _isMounted = false;
+    lastBlocksCount = 5;
+    transactionMap = {};
 
     constructor(props) {
         super(props);
         this.state = {
-            blockActivityList: []
+            blockActivityList: [],
+            transactionActivityList: []
         }
     }
 
@@ -64,7 +67,8 @@ class Home extends Component {
         })
         .then(() => {
 
-            Array.from(Array(5)).forEach((el, i) => {
+            this.transactionMap = new Map();
+            Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {
                 this.getBlock(this.state.blockheight - i - 1, i);
             });
         })
@@ -92,10 +96,30 @@ class Home extends Component {
                         blockActivityList: newBlockActivityList
                     };
                 });
+
+                this.parseTransactions(arrayIndex, (response.tx && response.tx.length) ? response.tx : []);
             }
         });
-    }
+    };
 
+    parseTransactions(index,newTransactions) {
+        this.transactionMap.set(index, newTransactions);
+        let transactions = [];
+
+        if(this.transactionMap.size != this.lastBlocksCount){           //update last transactions list only once to evade list trembling
+            return;
+        }
+
+        Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {        //keep from 0 t0 total-size
+            if(this.transactionMap.has(i)) {                                        //append in list
+                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastBlocksCount - transactions.length));
+            }
+        });
+
+        this.setState({
+            transactionActivityList: transactions.map(tx => <TransactionListElement key={tx.txid} item={tx}/>)
+        });
+    }
 
     getTransactions() {
         // fetch('http://localhost:5000/api/transactions?Page=1&PageSize=5')

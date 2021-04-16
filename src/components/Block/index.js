@@ -186,7 +186,7 @@ class Block extends Component {
 
     render() {
 
-        var dtFormat = Intl.DateTimeFormat('en-US', {
+        var dtFormat = Intl.DateTimeFormat('en-GB', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
