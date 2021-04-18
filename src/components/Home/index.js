@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import Web3 from 'web3';
+import React, {Component} from 'react';
 import _ from 'lodash';
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import JsonRpcClient from 'react-jsonrpc-client'
 
 import './style.css';
 import BlockListElement from "./BlockListElement";
@@ -16,73 +16,131 @@ import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
 import PageHeader from "../PageHeader/PageHeader";
-import {Card, CardBody, CardHeader, CardTitle} from "reactstrap";
+import {Card, CardBody} from "reactstrap";
 import {Line} from "react-chartjs-2";
 import bigChartData from "variables/charts.jsx";
 
-// var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-// var web3 = new Web3(new Web3.providers.HttpProvider('https://api.neoscan.io/api/main_net/v1/get_address_abstracts/'));
-// var web3Blockslast5 = new Web3(new Web3.providers.HttpProvider('http://5d712628d3448a001411b54a.mockapi.io/blockslast5'));
-
-var GETHEADER = {
-    method: 'GET',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Origin': '',
-        'Access-Control-Allow-Origin': '*',
-        'Host': 'http://localhost:5000'
-    },
-    };
+var api = new JsonRpcClient({
+    endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
+});
 
 class Home extends Component {
+
+    _isMounted = false;
+    lastBlocksCount = 5;
+    transactionMap = {};
 
     constructor(props) {
         super(props);
         this.state = {
+            blockActivityList: [],
+            transactionActivityList: []
         }
     }
 
     //https://pusher.com/tutorials/consume-restful-api-react
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
+        this._isMounted = true;
+
         this.getTransactions();
-        this.getBlocks();
         this.getWorldPopulationData();
         this.getTotalCommunityData();
         this.getTotalLastDistributionsData();
+
+        this.getBlockCount();
+        setInterval(() => {
+            this.getBlockCount();
+        }, 5000);
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    getBlockCount() {
+
+        api.request('getblockcount').then((response) => {
+
+            if (response && this._isMounted) {
+                this.setState({blockheight: (response) ? response : 0});
+            }
+        })
+        .then(() => {
+
+            this.transactionMap = new Map();
+            Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {
+                this.getBlock(this.state.blockheight - i - 1, i);
+            });
+        })
+    }
+
+    getBlock(height, arrayIndex) {
+
+        return api.request('getblock', height, 1).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState(function (previousState) {
+
+                    let newBlockActivityList = previousState.blockActivityList;
+                    newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
+
+                    // used in case of new block arrived and getblock calls are not in order
+                    let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+                    let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
+                    if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                        newBlockActivityList[existingBlockLineIndex] = undefined;
+                    }
+
+                    return {
+                        blockActivityList: newBlockActivityList
+                    };
+                });
+
+                this.parseTransactions(arrayIndex, (response.tx && response.tx.length) ? response.tx : []);
+            }
+        });
+    };
+
+    parseTransactions(index,newTransactions) {
+        this.transactionMap.set(index, newTransactions);
+        let transactions = [];
+
+        if(this.transactionMap.size != this.lastBlocksCount){           //update last transactions list only once to evade list trembling
+            return;
+        }
+
+        Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {        //keep from 0 t0 total-size
+            if(this.transactionMap.has(i)) {                                        //append in list
+                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastBlocksCount - transactions.length));
+            }
+        });
+
+        this.setState({
+            transactionActivityList: transactions.map(tx => <TransactionListElement key={tx.txid} item={tx}/>)
+        });
     }
 
     getTransactions() {
-        fetch('http://localhost:5000/api/transactions', GETHEADER)
+        // fetch('http://localhost:5000/api/transactions?Page=1&PageSize=5')
+        fetch('http://localhost:5000/api/transactions')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and parse data to component
-                this.setState({ transactionActivityList: data.map(item => <TransactionListElement key={item.id} item={item}/>)})
+                this.setState({
+                    transactionActivityList: data.map(item => <TransactionListElement key={item.hash} item={item}/>)
+                })
             })
             .catch(console.log)
     }
-
-    getBlocks() {
-        fetch('https://5d712628d3448a001411b54a.mockapi.io/blockslast5')
-        .then(res => res.json())
-        .then((data) => {                   //remove 0 index of OK result and parse data to component
-            this.setState({ blockActivityList: data.slice(1).map(item => <BlockListElement key={item.hash} item={item}/>)})
-        })
-        .catch(console.log)
-    }
-    // getBlocks() {
-    //     fetch('http://localhost:5000/api/blocks')
-    //         .then(res => res.json())
-    //         .then((data) => {                   //remove 0 index of OK result and parse data to component
-    //             this.setState({ blockActivityList: data.map(item => <BlockListElement key={item.hash} item={item}/>)})
-    //         })
-    //         .catch(console.log)
-    // }
 
     getWorldPopulationData() {
         fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/worldPopulation1')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and keep only the 5 first
-                this.setState({ worldPopulationDataList: (data.slice(1)).slice(0,5).map(item => <WorldPopulationElement key={item.id} item={item}/>)})
+                this.setState({
+                    worldPopulationDataList: (data.slice(1)).slice(0, 5).map(item => <WorldPopulationElement
+                        key={item.id} item={item}/>)
+                })
             })
             .catch(console.log)
     }
@@ -91,7 +149,10 @@ class Home extends Component {
         fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/communityPeople1')
             .then(res => res.json())
             .then((data) => {                   //remove 0 index of OK result and keep only the 5 first
-                this.setState({ totalCommunityDataList: (data.slice(1)).slice(0,5).map(item => <TotalCommunityElement key={item.id} item={item}/>)})
+                this.setState({
+                    totalCommunityDataList: (data.slice(1)).slice(0, 5).map(item => <TotalCommunityElement key={item.id}
+                                                                                                           item={item}/>)
+                })
             })
             .catch(console.log)
     }
@@ -100,7 +161,10 @@ class Home extends Component {
         fetch('https://5d8313cdc9e3410014070ff8.mockapi.io/v1/distributePerPerson1')
             .then(res => res.json())
             .then((data) => {                    //remove 0 index of OK result and keep only the 5 first
-                this.setState({ totalLastDistributionsDataList: (data.slice(1)).slice(0,5).map(item => <DistributionListElement key={item.id} item={item}/>)})
+                this.setState({
+                    totalLastDistributionsDataList: (data.slice(1)).slice(0, 5).map(item => <DistributionListElement
+                        key={item.id} item={item}/>)
+                })
             })
             .catch(console.log)
     }
@@ -112,58 +176,31 @@ class Home extends Component {
             transactionActivityRows.push(
                 <tr key={this.state.block_hashes[index]}>
                     <td className="tdCenter">{this.state.block_ids[index]}</td>
-                    <td><Link to={`/block/${this.state.block_hashes[index]}`}>{this.state.block_hashes[index]}</Link></td>
+                    <td><Link to={`/block/${this.state.block_hashes[index]}`}>{this.state.block_hashes[index]}</Link>
+                    </td>
                 </tr>
             )
         });
-        // var transactionActivityData = [{type: 'Invocation', transactionID: '50b9ccaef0f9306eba1b34fbd9a66aa1365dbf8b9b9085e206310eff458db370', timestamp: 1551338586},
-        //     {type: 'Invocation', transactionID: '13e5c967c76158f4ea197094f4e7fd47ad2165f223f4131564aa6e4bcb34a069', timestamp: 1551338586},
-        //     {type: 'Invocation', transactionID: 'd75d22aa4fe1788e201db2f191a0459285d072ca423e429a51e6d26e2f61c3d4', timestamp: 1551338586},
-        //     {type: 'Invocation', transactionID: 'ada996ad33ad98fbe3524e2b46e7bff3d4e3952f37c20ec273350d9a5eae70bb', timestamp: 1551338586},
-        //     {type: 'Invocation', transactionID: '4d84ba1b1f9003d121fd2480420e3d36b3451d0fbb9806fde6dd62f23294ba38', timestamp: 1551338586}];
-        // this.state.transactionActivityList = transactionActivityData.map(item => <TransactionListElement key={item.transactionID} item={item}/>)
 
-
-        // var blockActivityData = [{height: 33, size: 1526, transactions: 4433, producer: '3232321fdsfsd544fdfsd', hash: '1', time: 1551338586},
-        //     {height: 343, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '2', time: 1551338587}, {height: 1, size: 1526, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '3', time: 1551338588},
-        //     {height: 2223432, size: 2232, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '4', time: 1551338583}, {height: 1, size: 3426, transactions: 1, producer: '3232321fdsfsd544fdfsd', hash: '5', time: 1551338588}];
-        // this.state.blockActivityList = blockActivityData.map(item => <BlockListElement key={item.hash} item={item}/>)
-
-        // var worldPopulationData = [{dayId: 1, day: '01/01/2019', population: 10}, {dayId: 2, day: '01/02/2019', population: 12},
-        //     {dayId: 3, day: '01/03/2019', population: 88}, {dayId: 4, day: '01/04/2019', population: 7055}, {dayId: 5, day: '01/05/2019', population: 551},
-        //     {dayId: 6, day: '01/06/2019', population: 888}, {dayId: 7, day: '01/07/2019', population: 1001}, {dayId: 8, day: '01/08/2019', population: 1200},
-        //     {dayId: 9, day: '01/09/2019', population: 1500}, {dayId: 10, day: '01/10/2019', population: 1909}, {dayId: 11, day: '01/11/2019', population: 5001},
-        //     {dayId: 12, day: '01/12/2019', population: 1996}, {dayId: 13, day: '01/13/2019', population: 90668}, {dayId: 14, day: '01/14/2019', population: 10996},
-        //     {dayId: 15, day: '01/15/2019', population: 70258}, {dayId: 16, day: '01/16/2019', population: 99366}, {dayId: 17, day: '01/17/2019', population: 1000580},
-        //     {dayId: 18, day: '01/18/2019', population: 999999}, {dayId: 19, day: '01/19/2019', population: 1000025}, {dayId: 20, day: '01/20/2019', population: 9000000}];
-        // this.state.worldPopulatonDataList = worldPopulationData.map(item => <WorldPopulationElement key={item.dayId} item={item}/>)
-
-        // var totalCommunityData = [{dayId: 1, day: '01/01/2019', community: 10}, {dayId: 2, day: '01/02/2019', community: 12},
-        //     {dayId: 3, day: '01/03/2019', community: 88}, {dayId: 4, day: '01/04/2019', community: 7055}, {dayId: 5, day: '01/05/2019', community: 551},
-        //     {dayId: 6, day: '01/06/2019', community: 888}, {dayId: 7, day: '01/07/2019', community: 1001}, {dayId: 8, day: '01/08/2019', community: 1200},
-        //     {dayId: 9, day: '01/09/2019', community: 1500}, {dayId: 10, day: '01/10/2019', community: 1909}, {dayId: 11, day: '01/11/2019', community: 5001},
-        //     {dayId: 12, day: '01/12/2019', community: 1996}, {dayId: 13, day: '01/13/2019', community: 90668}, {dayId: 14, day: '01/14/2019', community: 10996},
-        //     {dayId: 15, day: '01/15/2019', community: 70258}, {dayId: 16, day: '01/16/2019', community: 99366}, {dayId: 17, day: '01/17/2019', community: 1000580},
-        //     {dayId: 18, day: '01/18/2019', community: 999999}, {dayId: 19, day: '01/19/2019', community: 1000025}, {dayId: 20, day: '01/20/2019', community: 9000000}];
-        // this.state.totalCommunityDataList = totalCommunityData.map(item => <TotalCommunityElement key={item.dayId} item={item}/>)
-
-        var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {accountHash: 2, codename: 'myAccount2'}, {accountHash: 3, codename: 'myAccount3'},
+        var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {
+            accountHash: 2,
+            codename: 'myAccount2'
+        }, {accountHash: 3, codename: 'myAccount3'},
             {accountHash: 4, codename: 'myAccount4'}, {accountHash: 5, codename: 'myAccount5'}];
-        this.state.totalAccountsDataList = totalAccountsData.map(item => <AccountListElement key={item.accountHash} item={item}/>)
-
-        // var totalLastDistributionsData = [{personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}, {personId: 1, day: '01/04/2019'}];
-        // this.state.totalLastDistributionsDataList = totalLastDistributionsData.map(item => <DistributionListElement key={item.personId} item={item}/>)
-
+        this.state.totalAccountsDataList = totalAccountsData.map(item => <AccountListElement key={item.accountHash}
+                                                                                             item={item}/>)
         return (
             <div>
-                <PageHeader />
+                <PageHeader/>
 
                 <div className="home">
-                    <TotalActivity totalTransactions="889,333,158" totalBlocks="343,556,339" totalWalletAddresses="339.765.332"/>
+                    <TotalActivity totalTransactions="889,333,158" totalBlocks={this.state.blockheight}
+                                   totalWalletAddresses="339.765.332"/>
 
                     <br/>
                     <br/>
-                    <MarketActivity neoCoinPrice="$8.99" currentMarketCap="$152,222,588" last24HourChange="1.32%" last24HourVolume="$554,345,312"/>
+                    <MarketActivity neoCoinPrice="$8.99" currentMarketCap="$152,222,588" last24HourChange="1.32%"
+                                    last24HourVolume="$554,345,312"/>
 
                     <br/>
                     <br/>
@@ -185,15 +222,15 @@ class Home extends Component {
 
                     <br/>
                     <br/>
-                    <p class="semi-title">Last 5 Transactions</p>
-                    <div class="table-header btn btn-twitter ">
+                    <p className="semi-title">Last 5 Transactions</p>
+                    <div className="table-header btn btn-twitter ">
                         <Row>
                             <Col sm> <span>Transaction Type</span></Col>
                             <Col sm><span>Transaction ID</span></Col>
                             <Col sm><span>Timestamp</span></Col>
                         </Row>
                     </div>
-                    <div className="table-list" >
+                    <div className="table-list">
                         {this.state.transactionActivityList}
                     </div>
                     <Link to="/transactions/1">
@@ -202,7 +239,7 @@ class Home extends Component {
 
                     <br/>
                     <br/>
-                    <p  class="semi-title">Last 5 Blocks</p>
+                    <p className="semi-title">Last 5 Blocks</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>Height</span></Col>
@@ -213,7 +250,7 @@ class Home extends Component {
                         </Row>
                     </div>
                     <div className="table-list">
-                        {this.state.blockActivityList}
+                        {(this.state.blockActivityList && this.state.blockActivityList.length) ? this.state.blockActivityList : []}
                     </div>
                     <Link to="/blocks/1">
                         <Button color="twitter">See all blocks</Button>
@@ -222,7 +259,7 @@ class Home extends Component {
                     <br/>
                     <br/>
 
-                    <p class="semi-title">WP</p>
+                    <p className="semi-title">WP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>D</span></Col>
@@ -239,7 +276,7 @@ class Home extends Component {
                     <br/>
                     <br/>
 
-                    <p  class="semi-title">TCP</p>
+                    <p className="semi-title">TCP</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>D</span></Col>
@@ -256,7 +293,7 @@ class Home extends Component {
                     <br/>
                     <br/>
 
-                    <p  class="semi-title">Total Accounts</p>
+                    <p className="semi-title">Total Accounts</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
                             <Col sm> <span>Human accounts</span></Col>

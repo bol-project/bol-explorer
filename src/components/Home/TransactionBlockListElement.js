@@ -4,7 +4,7 @@ import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import "assets/css/nucleo-icons.css";
 
-class TransactionListElement extends React.Component {
+class TransactionBlockListElement extends React.Component {
 
     constructor(){
         super();
@@ -14,15 +14,6 @@ class TransactionListElement extends React.Component {
     }
 
     render() {
-
-        var dtFormat = Intl.DateTimeFormat('en-GB', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
 
         return (
 
@@ -36,9 +27,6 @@ class TransactionListElement extends React.Component {
                             <span>{this.props.item.txid}</span>
                         </Link>
                     </Col>
-                    <Col sm>
-                        <span>{dtFormat.format(this.props.item.timestamp)}</span>
-                    </Col>
                 </Row>
                </div>
         )
@@ -46,4 +34,4 @@ class TransactionListElement extends React.Component {
 
 }
 
-export default TransactionListElement
+export default TransactionBlockListElement
