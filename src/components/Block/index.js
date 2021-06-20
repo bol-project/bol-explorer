@@ -32,7 +32,10 @@ class Block extends Component {
 
         this.getClaimInterval().then(() => {
 
-            this.getBlock();
+            this.getBlock().then(() => {
+
+                this.getPreviousBlock();
+            });
         });
 
 
@@ -58,16 +61,20 @@ class Block extends Component {
 
     getBlock() {
 
-        api.request('getblock', this.props.match.params.blockHash, 1).then((response) => {
+        return api.request('getblock', this.props.match.params.blockHash, 1).then((response) => {
 
             if (response && this._isMounted) {
                 this.setState({
                     blockHash: response.hash,
                     blockHeight: response.index,
                     time: response.time,
+                    bolDay: (parseInt(response.index/this.state.claimInterval, 10)),       //int(blockHeight/ClainInterval)
                     nextconsensus: response.nextconsensus,
                     size: response.size,
+                    nrRegisterTransactions: '',
                     version: response.version,
+                    invocationScript: (response.script && response.script.invocation) ? response.script.invocation : '',
+                    verificationScript: (response.script && response.script.verification) ? response.script.verification : '',
                     numberOfTransactions: (response.tx && response.tx.length) ? response.tx.length : 0,
                     transactionBlockActivityList: response.tx.map(item => <TransactionBlockListElement key={item.txid}
                                                                                                        item={item}/>),
@@ -79,14 +86,14 @@ class Block extends Component {
 
                 if(this.state.claimInterval && this.state.blockHeight % this.state.claimInterval === 0){
 
-                    this.getCWP();
+                    this.getCWP();                                              //interval block
                     this.getTCP().then(() => {
                         this.getNewRegisteredPeople();
                     });
                     this.getWorldWalletAmount();
                     this.getDistributePerPerson();
 
-                } else {
+                } else {                                                        //plain block
 
                     let unavailableAtInterval = "Available at the end of each interval"
                     this.setState({
@@ -98,6 +105,23 @@ class Block extends Component {
                     });
                 }
 
+            }
+        });
+    }
+
+    getPreviousBlock() {
+
+        return api.request('getblock', this.state.blockHeight - 1, 1).then((response) => {
+
+            if (response && this._isMounted) {
+                let currentBlockDate = new Date(0);
+                currentBlockDate.setUTCSeconds(this.state.time);
+                let previousBlockDate = new Date(0);
+                previousBlockDate.setUTCSeconds(response.time);
+
+                this.setState({
+                    blockTime: Math.abs(currentBlockDate.getTime() - previousBlockDate.getTime())/1000
+                });
             }
         });
     }
@@ -216,17 +240,25 @@ class Block extends Component {
                                     dtFormat.format(new Date(0).setUTCSeconds(this.state.time))}</td>
                             </tr>
                             <tr>
-                                <td className="tdLabel">CWP:</td>
-                                <td>{this.state.cwp}</td>
+                                <td className="tdLabel">BOL Day:</td>
+                                <td>{this.state.bolDay}</td>
                             </tr>
+                            {/*<tr>*/}
+                            {/*    <td className="tdLabel">CWP:</td>*/}
+                            {/*    <td>{this.state.cwp}</td>*/}
+                            {/*</tr>*/}
                             <tr>
                                 <td className="tdLabel">Size:</td>
                                 <td>{this.state.size}</td>
                             </tr>
                             <tr>
-                                <td className="tdLabel">New Registered People:</td>
-                                <td>{this.state.newRegisteredPeople}</td>
+                                <td className="tdLabel">Nr. of Register Transactions:</td>
+                                <td>{this.state.nrRegisterTransactions}</td>
                             </tr>
+                            {/*<tr>*/}
+                            {/*    <td className="tdLabel">New Registered People:</td>*/}
+                            {/*    <td>{this.state.newRegisteredPeople}</td>*/}
+                            {/*</tr>*/}
                             <tr>
                                 <td className="tdLabel">Previous Block:</td>
                                 <td><Link to={`../block/${this.state.previousBlockHash}`}
@@ -245,17 +277,29 @@ class Block extends Component {
                                 <td>{this.state.version}</td>
                             </tr>
                             <tr>
-                                <td className="tdLabel">TCP:</td>
-                                <td>{this.state.tcp}</td>
+                                <td className="tdLabel">Invocation Script:</td>
+                                <td>{this.state.invocationScript}</td>
                             </tr>
                             <tr>
-                                <td className="tdLabel">World Wallet Amount:</td>
-                                <td>{this.state.worldWalletAmount}</td>
+                                <td className="tdLabel">Verification Script:</td>
+                                <td>{this.state.verificationScript}</td>
                             </tr>
                             <tr>
-                                <td className="tdLabel">Distribute per Person:</td>
-                                <td>{this.state.distributePerPerson}</td>
+                                <td className="tdLabel">Block Time:</td>
+                                <td>{this.state.blockTime} sec</td>
                             </tr>
+                            {/*<tr>*/}
+                            {/*    <td className="tdLabel">TCP:</td>*/}
+                            {/*    <td>{this.state.tcp}</td>*/}
+                            {/*</tr>*/}
+                            {/*<tr>*/}
+                            {/*    <td className="tdLabel">World Wallet Amount:</td>*/}
+                            {/*    <td>{this.state.worldWalletAmount}</td>*/}
+                            {/*</tr>*/}
+                            {/*<tr>*/}
+                            {/*    <td className="tdLabel">Distribute per Person:</td>*/}
+                            {/*    <td>{this.state.distributePerPerson}</td>*/}
+                            {/*</tr>*/}
                             <tr>
                                 <td className="tdLabel">Next Block:</td>
                                 <td><Link to={`../block/${this.state.nextBlockHash}`}>{this.state.nextBlockHash}</Link>
