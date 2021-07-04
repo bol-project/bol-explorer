@@ -29,6 +29,7 @@ class Home extends Component {
     _isMounted = false;
     lastBlocksCount = 5;
     transactionMap = {};
+    intervalId = null;
 
     constructor(props) {
         super(props);
@@ -42,19 +43,19 @@ class Home extends Component {
     componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
         this._isMounted = true;
 
-        this.getTransactions();
         this.getWorldPopulationData();
         this.getTotalCommunityData();
         this.getTotalLastDistributionsData();
 
         this.getBlockCount();
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
             this.getBlockCount();
         }, 5000);
     }
 
     componentWillUnmount() {
         this._isMounted = false;
+        clearInterval(this.intervalId);
     }
 
     getBlockCount() {
@@ -121,18 +122,6 @@ class Home extends Component {
         });
     }
 
-    getTransactions() {
-        // fetch('http://localhost:5000/api/transactions?Page=1&PageSize=5')
-        fetch('http://localhost:5000/api/transactions')
-            .then(res => res.json())
-            .then((data) => {                   //remove 0 index of OK result and parse data to component
-                this.setState({
-                    transactionActivityList: data.map(item => <TransactionListElement key={item.hash} item={item}/>)
-                })
-            })
-            .catch(console.log)
-    }
-
     getWorldPopulationData() {
         fetch('https://5da3147176c28f0014bbe6f4.mockapi.io/worldPopulation1')
             .then(res => res.json())
@@ -170,17 +159,6 @@ class Home extends Component {
     }
 
     render() {
-
-        var transactionActivityRows = [];
-        _.each(this.state.block_ids, (value, index) => {
-            transactionActivityRows.push(
-                <tr key={this.state.block_hashes[index]}>
-                    <td className="tdCenter">{this.state.block_ids[index]}</td>
-                    <td><Link to={`/block/${this.state.block_hashes[index]}`}>{this.state.block_hashes[index]}</Link>
-                    </td>
-                </tr>
-            )
-        });
 
         var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {
             accountHash: 2,

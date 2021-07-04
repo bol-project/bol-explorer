@@ -15,6 +15,7 @@ var pageSize = 25;
 class Blocks extends Component {
 
     _isMounted = false;
+    intervalId = null;
 
     constructor() {
         super();
@@ -30,12 +31,13 @@ class Blocks extends Component {
         }
 
         this.getBlockCount();
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
             this.getBlockCount();
         }, 10000);
     }
     componentWillUnmount() {
         this._isMounted = false;
+        clearInterval(this.intervalId);
     }
 
     getBlockCount() {
@@ -48,13 +50,12 @@ class Blocks extends Component {
         })
         .then(() => {
 
-            //paging
-            Array.from(Array(pageSize)).forEach((el, i) => {
+            Array.from(Array(pageSize)).forEach((el, i) => {    //paging
 
                 let pageIndex = this.state.blockheight - i - 1 - (this.props.match.params.page - 1) * pageSize;
 
-                //max page overflow and negative positions
-                if (this.props.match.params.page <= Math.ceil(this.state.blockheight / pageSize) && pageIndex >= 0) {
+                if (this.props.match.params.page <=                     //max page overflow and negative positions
+                    Math.ceil(this.state.blockheight / pageSize) && pageIndex >= 0) {
                     this.getBlock(pageIndex, i);
                 }
             });
