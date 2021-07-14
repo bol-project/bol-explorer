@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 
 import './style.css';
 import TotalCommunityElement from "../Home/TotalCommunityElement";
-import BlockListElement from "../Home/BlockListElement";
 import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 

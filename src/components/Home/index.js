@@ -15,9 +15,6 @@ import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
 import PageHeader from "../PageHeader/PageHeader";
-import {Card, CardBody} from "reactstrap";
-import {Line} from "react-chartjs-2";
-import bigChartData from "variables/charts.jsx";
 
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
@@ -52,9 +49,6 @@ class Home extends Component {
         this.getClaimInterval().then(() => {
             this.getBlockCount();
         });
-        this.intervalId = setInterval(() => {
-            this.getBlockCount();
-        }, 5000);
     }
 
     componentWillUnmount() {

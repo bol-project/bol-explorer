@@ -31,9 +31,6 @@ class Blocks extends Component {
         }
 
         this.getBlockCount();
-        this.intervalId = setInterval(() => {
-            this.getBlockCount();
-        }, 10000);
     }
     componentWillUnmount() {
         this._isMounted = false;
