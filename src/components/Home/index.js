@@ -205,24 +205,6 @@ class Home extends Component {
 
                     <br/>
                     <br/>
-                    <p className="semi-title">BOL Chain Progress</p>
-                    <section className="section-lg">
-                        <Col md="12">
-                            <Card className="card-chart card-plain">
-                                <CardBody>
-                                    <div className="chart-area">
-                                        <Line
-                                            data={bigChartData.data}
-                                            options={bigChartData.options}
-                                        />
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </section>
-
-                    <br/>
-                    <br/>
                     <p className="semi-title">Last 5 Transactions</p>
                     <div className="table-header btn btn-twitter ">
                         <Row>
