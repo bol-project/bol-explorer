@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import _ from 'lodash';
 import {Link} from 'react-router-dom'
 import JsonRpcClient from 'react-jsonrpc-client'
 
@@ -23,11 +22,13 @@ import bigChartData from "variables/charts.jsx";
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
 });
+var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
+var ClaimIntervalStorageKey = "B3";
 
 class Home extends Component {
 
     _isMounted = false;
-    lastBlocksCount = 5;
+    lastNEntityRows = 5;
     transactionMap = {};
     intervalId = null;
 
@@ -35,7 +36,8 @@ class Home extends Component {
         super(props);
         this.state = {
             blockActivityList: [],
-            transactionActivityList: []
+            transactionActivityList: [],
+            bolDayActivityList: []
         }
     }
 
@@ -47,7 +49,9 @@ class Home extends Component {
         this.getTotalCommunityData();
         this.getTotalLastDistributionsData();
 
-        this.getBlockCount();
+        this.getClaimInterval().then(() => {
+            this.getBlockCount();
+        });
         this.intervalId = setInterval(() => {
             this.getBlockCount();
         }, 5000);
@@ -57,6 +61,17 @@ class Home extends Component {
         this._isMounted = false;
         clearInterval(this.intervalId);
     }
+
+    getClaimInterval() {
+
+        return api.request('getstorage', scriptHash, ClaimIntervalStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({claimInterval: parseInt(response, 16)});
+            }
+        });
+    };
 
     getBlockCount() {
 
@@ -68,9 +83,17 @@ class Home extends Component {
         })
         .then(() => {
 
+            //read transaction data
             this.transactionMap = new Map();
-            Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {
+            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
                 this.getBlock(this.state.blockheight - i - 1, i);
+            });
+
+            //read bol days
+            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
+            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+
+                this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i);
             });
         })
     }
@@ -107,13 +130,13 @@ class Home extends Component {
         this.transactionMap.set(index, newTransactions);
         let transactions = [];
 
-        if(this.transactionMap.size != this.lastBlocksCount){           //update last transactions list only once to evade list trembling
+        if(this.transactionMap.size != this.lastNEntityRows){           //update last transactions list only once to evade list trembling
             return;
         }
 
-        Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {        //keep from 0 t0 total-size
+        Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {        //keep from 0 t0 total-size
             if(this.transactionMap.has(i)) {                                        //append in list
-                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastBlocksCount - transactions.length));
+                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastNEntityRows - transactions.length));
             }
         });
 
@@ -285,19 +308,23 @@ class Home extends Component {
                         <Button color="twitter">To all accounts</Button>
                     </Link>
 
-                    <p className="semi-title">LDDPP</p>
+                    <p className="semi-title">Last 5 BOL Days</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>P</span></Col>
-                            <Col sm><span>D</span></Col>
+                            <Col sm> <span>Height</span></Col>
+                            <Col sm><span>Size</span></Col>
+                            <Col sm><span>Transactions</span></Col>
+                            <Col sm><span>Producer</span></Col>
+                            <Col sm><span>Timestamp</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
-                        {this.state.totalLastDistributionsDataList}
+                        {(this.state.bolDayActivityList && this.state.bolDayActivityList.length) ? this.state.bolDayActivityList : []}
                     </div>
-                    <Link to="/D/1">
-                        <Button color="twitter">To all d</Button>
+                    <Link to="/boldays/1">
+                        <Button color="twitter">See all days</Button>
                     </Link>
+
                 </div>
 
             </div>

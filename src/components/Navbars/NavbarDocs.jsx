@@ -129,8 +129,8 @@ class NavbarDocs extends React.Component {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/D/1">
-                                        LDDPP
+                                    <NavLink href="/boldays/1">
+                                        BOL DAY
                                </NavLink>
                                 </NavItem>
                             </Nav>
