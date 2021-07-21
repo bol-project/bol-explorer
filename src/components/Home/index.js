@@ -83,12 +83,12 @@ class Home extends Component {
                 this.getBlock(this.state.blockheight - i - 1, i);
             });
 
-            //read bol days
-            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
-            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
-
-                this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i);
-            });
+            // TODO read bol days
+            // let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
+            // Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+            //
+            //     this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i);
+            // });
         })
     }
 

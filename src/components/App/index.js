@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-
 import './style.css';
 
-
-import PageHeader from "components/PageHeader/PageHeader.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
 import Transactions from './../Transactions';
@@ -62,7 +58,10 @@ class App extends Component {
                                     <Route exact path="/blocks" render={() => (
                                         <h3>Blocks page not found!</h3>
                                     )}/>
-                                    <Route path="/block/:blockHash" component={Block}/>
+
+                                    {["/block/:blockHash", "/blockByHeight/:blockHeight"].map((path, index) =>
+                                        <Route path={path} component={Block} key={index} />
+                                    )}
                                     <Route exact path="/block" render={() => (
                                         <h3>Please select a blockHash!</h3>
                                     )}/>
