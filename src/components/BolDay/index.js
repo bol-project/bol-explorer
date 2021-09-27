@@ -57,6 +57,7 @@ class BolDay extends Component {
             if (response && this._isMounted) {
 
                 this.setState({
+                    bolDay: parseInt(response.index / this.state.claimInterval),
                     blockHeight: response.index
                 });
 
@@ -163,6 +164,10 @@ class BolDay extends Component {
                     <div>
                         <table>
                             <tbody>
+                            <tr>
+                                <td className="tdLabel">Bol day:</td>
+                                <td>{this.state.bolDay}</td>
+                            </tr>
                             <tr>
                                 <td className="tdLabel">CWP:</td>
                                 <td>{this.state.cwp}</td>

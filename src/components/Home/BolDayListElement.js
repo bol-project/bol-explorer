@@ -28,8 +28,11 @@ class BolDayListElement extends React.Component {
                 <Row>
                     <Col sm>
                         <Link to={"/bolday/" + this.props.item.hash}>
-                            <span>{this.props.item.index}</span>
+                            <span>{parseInt(this.props.item.index / this.props.item.claimInterval)}</span>
                         </Link>
+                    </Col>
+                    <Col sm>
+                        <span>{this.props.item.index}</span>
                     </Col>
                     <Col sm>
                         <span>{this.props.item.size}</span>

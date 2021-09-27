@@ -63,7 +63,6 @@ class BolDays extends Component {
         .then(() => {
 
             let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
-
             Array.from(Array(pageSize)).forEach((el, i) => {    //paging
 
                 let pageIndex = (lastBlockIndex) - (i * this.state.claimInterval) -
@@ -83,6 +82,7 @@ class BolDays extends Component {
 
             if (response && this._isMounted) {
 
+                response.claimInterval = this.state.claimInterval;          //pass already retrieved claimInterval
                 this.setState(function (previousState) {
 
                     let newBolDayActivityList = previousState.bolDayActivityList;
@@ -110,6 +110,7 @@ class BolDays extends Component {
 
                 <div className="table-header btn btn-twitter">
                     <Row>
+                        <Col sm> <span>Bol day</span></Col>
                         <Col sm> <span>Height</span></Col>
                         <Col sm><span>Size</span></Col>
                         <Col sm><span>Transactions</span></Col>

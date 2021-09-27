@@ -4,6 +4,7 @@ import JsonRpcClient from 'react-jsonrpc-client'
 
 import './style.css';
 import BlockListElement from "./BlockListElement";
+import BolDayListElement from "./BolDayListElement";
 import TransactionListElement from "./TransactionListElement";
 import WorldPopulationElement from "./WorldPopulationElement";
 import TotalCommunityElement from "./TotalCommunityElement";
@@ -21,6 +22,11 @@ var api = new JsonRpcClient({
 });
 var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
 var ClaimIntervalStorageKey = "B3";
+
+var BlockRetrievalDestination = {
+    "BLOCK_LIST": "BlockList",
+    "BOL_DAY_LIST": "BolDayList"
+};
 
 class Home extends Component {
 
@@ -80,40 +86,28 @@ class Home extends Component {
             //read transaction data
             this.transactionMap = new Map();
             Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
-                this.getBlock(this.state.blockheight - i - 1, i);
+                this.getBlock(this.state.blockheight - i - 1, i, BlockRetrievalDestination.BLOCK_LIST);
             });
 
-            // TODO read bol days
-            // let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
-            // Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
-            //
-            //     this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i);
-            // });
+            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
+            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+
+                this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i, BlockRetrievalDestination.BOL_DAY_LIST);
+            });
         })
     }
 
-    getBlock(height, arrayIndex) {
+    getBlock(height, arrayIndex, dest) {
 
         return api.request('getblock', height, 1).then((response) => {
 
             if (response && this._isMounted) {
 
-                this.setState(function (previousState) {
-
-                    let newBlockActivityList = previousState.blockActivityList;
-                    newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
-
-                    // used in case of new block arrived and getblock calls are not in order
-                    let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
-                    let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
-                    if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
-                        newBlockActivityList[existingBlockLineIndex] = undefined;
-                    }
-
-                    return {
-                        blockActivityList: newBlockActivityList
-                    };
-                });
+                if(BlockRetrievalDestination.BLOCK_LIST === dest) {         //depending on the caller
+                    this.updateBlockList(arrayIndex, response);             //the respective list is populated
+                } else if(BlockRetrievalDestination.BOL_DAY_LIST === dest) {
+                    this.updateBolDayList(arrayIndex, response);
+                }
 
                 this.parseTransactions(arrayIndex, (response.tx && response.tx.length) ? response.tx : []);
             }
@@ -173,6 +167,49 @@ class Home extends Component {
                 })
             })
             .catch(console.log)
+    }
+
+    /** Append data on Block list **/
+    updateBlockList(arrayIndex, response) {
+
+        this.setState(function (previousState) {
+
+            let newBlockActivityList = previousState.blockActivityList;
+            newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
+
+            // used in case of new block arrived and getblock calls are not in order
+            let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+            let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
+            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                newBlockActivityList[existingBlockLineIndex] = undefined;
+            }
+
+            return {
+                blockActivityList: newBlockActivityList
+            };
+        });
+    }
+
+    /** Append data on Bol day list **/
+    updateBolDayList(arrayIndex, response) {
+
+        response.claimInterval = this.state.claimInterval;          //pass already retrieved claimInterval
+        this.setState(function (previousState) {
+
+            let newBolDayActivityList = previousState.bolDayActivityList;
+            newBolDayActivityList[arrayIndex] = <BolDayListElement key={response.hash} item={response}/>;
+
+            // used in case of new block arrived and getblock calls are not in order
+            let existingBlockLine = previousState.bolDayActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+            let existingBlockLineIndex = previousState.bolDayActivityList.indexOf(existingBlockLine);
+            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                newBolDayActivityList[existingBlockLineIndex] = undefined;
+            }
+
+            return {
+                bolDayActivityList: newBolDayActivityList
+            };
+        });
     }
 
     render() {
@@ -287,6 +324,7 @@ class Home extends Component {
                     <p className="semi-title">Last 5 BOL Days</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
+                            <Col sm> <span>Bol day</span></Col>
                             <Col sm> <span>Height</span></Col>
                             <Col sm><span>Size</span></Col>
                             <Col sm><span>Transactions</span></Col>
