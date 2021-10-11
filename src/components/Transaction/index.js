@@ -28,6 +28,11 @@ class Transaction extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
+    componentDidUpdate(prevProps) {
+        if(prevProps.location.pathname != this.props.location.pathname) {   //Used in case an internal redirect occurs
+            window.location.reload();                                       //for new block height on the search bar
+        }
+    }
 
     getTransaction() {
 

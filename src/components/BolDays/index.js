@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 
 import './style.css';
-import BlockListElement from "../Home/BlockListElement";
+import BolDayListElement from "../Home/BolDayListElement";
 import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import JsonRpcClient from "react-jsonrpc-client";
@@ -10,17 +10,18 @@ import JsonRpcClient from "react-jsonrpc-client";
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
 });
+var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
+var ClaimIntervalStorageKey = "B3";
 var pageSize = 25;
 
-class Blocks extends Component {
+class BolDays extends Component {
 
     _isMounted = false;
-    intervalId = null;
 
     constructor() {
         super();
         this.state = {
-            blockActivityList: []
+            bolDayActivityList: []
         };
     }
 
@@ -30,16 +31,30 @@ class Blocks extends Component {
             return;
         }
 
-        this.getBlockCount();
+        this.getClaimInterval().then(() => {
+
+            this.getBlockCount().then(() => {});
+        });
+
     }
     componentWillUnmount() {
         this._isMounted = false;
-        clearInterval(this.intervalId);
     }
+
+    getClaimInterval() {
+
+        return api.request('getstorage', scriptHash, ClaimIntervalStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({claimInterval: parseInt(response, 16)});
+            }
+        });
+    };
 
     getBlockCount() {
 
-        api.request('getblockcount').then((response) => {
+        return api.request('getblockcount').then((response) => {
 
             if (response && this._isMounted) {
                 this.setState({blockheight: response});
@@ -47,17 +62,19 @@ class Blocks extends Component {
         })
         .then(() => {
 
+            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
             Array.from(Array(pageSize)).forEach((el, i) => {    //paging
 
-                let pageIndex = this.state.blockheight - i - 1 - (this.props.match.params.page - 1) * pageSize;
+                let pageIndex = (lastBlockIndex) - (i * this.state.claimInterval) -
+                    (this.props.match.params.page - 1) * pageSize;
 
                 if (this.props.match.params.page <=                     //max page overflow and negative positions
-                    Math.ceil(this.state.blockheight / pageSize) && pageIndex >= 0) {
+                    Math.ceil((lastBlockIndex/this.state.claimInterval) / pageSize) && pageIndex >= 0) {
                     this.getBlock(pageIndex, i);
                 }
             });
         })
-    }
+    };
 
     getBlock(height, arrayIndex) {
 
@@ -65,20 +82,21 @@ class Blocks extends Component {
 
             if (response && this._isMounted) {
 
+                response.claimInterval = this.state.claimInterval;          //pass already retrieved claimInterval
                 this.setState(function (previousState) {
 
-                    let newBlockActivityList = previousState.blockActivityList;
-                    newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
+                    let newBolDayActivityList = previousState.bolDayActivityList;
+                    newBolDayActivityList[arrayIndex] = <BolDayListElement key={response.hash} item={response}/>;
 
                     // used in case of new block arrived and getblock calls are not in order
-                    let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
-                    let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
+                    let existingBlockLine = previousState.bolDayActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+                    let existingBlockLineIndex = previousState.bolDayActivityList.indexOf(existingBlockLine);
                     if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
-                        newBlockActivityList[existingBlockLineIndex] = undefined;
+                        newBolDayActivityList[existingBlockLineIndex] = undefined;
                     }
 
                     return {
-                        blockActivityList: newBlockActivityList
+                        bolDayActivityList: newBolDayActivityList
                     };
                 });
             }
@@ -88,10 +106,11 @@ class Blocks extends Component {
     render() {
         return (
             <div className="view-page">
-                <h1>All blocks</h1>
+                <h1>All Bol Days</h1>
 
                 <div className="table-header btn btn-twitter">
                     <Row>
+                        <Col sm> <span>Bol day</span></Col>
                         <Col sm> <span>Height</span></Col>
                         <Col sm><span>Size</span></Col>
                         <Col sm><span>Transactions</span></Col>
@@ -100,15 +119,15 @@ class Blocks extends Component {
                     </Row>
                 </div>
                 <div className="table-list">
-                    {(this.state.blockActivityList && this.state.blockActivityList.length) ? this.state.blockActivityList : []}
+                    {(this.state.bolDayActivityList && this.state.bolDayActivityList.length) ? this.state.bolDayActivityList : []}
                 </div>
                 <br/>
                 <br/>
                 <Link className={((parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}
+                      to={`/boldays/${parseInt(this.props.match.params.page) - 1}`}
                       onClick={this.forceUpdate}>Previous</Link>
                 <span> </span>
-                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}
+                <Link to={`/boldays/${parseInt(this.props.match.params.page) + 1}`}
                       onClick={this.forceUpdate}>Next</Link>
 
             </div>
@@ -118,4 +137,4 @@ class Blocks extends Component {
 }
 
 
-export default Blocks;
+export default BolDays;

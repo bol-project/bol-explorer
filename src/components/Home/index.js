@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import _ from 'lodash';
 import {Link} from 'react-router-dom'
 import JsonRpcClient from 'react-jsonrpc-client'
 
 import './style.css';
 import BlockListElement from "./BlockListElement";
+import BolDayListElement from "./BolDayListElement";
 import TransactionListElement from "./TransactionListElement";
 import WorldPopulationElement from "./WorldPopulationElement";
 import TotalCommunityElement from "./TotalCommunityElement";
@@ -16,18 +16,22 @@ import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
 import PageHeader from "../PageHeader/PageHeader";
-import {Card, CardBody} from "reactstrap";
-import {Line} from "react-chartjs-2";
-import bigChartData from "variables/charts.jsx";
 
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
 });
+var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
+var ClaimIntervalStorageKey = "B3";
+
+var BlockRetrievalDestination = {
+    "BLOCK_LIST": "BlockList",
+    "BOL_DAY_LIST": "BolDayList"
+};
 
 class Home extends Component {
 
     _isMounted = false;
-    lastBlocksCount = 5;
+    lastNEntityRows = 5;
     transactionMap = {};
     intervalId = null;
 
@@ -35,7 +39,8 @@ class Home extends Component {
         super(props);
         this.state = {
             blockActivityList: [],
-            transactionActivityList: []
+            transactionActivityList: [],
+            bolDayActivityList: []
         }
     }
 
@@ -47,16 +52,26 @@ class Home extends Component {
         this.getTotalCommunityData();
         this.getTotalLastDistributionsData();
 
-        this.getBlockCount();
-        this.intervalId = setInterval(() => {
+        this.getClaimInterval().then(() => {
             this.getBlockCount();
-        }, 5000);
+        });
     }
 
     componentWillUnmount() {
         this._isMounted = false;
         clearInterval(this.intervalId);
     }
+
+    getClaimInterval() {
+
+        return api.request('getstorage', scriptHash, ClaimIntervalStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({claimInterval: parseInt(response, 16)});
+            }
+        });
+    };
 
     getBlockCount() {
 
@@ -68,35 +83,31 @@ class Home extends Component {
         })
         .then(() => {
 
+            //read transaction data
             this.transactionMap = new Map();
-            Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {
-                this.getBlock(this.state.blockheight - i - 1, i);
+            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+                this.getBlock(this.state.blockheight - i - 1, i, BlockRetrievalDestination.BLOCK_LIST);
+            });
+
+            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
+            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+
+                this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i, BlockRetrievalDestination.BOL_DAY_LIST);
             });
         })
     }
 
-    getBlock(height, arrayIndex) {
+    getBlock(height, arrayIndex, dest) {
 
         return api.request('getblock', height, 1).then((response) => {
 
             if (response && this._isMounted) {
 
-                this.setState(function (previousState) {
-
-                    let newBlockActivityList = previousState.blockActivityList;
-                    newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
-
-                    // used in case of new block arrived and getblock calls are not in order
-                    let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
-                    let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
-                    if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
-                        newBlockActivityList[existingBlockLineIndex] = undefined;
-                    }
-
-                    return {
-                        blockActivityList: newBlockActivityList
-                    };
-                });
+                if(BlockRetrievalDestination.BLOCK_LIST === dest) {         //depending on the caller
+                    this.updateBlockList(arrayIndex, response);             //the respective list is populated
+                } else if(BlockRetrievalDestination.BOL_DAY_LIST === dest) {
+                    this.updateBolDayList(arrayIndex, response);
+                }
 
                 this.parseTransactions(arrayIndex, (response.tx && response.tx.length) ? response.tx : []);
             }
@@ -107,13 +118,13 @@ class Home extends Component {
         this.transactionMap.set(index, newTransactions);
         let transactions = [];
 
-        if(this.transactionMap.size != this.lastBlocksCount){           //update last transactions list only once to evade list trembling
+        if(this.transactionMap.size != this.lastNEntityRows){           //update last transactions list only once to evade list trembling
             return;
         }
 
-        Array.from(Array(this.lastBlocksCount)).forEach((el, i) => {        //keep from 0 t0 total-size
+        Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {        //keep from 0 t0 total-size
             if(this.transactionMap.has(i)) {                                        //append in list
-                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastBlocksCount - transactions.length));
+                transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastNEntityRows - transactions.length));
             }
         });
 
@@ -158,6 +169,49 @@ class Home extends Component {
             .catch(console.log)
     }
 
+    /** Append data on Block list **/
+    updateBlockList(arrayIndex, response) {
+
+        this.setState(function (previousState) {
+
+            let newBlockActivityList = previousState.blockActivityList;
+            newBlockActivityList[arrayIndex] = <BlockListElement key={response.hash} item={response}/>;
+
+            // used in case of new block arrived and getblock calls are not in order
+            let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+            let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
+            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                newBlockActivityList[existingBlockLineIndex] = undefined;
+            }
+
+            return {
+                blockActivityList: newBlockActivityList
+            };
+        });
+    }
+
+    /** Append data on Bol day list **/
+    updateBolDayList(arrayIndex, response) {
+
+        response.claimInterval = this.state.claimInterval;          //pass already retrieved claimInterval
+        this.setState(function (previousState) {
+
+            let newBolDayActivityList = previousState.bolDayActivityList;
+            newBolDayActivityList[arrayIndex] = <BolDayListElement key={response.hash} item={response}/>;
+
+            // used in case of new block arrived and getblock calls are not in order
+            let existingBlockLine = previousState.bolDayActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
+            let existingBlockLineIndex = previousState.bolDayActivityList.indexOf(existingBlockLine);
+            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                newBolDayActivityList[existingBlockLineIndex] = undefined;
+            }
+
+            return {
+                bolDayActivityList: newBolDayActivityList
+            };
+        });
+    }
+
     render() {
 
         var totalAccountsData = [{accountHash: 1, codename: 'myAccount1'}, {
@@ -179,24 +233,6 @@ class Home extends Component {
                     <br/>
                     <MarketActivity neoCoinPrice="$8.99" currentMarketCap="$152,222,588" last24HourChange="1.32%"
                                     last24HourVolume="$554,345,312"/>
-
-                    <br/>
-                    <br/>
-                    <p className="semi-title">BOL Chain Progress</p>
-                    <section className="section-lg">
-                        <Col md="12">
-                            <Card className="card-chart card-plain">
-                                <CardBody>
-                                    <div className="chart-area">
-                                        <Line
-                                            data={bigChartData.data}
-                                            options={bigChartData.options}
-                                        />
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </section>
 
                     <br/>
                     <br/>
@@ -285,19 +321,24 @@ class Home extends Component {
                         <Button color="twitter">To all accounts</Button>
                     </Link>
 
-                    <p className="semi-title">LDDPP</p>
+                    <p className="semi-title">Last 5 BOL Days</p>
                     <div className="table-header btn btn-twitter">
                         <Row>
-                            <Col sm> <span>P</span></Col>
-                            <Col sm><span>D</span></Col>
+                            <Col sm> <span>Bol day</span></Col>
+                            <Col sm> <span>Height</span></Col>
+                            <Col sm><span>Size</span></Col>
+                            <Col sm><span>Transactions</span></Col>
+                            <Col sm><span>Producer</span></Col>
+                            <Col sm><span>Timestamp</span></Col>
                         </Row>
                     </div>
                     <div className="table-list">
-                        {this.state.totalLastDistributionsDataList}
+                        {(this.state.bolDayActivityList && this.state.bolDayActivityList.length) ? this.state.bolDayActivityList : []}
                     </div>
-                    <Link to="/D/1">
-                        <Button color="twitter">To all d</Button>
+                    <Link to="/boldays/1">
+                        <Button color="twitter">See all days</Button>
                     </Link>
+
                 </div>
 
             </div>

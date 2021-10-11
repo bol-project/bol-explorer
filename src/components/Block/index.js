@@ -47,6 +47,11 @@ class Block extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
+    componentDidUpdate(prevProps) {
+        if(prevProps.location.pathname != this.props.location.pathname) {   //Used in case an internal redirect occurs
+            window.location.reload();                                       //for new block height on the search bar
+        }
+    }
 
     getClaimInterval() {
 
@@ -61,7 +66,9 @@ class Block extends Component {
 
     getBlock() {
 
-        return api.request('getblock', this.props.match.params.blockHash, 1).then((response) => {
+        let blockIdentifier = (this.props.match.params.blockHash) ?     //block identifier varies depending on the given params
+            this.props.match.params.blockHash : parseInt(this.props.match.params.blockHeight);  // /block/:blockHash
+        return api.request('getblock', blockIdentifier, 1).then((response) => {                 // /blockByHeight/:blockHeight
 
             if (response && this._isMounted) {
                 this.setState({

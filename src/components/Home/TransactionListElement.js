@@ -14,7 +14,7 @@ class TransactionListElement extends React.Component {
     }
 
     render() {
-
+        //TODO: this.props.item.timestamp comes as null
         var dtFormat = Intl.DateTimeFormat('en-GB', {
             year: 'numeric',
             month: '2-digit',

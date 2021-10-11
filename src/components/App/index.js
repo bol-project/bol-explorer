@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-
 import './style.css';
 
-
-import PageHeader from "components/PageHeader/PageHeader.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
 import Transactions from './../Transactions';
@@ -17,8 +13,8 @@ import WorldPopulationDays from './../WorldPopulationDays';
 import TotalCommunityDays from './../TotalCommunityDays';
 import Accounts from './../Accounts';
 import Account from './../Account';
-import Distributions from './../Distributions';
-
+import BolDays from './../BolDays';
+import BolDay from './../BolDay';
 import Home from './../Home';
 
 
@@ -62,7 +58,10 @@ class App extends Component {
                                     <Route exact path="/blocks" render={() => (
                                         <h3>Blocks page not found!</h3>
                                     )}/>
-                                    <Route path="/block/:blockHash" component={Block}/>
+
+                                    {["/block/:blockHash", "/blockByHeight/:blockHeight"].map((path, index) =>
+                                        <Route path={path} component={Block} key={index} />
+                                    )}
                                     <Route exact path="/block" render={() => (
                                         <h3>Please select a blockHash!</h3>
                                     )}/>
@@ -95,9 +94,13 @@ class App extends Component {
                                         <h3>Please select an accountHash!</h3>
                                     )}/>
 
-                                    <Route path="/D/:page" component={Distributions}/>
-                                    <Route exact path="/D" render={() => (
-                                        <h3>D page not found!</h3>
+                                    <Route path="/boldays/:page" component={BolDays}/>
+                                    <Route exact path="/boldays" render={() => (
+                                        <h3>BolDays page not found!</h3>
+                                    )}/>
+                                    <Route path="/bolday/:blockHash" component={BolDay}/>
+                                    <Route exact path="/bolday" render={() => (
+                                        <h3>Bol Day page not found!</h3>
                                     )}/>
                                 </div>
 
