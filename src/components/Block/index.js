@@ -36,9 +36,7 @@ class Block extends Component {
 
                 this.getPreviousBlock();
             });
-        });
-
-
+        }).catch(console.log);
     }
 
     componentDidMount() {

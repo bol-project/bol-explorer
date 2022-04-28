@@ -16,6 +16,7 @@ import Row from "reactstrap/es/Row";
 import Col from "reactstrap/es/Col";
 import Button from "reactstrap/es/Button";
 import PageHeader from "../PageHeader/PageHeader";
+import {Modal} from "reactstrap";
 
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL           //'https://rpc.bolchain.net',
@@ -40,7 +41,8 @@ class Home extends Component {
         this.state = {
             blockActivityList: [],
             transactionActivityList: [],
-            bolDayActivityList: []
+            bolDayActivityList: [],
+            showErrorModal: false
         }
     }
 
@@ -54,8 +56,17 @@ class Home extends Component {
 
         this.getClaimInterval().then(() => {
             this.getBlockCount();
+        }, () => {
+            this.toggleModal("showErrorModal");
+            console.log('There was an error contacting the server');
         });
     }
+
+    toggleModal = modalState => {
+        this.setState({
+            [modalState]: !this.state[modalState]
+        });
+    };
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -70,7 +81,7 @@ class Home extends Component {
 
                 this.setState({claimInterval: parseInt(response, 16)});
             }
-        });
+        }).catch(console.log);
     };
 
     getBlockCount() {
@@ -81,20 +92,23 @@ class Home extends Component {
                 this.setState({blockheight: (response) ? response : 0});
             }
         })
-        .then(() => {
+            .then(() => {
 
-            //read transaction data
-            this.transactionMap = new Map();
-            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
-                this.getBlock(this.state.blockheight - i - 1, i, BlockRetrievalDestination.BLOCK_LIST);
-            });
+                //read transaction data
+                this.transactionMap = new Map();
+                Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+                    this.getBlock(this.state.blockheight - i - 1, i, BlockRetrievalDestination.BLOCK_LIST);
+                });
 
-            let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
-            Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
+                let lastBlockIndex = this.state.blockheight - (this.state.blockheight % this.state.claimInterval);
+                Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {
 
-                this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i, BlockRetrievalDestination.BOL_DAY_LIST);
-            });
-        })
+                    this.getBlock((lastBlockIndex) - (i * this.state.claimInterval), i, BlockRetrievalDestination.BOL_DAY_LIST);
+                });
+            }).catch(error => {
+            this.toggleModal("showErrorModal");
+            console.log('There was an error contacting the server');
+        });
     }
 
     getBlock(height, arrayIndex, dest) {
@@ -103,9 +117,9 @@ class Home extends Component {
 
             if (response && this._isMounted) {
 
-                if(BlockRetrievalDestination.BLOCK_LIST === dest) {         //depending on the caller
+                if (BlockRetrievalDestination.BLOCK_LIST === dest) {         //depending on the caller
                     this.updateBlockList(arrayIndex, response);             //the respective list is populated
-                } else if(BlockRetrievalDestination.BOL_DAY_LIST === dest) {
+                } else if (BlockRetrievalDestination.BOL_DAY_LIST === dest) {
                     this.updateBolDayList(arrayIndex, response);
                 }
 
@@ -114,16 +128,16 @@ class Home extends Component {
         });
     };
 
-    parseTransactions(index,newTransactions) {
+    parseTransactions(index, newTransactions) {
         this.transactionMap.set(index, newTransactions);
         let transactions = [];
 
-        if(this.transactionMap.size != this.lastNEntityRows){           //update last transactions list only once to evade list trembling
+        if (this.transactionMap.size != this.lastNEntityRows) {           //update last transactions list only once to evade list trembling
             return;
         }
 
         Array.from(Array(this.lastNEntityRows)).forEach((el, i) => {        //keep from 0 t0 total-size
-            if(this.transactionMap.has(i)) {                                        //append in list
+            if (this.transactionMap.has(i)) {                                        //append in list
                 transactions = transactions.concat(this.transactionMap.get(i).slice(0, this.lastNEntityRows - transactions.length));
             }
         });
@@ -338,6 +352,28 @@ class Home extends Component {
                     <Link to="/boldays/1">
                         <Button color="twitter">See all days</Button>
                     </Link>
+
+                    <Modal
+                        modalClassName="modal-mini modal-primary modal-mini"
+                        isOpen={this.state.showErrorModal}
+                        toggle={() => this.toggleModal("showErrorModal")}>
+                        <div className="modal-header justify-content-center">
+                            <button
+                                className="close"
+                                onClick={() => this.toggleModal("showErrorModal")}>
+                                <i className="tim-icons icon-simple-remove text-white"/>
+                            </button>
+                            <div className="modal-profile">
+                                <i className="tim-icons icon-settings"/>
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            <p>Error on loading page..</p>
+                            <p>Please try again later</p>
+                        </div>
+                        <div className="modal-footer">
+                        </div>
+                    </Modal>
 
                 </div>
 

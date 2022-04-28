@@ -65,7 +65,7 @@ class Transaction extends Component {
 
                 this.getBlock();
             }
-        });
+        }).catch(console.log);
     }
 
     getBlock() {

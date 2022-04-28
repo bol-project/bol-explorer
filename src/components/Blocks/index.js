@@ -56,7 +56,7 @@ class Blocks extends Component {
                     this.getBlock(pageIndex, i);
                 }
             });
-        })
+        }).catch(console.log);
     }
 
     getBlock(height, arrayIndex) {

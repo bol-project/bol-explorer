@@ -30,7 +30,7 @@ class BolDay extends Component {
 
         this.getClaimInterval().then(() => {
             this.getBlock();
-        });
+        }).catch(console.log);
     }
 
     componentDidMount() {
