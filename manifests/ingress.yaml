@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: __CI_BUILD_REF_SLUG__-explorer
@@ -7,10 +7,10 @@ metadata:
     app: __CI_BUILD_REF_SLUG__-explorer
   annotations:
     kubernetes.io/tls-acme: "true"
-    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
     - explorer.__CI_ENV_SLUG__.bolchain.net
@@ -21,5 +21,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: __CI_BUILD_REF_SLUG__-explorer
-          servicePort: 80
+          service:
+            name: __CI_BUILD_REF_SLUG__-explorer
+            port: 
+              number: 80
