@@ -51,11 +51,12 @@ deploy:
     - kubectl version
     - kubectl cluster-info
     - cd manifests/    
-    - sed -i -e "s~__CI_BUILD_REF_SLUG__~${CI_ENVIRONMENT_SLUG}~" -e "s~__CI_ENV_SLUG__~${ENV_SLUG}~" deployment.yaml service.yaml ingress.yaml
-    - sed -i "s~__VERSION__~${CI_COMMIT_REF_NAME}~" deployment.yaml ingress.yaml service.yaml
+    - sed -i -e "s~__CI_BUILD_REF_SLUG__~${CI_ENVIRONMENT_SLUG}~" -e "s~__CI_ENV_SLUG__~${ENV_SLUG}~" deployment.yaml service.yaml ingress.yaml certificate.yaml
+    - sed -i "s~__VERSION__~${CI_COMMIT_REF_NAME}~" deployment.yaml ingress.yaml service.yaml certificate.yaml
     - sed -i "s~__CI_IMAGE_TAG__~${IMAGE_TAG}~" deployment.yaml
     - kubectl apply -f deployment.yaml
     - kubectl apply -f service.yaml
+    - kubectl apply -f certificate.yaml
     - kubectl apply -f ingress.yaml
     - kubectl rollout status -f deployment.yaml
     - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}

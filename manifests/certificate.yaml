@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: __CI_BUILD_REF_SLUG__-explorer-certificate
+spec:
+  secretName: __CI_BUILD_REF_SLUG__-explorer-tls
+  dnsNames:
+  - explorer.__CI_ENV_SLUG__.bolchain.net
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
