@@ -34,7 +34,7 @@ class BolDays extends Component {
         this.getClaimInterval().then(() => {
 
             this.getBlockCount().then(() => {});
-        });
+        }).catch(console.log);
 
     }
     componentWillUnmount() {

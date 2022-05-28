@@ -87,3 +87,7 @@ h1, h2, h3, body{
     min-width: 200px;
 }
 
+.modal.modal-primary .modal-content {
+    background-color: #acbb24f7 !important;
+}
+
