@@ -1,16 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\node_modules\\react-router",
-    "\\src",
     "\\src\\assets",
     "\\src\\assets\\scss",
     "\\src\\assets\\scss\\blk-design-system-react",
     "\\src\\components",
+    "\\src\\components\\App",
     "\\src\\components\\BolDays",
     "\\src\\components\\Home",
     "\\src\\components\\Transaction"
   ],
-  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
