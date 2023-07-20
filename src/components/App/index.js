@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 
-import Footer from "components/Footer/Footer.jsx";
+import Footer from "../Footer/Footer.jsx";
 
 import Transactions from './../Transactions';
 import Transaction from './../Transaction';

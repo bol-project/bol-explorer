@@ -29,7 +29,7 @@ class Transaction extends Component {
         this._isMounted = false;
     }
     componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname != this.props.location.pathname) {   //Used in case an internal redirect occurs
+        if(prevProps.location.pathname !== this.props.location.pathname) {   //Used in case an internal redirect occurs
             window.location.reload();                                       //for new block height on the search bar
         }
     }

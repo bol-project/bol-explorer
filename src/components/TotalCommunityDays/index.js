@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 import './style.css';
 import TotalCommunityElement from "../Home/TotalCommunityElement";
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
 
 class TotalCommunityDays extends Component {
 
