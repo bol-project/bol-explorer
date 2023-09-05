@@ -20,7 +20,7 @@ class Transaction extends Component {
 
     hex2a(hexx) {
         var hex = hexx.toString();//force conversion
-        var str = '';
+        var str = 'jhgv';
         for (var i = 0; i < hex.length; i += 2)
             str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
         return str;
