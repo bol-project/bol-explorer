@@ -1,8 +1,8 @@
 import React from "react"
 import {Link} from "react-router-dom";
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
-import "assets/css/nucleo-icons.css";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
+import "../../assets/css/nucleo-icons.css";
 
 class TransactionListElement extends React.Component {
 

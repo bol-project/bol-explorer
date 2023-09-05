@@ -3,8 +3,8 @@ import {Link} from 'react-router-dom'
 
 import './style.css';
 import BolDayListElement from "../Home/BolDayListElement";
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
 import JsonRpcClient from "react-jsonrpc-client";
 
 var api = new JsonRpcClient({
@@ -91,7 +91,7 @@ class BolDays extends Component {
                     // used in case of new block arrived and getblock calls are not in order
                     let existingBlockLine = previousState.bolDayActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
                     let existingBlockLineIndex = previousState.bolDayActivityList.indexOf(existingBlockLine);
-                    if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+                    if (existingBlockLine && arrayIndex !== existingBlockLineIndex) {
                         newBolDayActivityList[existingBlockLineIndex] = undefined;
                     }
 

@@ -95,48 +95,49 @@
     overflow: hidden;
 
     .square {
-      background-size: cover;
+        background-size: cover;
     }
+
     .square-1 {
-      height: 300px;
-      width: 300px;
-      background-image: url("../../assets/img/square1.png");
-      top: 80px;
-      left: 100px;
-      opacity: 0.3;
-      animation-duration: 5s;
+        height: 300px;
+        width: 300px;
+        background-image: url("../../../assets/img/square1.png");
+        top: 80px;
+        left: 100px;
+        opacity: 0.3;
+        animation-duration: 5s;
     }
 
-    .square-2{
-      height: 200px;
-      width: 200px;
-      background: url("../../assets/img/square3.png");
-      background-size: cover;
-      bottom: 40px;
-      left: 600px;
-      opacity: 0.1;
-      animation-duration: 8s;
+    .square-2 {
+        height: 200px;
+        width: 200px;
+        background: url("../../../../assets/img/square3.png");
+        background-size: cover;
+        bottom: 40px;
+        left: 600px;
+        opacity: 0.1;
+        animation-duration: 8s;
     }
 
-    .square-3{
-      height: 100px;
-      width: 100px;
-      background: url("../../assets/img/square2.png");
-      background-size: cover;
-      top: 300px;
-      left: 700px;
-      animation-duration: 5s;
+    .square-3 {
+        height: 100px;
+        width: 100px;
+        background: url("../../../assets/img/square2.png");
+        background-size: cover;
+        top: 300px;
+        left: 700px;
+        animation-duration: 5s;
     }
 
-    .square-4{
-      height: 250px;
-      width: 250px;
-      background: url("../../assets/img/square3.png");
-      background-size: cover;
-      top: 0px;
-      right: 100px;
-      opacity: 0.8;
-      animation-duration: 9s;
+    .square-4 {
+        height: 250px;
+        width: 250px;
+        background: url("../../../assets/img/square3.png");
+        background-size: cover;
+        top: 0px;
+        right: 100px;
+        opacity: 0.8;
+        animation-duration: 9s;
     }
 }
 

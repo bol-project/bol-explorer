@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import './style.css';
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
 import TransactionBlockListElement from "../Home/TransactionBlockListElement";
 import JsonRpcClient from "react-jsonrpc-client";
 
@@ -46,7 +46,7 @@ class Block extends Component {
         this._isMounted = false;
     }
     componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname != this.props.location.pathname) {   //Used in case an internal redirect occurs
+        if(prevProps.location.pathname !== this.props.location.pathname) {   //Used in case an internal redirect occurs
             window.location.reload();                                       //for new block height on the search bar
         }
     }

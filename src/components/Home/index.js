@@ -12,9 +12,9 @@ import AccountListElement from "./AccountListElement";
 import DistributionListElement from "./DistributionListElement";
 import TotalActivity from "./TotalActivity";
 import MarketActivity from "./MarketActivity";
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
-import Button from "reactstrap/es/Button";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
+import Button from "reactstrap/lib/Button";
 import PageHeader from "../PageHeader/PageHeader";
 import {Modal} from "reactstrap";
 
@@ -132,7 +132,7 @@ class Home extends Component {
         this.transactionMap.set(index, newTransactions);
         let transactions = [];
 
-        if (this.transactionMap.size != this.lastNEntityRows) {           //update last transactions list only once to evade list trembling
+        if (this.transactionMap.size !== this.lastNEntityRows) {           //update last transactions list only once to evade list trembling
             return;
         }
 
@@ -194,7 +194,7 @@ class Home extends Component {
             // used in case of new block arrived and getblock calls are not in order
             let existingBlockLine = previousState.blockActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
             let existingBlockLineIndex = previousState.blockActivityList.indexOf(existingBlockLine);
-            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+            if (existingBlockLine && arrayIndex !== existingBlockLineIndex) {
                 newBlockActivityList[existingBlockLineIndex] = undefined;
             }
 
@@ -216,7 +216,7 @@ class Home extends Component {
             // used in case of new block arrived and getblock calls are not in order
             let existingBlockLine = previousState.bolDayActivityList.filter(e => e && (e.key) && e.key === response.hash)[0];
             let existingBlockLineIndex = previousState.bolDayActivityList.indexOf(existingBlockLine);
-            if (existingBlockLine && arrayIndex != existingBlockLineIndex) {
+            if (existingBlockLine && arrayIndex !== existingBlockLineIndex) {
                 newBolDayActivityList[existingBlockLineIndex] = undefined;
             }
 

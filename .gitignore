@@ -23,3 +23,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/.vs/bol-explorer/v17/.wsuo
+/.gitignore
+/.gitignore
+/.vs/bol-explorer/FileContentIndex/2c30a265-5f37-4881-a83e-8d42a5af6f53.vsidx
+/.vs/slnx.sqlite
+/.vs/bol-explorer/FileContentIndex/5396f2c3-e0e9-4bae-a641-8179d0d05b60.vsidx

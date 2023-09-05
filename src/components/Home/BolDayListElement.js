@@ -1,7 +1,7 @@
 import React from "react"
 import {Link} from "react-router-dom";
-import Col from "reactstrap/es/Col";
-import Row from "reactstrap/es/Row";
+import Col from "reactstrap/lib/Col";
+import Row from "reactstrap/lib/Row";
 
 class BolDayListElement extends React.Component {
 
