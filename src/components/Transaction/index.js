@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 import './style.css';
 import JsonRpcClient from "react-jsonrpc-client";
 
@@ -16,6 +17,16 @@ class Transaction extends Component {
         };
     }
 
+
+    hex2a(hexx) {
+        var hex = hexx.toString();//force conversion
+        var str = 'jhgv';
+        for (var i = 0; i < hex.length; i += 2)
+            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+        return str;
+    }
+
+
     componentWillMount() {
         this._isMounted = true;
 
@@ -29,7 +40,7 @@ class Transaction extends Component {
         this._isMounted = false;
     }
     componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname != this.props.location.pathname) {   //Used in case an internal redirect occurs
+        if(prevProps.location.pathname !== this.props.location.pathname) {   //Used in case an internal redirect occurs
             window.location.reload();                                       //for new block height on the search bar
         }
     }
@@ -48,6 +59,35 @@ class Transaction extends Component {
                         }
                     })
                 }
+
+                let remark = null;
+                if(response.attributes && response.attributes.length) {
+                    response.attributes.forEach((attr) => {
+                        if(attr && attr.usage && attr.usage === 'Remark') {
+                            remark = this.hex2a(attr.data);
+                        }
+                    })
+                }
+
+                let remark1 = null;
+                if(response.attributes && response.attributes.length) {
+                    response.attributes.forEach((attr) => {
+                        if(attr && attr.usage && attr.usage === 'Remark1') {
+                            remark1 = this.hex2a(attr.data);
+                        }
+                    })
+                }
+                
+                let remark2 = null;
+                if(response.attributes && response.attributes.length) {
+                    response.attributes.forEach((attr) => {
+                        if(attr && attr.usage && attr.usage === 'Remark2') {
+                            remark2 = this.hex2a(attr.data);
+                            
+                        }
+                    })
+                }              
+
                 this.setState({
                     blockhash: response.blockhash,
                     txid: response.txid,
@@ -60,7 +100,10 @@ class Transaction extends Component {
                     invocationScript: (response.scripts && response.scripts.length) ?
                         response.scripts[0]["invocation"] : null,
                     verificationScript: (response.scripts && response.scripts.length) ?
-                        response.scripts[0]["verification"] : null
+                        response.scripts[0]["verification"] : null,
+                    remark: remark,
+                    remark1: remark1,
+                    remark2: remark2,
                 });
 
                 this.getBlock();
@@ -111,6 +154,13 @@ class Transaction extends Component {
                             <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.invocationScript}</td></tr>
                         <tr><td className="tdLabel">Verification script: </td>
                             <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.verificationScript}</td></tr>
+                        <tr><td className="tdLabel">Remark: </td>
+                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark}</td></tr>
+                        <tr><td className="tdLabel">Remark1: </td>
+                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark1}</td></tr>
+                        <tr><td className="tdLabel">Remark2: </td>
+                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark2}</td></tr>
+
 
                         </tbody>
                     </table>

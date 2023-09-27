@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 import './style.css';
 import TransactionListElement from "../Home/TransactionListElement";
-import Row from "reactstrap/es/Row";
-import Col from "reactstrap/es/Col";
+import Row from "reactstrap/lib/Row";
+import Col from "reactstrap/lib/Col";
 
 class Transactions extends Component {
 

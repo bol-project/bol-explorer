@@ -1,8 +1,8 @@
-FROM nginx:1.15.0-alpine AS base
+FROM nginx:1.25.1 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM node:11.4-stretch AS build
+FROM node:16.17.0 AS build
 WORKDIR /repo
 
 COPY ./package.json ./
@@ -16,6 +16,8 @@ RUN npm run compile-sass
 RUN npm run minify-sass
 RUN npm run build
 
+
+
 FROM build AS publish
 RUN cp -a build/. /app
 
@@ -24,3 +26,4 @@ WORKDIR /app
 COPY --from=publish /app /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./robots.txt /etc/nginx/robots.txt
+

@@ -1,5 +1,6 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
+
 
 import {
     Collapse,
@@ -13,9 +14,10 @@ import {
     Nav,
     Container, CardHeader
 } from "reactstrap";
-import InputGroupAddon from "reactstrap/es/InputGroupAddon";
-import InputGroupText from "reactstrap/es/InputGroupText";
-import InputGroup from "reactstrap/es/InputGroup";
+import InputGroupAddon from "reactstrap/lib/InputGroup";
+import InputGroupText from "reactstrap/lib/InputGroupText";
+import InputGroup from "reactstrap/lib/InputGroup";
+
 
 const txHashPrefix = "0x";
 const txHashSize = 66;
@@ -103,7 +105,7 @@ class NavbarDocs extends React.Component {
 
     /** Returns if the given value is transaction hash, of specific suffix and length */
     isTxHash(val) {
-        return val && val.trim().startsWith(txHashPrefix) && val.trim().length == txHashSize;
+        return val && val.trim().startsWith(txHashPrefix) && val.trim().length === txHashSize;
     };
 
     searchByTxHash() {
@@ -118,7 +120,7 @@ class NavbarDocs extends React.Component {
                         <div className="navbar-translate">
                             <NavbarBrand href="/">
                                 <img
-                                    alt="..." width={50} height={50} src={require("assets/img/bol_logo.png")}
+                                    alt="..." width={50} height={50} src={require("../../assets/img/bol_logo.png")}
                                 />
                             </NavbarBrand>
                             <button

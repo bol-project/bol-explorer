@@ -34,6 +34,7 @@ class Account extends Component {
                         <tr><td className="tdLabel">Wallet Balance: </td><td>{currentAccount.walletBalance}</td></tr>
                         <tr><td className="tdLabel">Total Transactions: </td><td>{currentAccount.totalTransactions}</td></tr>
                         <tr><td className="tdLabel">Last Transaction: </td><td>{currentAccount.lastTransaction}</td></tr>
+                        <tr><td className="tdLabel">Detailed Account Info: </td><td>{currentAccount.lastTransaction}</td></tr>
 
                         </tbody>
                     </table>
