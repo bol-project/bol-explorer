@@ -11,8 +11,9 @@ let ps = null;
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
-var scriptHash = "49071c33087967cc6d3c0f0ef35c013163b047eb";
-var ClaimIntervalStorageKey = "B3";
+var scriptHash = "032be89207da01ba724a20f567ccc3fdcfeac064";
+
+var ClaimIntervalStorageKey = "B300";
 var CWPStorageKey = "B7";
 var TCPStorageKey = "08";
 var WorldWalletAmountStorageKey = "B8";
@@ -256,19 +257,22 @@ class Block extends Component {
                                 <td className="tdLabel">Size:</td>
                                 <td>{this.state.size}</td>
                             </tr>
-                            <tr>
-                                <td className="tdLabel">Nr. of Register Transactions:</td>
-                                <td>{this.state.nrRegisterTransactions}</td>
-                            </tr>
                             {/*<tr>*/}
                             {/*    <td className="tdLabel">New Registered People:</td>*/}
                             {/*    <td>{this.state.newRegisteredPeople}</td>*/}
                             {/*</tr>*/}
                             <tr>
                                 <td className="tdLabel">Previous Block:</td>
-                                <td><Link to={`../block/${this.state.previousBlockHash}`}
-                                          onClick={this.forceUpdate}>{this.state.previousBlockHash}</Link></td>
+                                <td><Link to={`../block/${this.state.previousBlockHash}`}>{this.state.previousBlockHash}</Link>
+                                </td>
                             </tr>
+
+                            <tr>
+                                <td className="tdLabel">Next Block:</td>
+                                <td><Link to={`../block/${this.state.nextBlockHash}`}>{this.state.nextBlockHash}</Link>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td className="tdLabel">Merkle Root:</td>
                                 <td>{this.state.merkleRoot}</td>
@@ -305,11 +309,6 @@ class Block extends Component {
                             {/*    <td className="tdLabel">Distribute per Person:</td>*/}
                             {/*    <td>{this.state.distributePerPerson}</td>*/}
                             {/*</tr>*/}
-                            <tr>
-                                <td className="tdLabel">Next Block:</td>
-                                <td><Link to={`../block/${this.state.nextBlockHash}`}>{this.state.nextBlockHash}</Link>
-                                </td>
-                            </tr>
                             <tr>
                                 <td className="tdLabel">Number of Transactions:</td>
                                 <td>{this.state.numberOfTransactions}</td>
