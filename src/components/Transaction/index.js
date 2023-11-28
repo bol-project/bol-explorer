@@ -3,10 +3,17 @@ import React, { Component } from 'react';
 
 import './style.css';
 import JsonRpcClient from "react-jsonrpc-client";
+import CryptoJS from 'crypto-js';
+import Base58 from 'base-58';
 
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
+
+var scriptHash = "b385fb98c305c82e35da302fd979eb0450fb03d4";
+var TranferTransactionStorageKey = "C000";
+var TranferClaimTransactionStorageKey = "C100";
+
 class Transaction extends Component {
 
     _isMounted = false;
@@ -15,6 +22,8 @@ class Transaction extends Component {
         super();
         this.state = {
         };
+
+
     }
 
 
@@ -45,6 +54,39 @@ class Transaction extends Component {
         }
     }
 
+    getScriptHash() {
+
+        return api.request('getbolhash').then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({scriptHash: response});
+            }
+        });
+    }
+
+    getTransferNetFee() {
+
+        return api.request('getstorage', scriptHash, TranferTransactionStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({net_fee: parseInt(response, 16)});
+            }
+        });
+    }
+
+    getTranferClaimNetFee() {
+
+        return api.request('getstorage', scriptHash, TranferClaimTransactionStorageKey).then((response) => {
+
+            if (response && this._isMounted) {
+
+                this.setState({net_fee: parseInt(response, 16)});
+            }
+        });
+    }
+
     getTransaction() {
 
         api.request('getrawtransaction', this.props.match.params.transactionHash, 1).then((response) => {
@@ -52,30 +94,43 @@ class Transaction extends Component {
             if (response && this._isMounted) {
 
                 let sentFrom = null;
+                let sentFromR = null;
                 if(response.attributes && response.attributes.length) {
                     response.attributes.forEach((attr) => {
                         if(attr && attr.usage && attr.usage === 'Script') {
                             sentFrom = attr.data;
+                            sentFrom='19'+sentFrom;
+                            var message = CryptoJS.enc.Hex.parse(sentFrom);
+                            var hash=CryptoJS.SHA256(message);
+                            hash=CryptoJS.SHA256(hash);
+                            var stringhash=hash.toString();
+                            var stringhash4bytes=stringhash.slice(0, 8);                                                     
+                            sentFromR=sentFrom+stringhash4bytes;                           
+                            sentFrom=Base58.encode(new Buffer(sentFromR,'hex'));                            
                         }
                     })
                 }
 
-                let remark = null;
+                let transtype = null;
                 if(response.attributes && response.attributes.length) {
                     response.attributes.forEach((attr) => {
                         if(attr && attr.usage && attr.usage === 'Remark') {
-                            remark = this.hex2a(attr.data);
+                            transtype = this.hex2a(attr.data);
                         }
                     })
                 }
 
                 let remark1 = null;
+                let remark1label=null;
                 if(response.attributes && response.attributes.length) {
                     response.attributes.forEach((attr) => {
                         if(attr && attr.usage && attr.usage === 'Remark1') {
                             remark1 = this.hex2a(attr.data);
                         }
                     })
+                    if(transtype==='claim' || transtype==='transferClaim'){
+                        remark1label="From codename";
+                    }
                 }
                 
                 let remark2 = null;
@@ -101,7 +156,8 @@ class Transaction extends Component {
                         response.scripts[0]["invocation"] : null,
                     verificationScript: (response.scripts && response.scripts.length) ?
                         response.scripts[0]["verification"] : null,
-                    remark: remark,
+                    transtype: transtype,
+                    remark1label:remark1label,
                     remark1: remark1,
                     remark2: remark2,
                 });
@@ -140,11 +196,10 @@ class Transaction extends Component {
                 <div>
                     <table>
                         <tbody>
-
-                        <tr><td className="tdLabel">Transaction Id: </td><td>{this.state.txid}</td></tr>
+                        <tr><td className="tdLabel">Transaction Id: </td><td>{this.state.txid}</td></tr>     
                         <tr><td className="tdLabel">Transaction Type: </td><td>{this.state.type}</td></tr>
                         <tr><td className="tdLabel">Send from: </td><td>{this.state.sentFrom}</td></tr>
-                            <tr><td className="tdLabel">Send to: </td><td>{this.state.sentTo}</td></tr>
+                        <tr><td className="tdLabel">Send to: </td><td>{this.state.sentTo}</td></tr>
                         <tr><td className="tdLabel">Included in block: </td><td>{this.state.blockIndex}</td></tr>
                         <tr><td className="tdLabel">Timestamp: </td><td>{(!this.state.blocktime) ? '' :
                             dtFormat.format(new Date(0).setUTCSeconds(this.state.blocktime))}</td></tr>
@@ -153,10 +208,10 @@ class Transaction extends Component {
                         <tr><td className="tdLabel">Invocation script: </td>
                             <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.invocationScript}</td></tr>
                         <tr><td className="tdLabel">Verification script: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.verificationScript}</td></tr>
-                        <tr><td className="tdLabel">Remark: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark}</td></tr>
-                        <tr><td className="tdLabel">Remark1: </td>
+                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.verificationScript}</td></tr>                        
+                        <tr><td className="tdLabel">Type: </td>
+                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.transtype}</td></tr>
+                        <tr><td className="tdLabel">{this.state.remark1label}</td>
                             <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark1}</td></tr>
                         <tr><td className="tdLabel">Remark2: </td>
                             <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark2}</td></tr>
