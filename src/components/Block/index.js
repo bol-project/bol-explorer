@@ -12,6 +12,7 @@ var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
 var scriptHash = "032be89207da01ba724a20f567ccc3fdcfeac064";
+
 var ClaimIntervalStorageKey = "B300";
 var CWPStorageKey = "B7";
 var TCPStorageKey = "08";

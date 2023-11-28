@@ -105,7 +105,8 @@ class Transaction extends Component {
                             hash=CryptoJS.SHA256(hash);
                             var stringhash=hash.toString();
                             var stringhash4bytes=stringhash.slice(0, 8);                                                     
-                            sentFromR=sentFrom+stringhash4bytes;                           
+                            sentFromR=sentFrom+stringhash4bytes;     
+                                                  
                             sentFrom=Base58.encode(new Buffer(sentFromR,'hex'));                            
                         }
                     })
