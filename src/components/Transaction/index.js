@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import BolContext from '../../bolContext';
 
 import './style.css';
 import JsonRpcClient from "react-jsonrpc-client";
@@ -15,6 +16,7 @@ var TranferTransactionStorageKey = "C000";
 var TranferClaimTransactionStorageKey = "C100";
 
 class Transaction extends Component {
+    static contextType = BolContext;
 
     _isMounted = false;
 
