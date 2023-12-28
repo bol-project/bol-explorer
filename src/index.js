@@ -9,6 +9,17 @@ import "./assets/demo/demo.css";
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import bolClientInstance from './client/bolClient';
+import BolContext from './bolContext';
+
+global.Buffer = global.Buffer || require('buffer').Buffer;
+
+await bolClientInstance.initialize();
+
+ReactDOM.render(
+    <BolContext.Provider value={bolClientInstance}>
+        <App />
+    </BolContext.Provider>, 
+    document.getElementById('root'));
 
 serviceWorker.unregister();
