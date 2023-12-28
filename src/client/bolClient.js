@@ -102,7 +102,11 @@ class BolClient {
 
   async getStorageByBlock(storageKey, blockHeight) {
     const storageByBlockKey = key(storageKey) + dkey(blockHeight);
-    const response = await this.rpc.request("getstorage", this.bolHash, storageByBlockKey);
+    const response = await this.rpc.request(
+      "getstorage",
+      this.bolHash,
+      storageByBlockKey
+    );
     return leHexToDecimal(response);
   }
 
@@ -141,7 +145,7 @@ class BolClient {
       (item) => item.usage === "Script"
     );
     if (scriptAttribute) {
-      bolData.Address = scriptHashToAddress(scriptAttribute.data);
+      bolData.ExecutingAddress = scriptHashToAddress(scriptAttribute.data);
     }
 
     if (transaction.script) {
@@ -153,7 +157,9 @@ class BolClient {
       ?.filter((attribute) => attribute.usage.startsWith("Remark"))
       .map((attribute) => hexToAscii(attribute.data));
 
-    const keys = remarksTable[remarks[0]];
+    const bolTransactionType = remarks[0];
+    bolData.BolTransactionType = bolTransactionType;
+    const keys = remarksTable[bolTransactionType];
     keys.forEach((key, index) => {
       bolData[key] = remarks[index + 1];
     });
