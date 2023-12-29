@@ -34,8 +34,8 @@ class Transaction extends Component {
   render() {
     const transaction = this.state.transaction;
 
-    const invocationScript = transaction?.scripts?.[0].invocation ?? null;
-    const verificationScript = transaction?.scripts?.[0].verification ?? null;
+    const invocationScript = transaction?.scripts?.[0]?.invocation;
+    const verificationScript = transaction?.scripts?.[0]?.verification;
 
     const TableRow = ({ label, value, valueStyle = {} }) => (
       <tr>
