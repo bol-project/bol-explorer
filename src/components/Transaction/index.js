@@ -1,230 +1,92 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
+import BolContext from "../../bolContext";
 
-import './style.css';
-import JsonRpcClient from "react-jsonrpc-client";
-import CryptoJS from 'crypto-js';
-import Base58 from 'base-58';
+import "./style.css";
 
-var api = new JsonRpcClient({
-    endpoint: process.env.REACT_APP_SERVER_URL
+const dtFormat = Intl.DateTimeFormat("en-GB", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
 });
 
-var scriptHash = "b385fb98c305c82e35da302fd979eb0450fb03d4";
-var TranferTransactionStorageKey = "C000";
-var TranferClaimTransactionStorageKey = "C100";
-
 class Transaction extends Component {
+  static contextType = BolContext;
 
-    _isMounted = false;
+  constructor() {
+    super();
+    this.state = {};
+  }
 
-    constructor() {
-        super();
-        this.state = {
-        };
+  async componentDidMount() {
+    window.scrollTo(0, 0);
+    const client = this.context;
+    var transaction = await client.getTransaction(
+      this.props.match.params.transactionHash
+    );
+    this.setState({ transaction });
+  }
 
+  render() {
+    const transaction = this.state.transaction;
 
-    }
+    const invocationScript = transaction?.scripts?.[0]?.invocation;
+    const verificationScript = transaction?.scripts?.[0]?.verification;
 
+    const TableRow = ({ label, value, valueStyle = {} }) => (
+      <tr>
+        <td className="tdLabel">{label}</td>
+        <td style={{ whiteSpace: "inherit", wordBreak: "break-word" }}>
+          {value}
+        </td>
+      </tr>
+    );
 
-    hex2a(hexx) {
-        var hex = hexx.toString();//force conversion
-        var str = '';
-        for (var i = 0; i < hex.length; i += 2)
-            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-        return str;
-    }
+    return (
+      <div className="view-page">
+        <h2>Transaction Information</h2>
+        <div>
+          <table>
+            <tbody>
+              {[
+                ["Transaction Id:", transaction?.txid],
+                ["Transaction Type:", transaction?.type],
+                [
+                  "Included in block:",
+                  <Link to={"/block/" + transaction?.blockhash}>
+                    <span>{transaction?.blockhash}</span>
+                  </Link>,
+                ],
+                [
+                  "Timestamp:",
+                  dtFormat.format(
+                    new Date(0).setUTCSeconds(transaction?.blocktime ?? 0)
+                  ),
+                ],
+                ["Network Fee:", transaction?.net_fee],
+                ["Size:", transaction?.size],
+                ["Invocation script:", invocationScript],
+                ["Verification script:", verificationScript],
+                ["", "Bol Data"],
+              ].map(([label, value], index) => (
+                <TableRow key={index} label={label} value={value} />
+              ))}
 
-
-    componentWillMount() {
-        this._isMounted = true;
-
-        this.getTransaction();
-    }
-
-    componentDidMount() {
-        window.scrollTo(0, 0);
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-    componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname !== this.props.location.pathname) {   //Used in case an internal redirect occurs
-            window.location.reload();                                       //for new block height on the search bar
-        }
-    }
-
-    getScriptHash() {
-
-        return api.request('getbolhash').then((response) => {
-
-            if (response && this._isMounted) {
-
-                this.setState({scriptHash: response});
-            }
-        });
-    }
-
-    getTransferNetFee() {
-
-        return api.request('getstorage', scriptHash, TranferTransactionStorageKey).then((response) => {
-
-            if (response && this._isMounted) {
-
-                this.setState({net_fee: parseInt(response, 16)});
-            }
-        });
-    }
-
-    getTranferClaimNetFee() {
-
-        return api.request('getstorage', scriptHash, TranferClaimTransactionStorageKey).then((response) => {
-
-            if (response && this._isMounted) {
-
-                this.setState({net_fee: parseInt(response, 16)});
-            }
-        });
-    }
-
-    getTransaction() {
-
-        api.request('getrawtransaction', this.props.match.params.transactionHash, 1).then((response) => {
-
-            if (response && this._isMounted) {
-
-                let sentFrom = null;
-                let sentFromR = null;
-                if(response.attributes && response.attributes.length) {
-                    response.attributes.forEach((attr) => {
-                        if(attr && attr.usage && attr.usage === 'Script') {
-                            sentFrom = attr.data;
-                            sentFrom='19'+sentFrom;
-                            var message = CryptoJS.enc.Hex.parse(sentFrom);
-                            var hash=CryptoJS.SHA256(message);
-                            hash=CryptoJS.SHA256(hash);
-                            var stringhash=hash.toString();
-                            var stringhash4bytes=stringhash.slice(0, 8);                                                     
-                            sentFromR=sentFrom+stringhash4bytes;     
-                                                  
-                            sentFrom=Base58.encode(new Buffer(sentFromR,'hex'));                            
-                        }
-                    })
-                }
-
-                let transtype = null;
-                if(response.attributes && response.attributes.length) {
-                    response.attributes.forEach((attr) => {
-                        if(attr && attr.usage && attr.usage === 'Remark') {
-                            transtype = this.hex2a(attr.data);
-                        }
-                    })
-                }
-
-                let remark1 = null;
-                let remark1label=null;
-                if(response.attributes && response.attributes.length) {
-                    response.attributes.forEach((attr) => {
-                        if(attr && attr.usage && attr.usage === 'Remark1') {
-                            remark1 = this.hex2a(attr.data);
-                        }
-                    })
-                    if(transtype==='claim' || transtype==='transferClaim'){
-                        remark1label="From codename";
-                    }
-                }
-                
-                let remark2 = null;
-                if(response.attributes && response.attributes.length) {
-                    response.attributes.forEach((attr) => {
-                        if(attr && attr.usage && attr.usage === 'Remark2') {
-                            remark2 = this.hex2a(attr.data);
-                            
-                        }
-                    })
-                }              
-
-                this.setState({
-                    blockhash: response.blockhash,
-                    txid: response.txid,
-                    type: response.type,
-                    sentFrom: sentFrom,
-                    // Send to
-                    blocktime: response.blocktime,
-                    net_fee: response.net_fee,
-                    size: response.size,
-                    invocationScript: (response.scripts && response.scripts.length) ?
-                        response.scripts[0]["invocation"] : null,
-                    verificationScript: (response.scripts && response.scripts.length) ?
-                        response.scripts[0]["verification"] : null,
-                    transtype: transtype,
-                    remark1label:remark1label,
-                    remark1: remark1,
-                    remark2: remark2,
-                });
-
-                this.getBlock();
-            }
-        }).catch(console.log);
-    }
-
-    getBlock() {
-
-        api.request('getblock', this.state.blockhash, 1).then((response) => {
-
-            if (response && this._isMounted) {
-                this.setState({
-                    blockIndex: response.index
-                });
-            }
-        });
-    }
-
-    render() {
-
-        var dtFormat = Intl.DateTimeFormat('en-GB', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-
-        return (
-            <div className="view-page">
-                <h2>Transaction Information</h2>
-                <div>
-                    <table>
-                        <tbody>
-                        <tr><td className="tdLabel">Transaction Id: </td><td>{this.state.txid}</td></tr>     
-                        <tr><td className="tdLabel">Transaction Type: </td><td>{this.state.type}</td></tr>
-                        <tr><td className="tdLabel">Send from: </td><td>{this.state.sentFrom}</td></tr>
-                        <tr><td className="tdLabel">Send to: </td><td>{this.state.sentTo}</td></tr>
-                        <tr><td className="tdLabel">Included in block: </td><td>{this.state.blockIndex}</td></tr>
-                        <tr><td className="tdLabel">Timestamp: </td><td>{(!this.state.blocktime) ? '' :
-                            dtFormat.format(new Date(0).setUTCSeconds(this.state.blocktime))}</td></tr>
-                        <tr><td className="tdLabel">Network Fee: </td><td>{this.state.net_fee}</td></tr>
-                        <tr><td className="tdLabel">Size: </td><td>{this.state.size}</td></tr>
-                        <tr><td className="tdLabel">Invocation script: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.invocationScript}</td></tr>
-                        <tr><td className="tdLabel">Verification script: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.verificationScript}</td></tr>                        
-                        <tr><td className="tdLabel">Type: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.transtype}</td></tr>
-                        <tr><td className="tdLabel">{this.state.remark1label}</td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark1}</td></tr>
-                        <tr><td className="tdLabel">Remark2: </td>
-                            <td style={{"whiteSpace": "inherit","wordBreak": "break-word"}}>{this.state.remark2}</td></tr>
-
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
-    }
-
+              {Object.entries(transaction?.bolData ?? {})
+                .sort()
+                .map(([key, value], index) => (
+                  <TableRow key={key} label={key} value={value} />
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Transaction;
