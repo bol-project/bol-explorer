@@ -43,6 +43,9 @@ class BolClient {
   rpc;
   bolHash;
 
+  transferFee;
+  operationsFee;
+
   constructor(endpoint) {
     this.rpc = new JsonRpcClient({
       endpoint: endpoint,
@@ -54,21 +57,25 @@ class BolClient {
   }
 
   async getTransferFee() {
+    if (this.transferFee) return this.transferFee;
     const response = await this.rpc.request(
       "getstorage",
       this.bolHash,
       key(TransferFee)
     );
-    return leHexToDecimal(response);
+    this.transferFee = leHexToDecimal(response);
+    return this.transferFee;
   }
 
   async getOperationsFee() {
+    if (this.operationsFee) return this.operationsFee;
     const response = await this.rpc.request(
       "getstorage",
       this.bolHash,
       key(OperationsFee)
     );
-    return leHexToDecimal(response);
+    this.operationsFee = leHexToDecimal(response);
+    return this.operationsFee;
   }
 
   async getTransaction(transactionId) {
