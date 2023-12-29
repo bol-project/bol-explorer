@@ -86,7 +86,7 @@ class BolClient {
     );
 
     if (transaction.type === "InvocationTransaction") {
-      const bolData = this.parseBolData(transaction);
+      const bolData = await this.parseBolData(transaction);
       transaction.bolData = bolData;
     }
 
@@ -145,7 +145,7 @@ class BolClient {
     return await this.getStorageByBlock(TotalSupply, blockHeight);
   }
 
-  parseBolData(transaction) {
+  async parseBolData(transaction) {
     const bolData = {};
 
     const scriptAttribute = transaction.attributes?.find(
@@ -170,6 +170,13 @@ class BolClient {
     keys.forEach((key, index) => {
       bolData[key] = remarks[index + 1];
     });
+
+    bolData.TransactionFee = 0;
+    if (bolData.BolTransactionType === "transfer") {
+      bolData.TransactionFee = (await this.getTransferFee()).toString();
+    } else if (bolData.BolTransactionType === "transferClaim") {
+      bolData.TransactionFee = (await this.getOperationsFee()).toString();
+    }
 
     return bolData;
   }
