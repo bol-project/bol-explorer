@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import BolContext from "../../bolContext";
 
@@ -54,7 +55,12 @@ class Transaction extends Component {
               {[
                 ["Transaction Id:", transaction?.txid],
                 ["Transaction Type:", transaction?.type],
-                ["Included in block:", transaction?.blockhash],
+                [
+                  "Included in block:",
+                  <Link to={"/block/" + transaction?.blockhash}>
+                    <span>{transaction?.blockhash}</span>
+                  </Link>,
+                ],
                 [
                   "Timestamp:",
                   dtFormat.format(
