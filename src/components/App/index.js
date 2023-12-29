@@ -21,6 +21,14 @@ import Home from './../Home';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import NavbarDocs from "../Navbars/NavbarDocs";
 
+import JsonRpcClient from "react-jsonrpc-client";
+
+var api = new JsonRpcClient({
+    endpoint: process.env.REACT_APP_SERVER_URL
+});
+
+
+
 class App extends Component {
     componentDidMount() {
         document.body.classList.toggle("index-page");
@@ -29,7 +37,17 @@ class App extends Component {
         document.body.classList.toggle("index-page");
     }
 
+    getScriptHash() {
+        //console.log('Before API request');
+        return api.request('getbolhash')
+          .then((response) => {
+            //console.log('API response:', response);
+            sessionStorage.setItem('scriptHashResult', response);
+          })
+      }
+
     render() {
+        this.getScriptHash();
         return (
             <div className="App">
                 <div className="App-nav">

@@ -11,9 +11,10 @@ let ps = null;
 var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
-var scriptHash = "032be89207da01ba724a20f567ccc3fdcfeac064";
+var scriptHash = sessionStorage.getItem('scriptHashResult');
 
 var ClaimIntervalStorageKey = "B300";
+
 var CWPStorageKey = "B7";
 var TCPStorageKey = "08";
 var WorldWalletAmountStorageKey = "B8";
@@ -25,7 +26,7 @@ class Block extends Component {
 
     constructor() {
         super();
-        this.state = {};
+        this.state = { };
     }
 
     componentWillMount() {
@@ -86,7 +87,8 @@ class Block extends Component {
                                                                                                        item={item}/>),
                     merkleRoot: response.merkleroot,
                     previousBlockHash: response.previousblockhash,
-                    nextBlockHash: response.nextblockhash
+                    nextBlockHash: response.nextblockhash,
+                    //scriptHash:'ljk'
                 });
 
 
@@ -257,10 +259,7 @@ class Block extends Component {
                                 <td className="tdLabel">Size:</td>
                                 <td>{this.state.size}</td>
                             </tr>
-                            {/*<tr>*/}
-                            {/*    <td className="tdLabel">New Registered People:</td>*/}
-                            {/*    <td>{this.state.newRegisteredPeople}</td>*/}
-                            {/*</tr>*/}
+
                             <tr>
                                 <td className="tdLabel">Previous Block:</td>
                                 <td><Link to={`../block/${this.state.previousBlockHash}`}>{this.state.previousBlockHash}</Link>
@@ -312,6 +311,10 @@ class Block extends Component {
                             <tr>
                                 <td className="tdLabel">Number of Transactions:</td>
                                 <td>{this.state.numberOfTransactions}</td>
+                            </tr>
+                            <tr>
+                                <td className="tdLabel">ScriptHash:</td>
+                                <td>{this.state.scriptHash}</td>
                             </tr>
 
                             </tbody>

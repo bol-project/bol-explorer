@@ -10,7 +10,7 @@ var api = new JsonRpcClient({
     endpoint: process.env.REACT_APP_SERVER_URL
 });
 
-var scriptHash = "b385fb98c305c82e35da302fd979eb0450fb03d4";
+var scriptHash = sessionStorage.getItem('scriptHashResult');
 var TranferTransactionStorageKey = "C000";
 var TranferClaimTransactionStorageKey = "C100";
 
@@ -22,8 +22,6 @@ class Transaction extends Component {
         super();
         this.state = {
         };
-
-
     }
 
 
@@ -52,17 +50,6 @@ class Transaction extends Component {
         if(prevProps.location.pathname !== this.props.location.pathname) {   //Used in case an internal redirect occurs
             window.location.reload();                                       //for new block height on the search bar
         }
-    }
-
-    getScriptHash() {
-
-        return api.request('getbolhash').then((response) => {
-
-            if (response && this._isMounted) {
-
-                this.setState({scriptHash: response});
-            }
-        });
     }
 
     getTransferNetFee() {
@@ -105,8 +92,7 @@ class Transaction extends Component {
                             hash=CryptoJS.SHA256(hash);
                             var stringhash=hash.toString();
                             var stringhash4bytes=stringhash.slice(0, 8);                                                     
-                            sentFromR=sentFrom+stringhash4bytes;     
-                                                  
+                            sentFromR=sentFrom+stringhash4bytes;                         
                             sentFrom=Base58.encode(new Buffer(sentFromR,'hex'));                            
                         }
                     })
@@ -149,6 +135,7 @@ class Transaction extends Component {
                     txid: response.txid,
                     type: response.type,
                     sentFrom: sentFrom,
+     
                     // Send to
                     blocktime: response.blocktime,
                     net_fee: response.net_fee,
@@ -181,7 +168,7 @@ class Transaction extends Component {
     }
 
     render() {
-
+        console.log(scriptHash);
         var dtFormat = Intl.DateTimeFormat('en-GB', {
             year: 'numeric',
             month: '2-digit',
@@ -201,6 +188,7 @@ class Transaction extends Component {
                         <tr><td className="tdLabel">Transaction Type: </td><td>{this.state.type}</td></tr>
                         <tr><td className="tdLabel">Send from: </td><td>{this.state.sentFrom}</td></tr>
                         <tr><td className="tdLabel">Send to: </td><td>{this.state.sentTo}</td></tr>
+                        <tr><td className="tdLabel">Scripthash: </td><td>{this.scriptHash}</td></tr>
                         <tr><td className="tdLabel">Included in block: </td><td>{this.state.blockIndex}</td></tr>
                         <tr><td className="tdLabel">Timestamp: </td><td>{(!this.state.blocktime) ? '' :
                             dtFormat.format(new Date(0).setUTCSeconds(this.state.blocktime))}</td></tr>
