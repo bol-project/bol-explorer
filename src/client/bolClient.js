@@ -145,7 +145,7 @@ class BolClient {
       (item) => item.usage === "Script"
     );
     if (scriptAttribute) {
-      bolData.ExecutingAddress = scriptHashToAddress(scriptAttribute.data);
+      bolData.SignedByAddress = scriptHashToAddress(scriptAttribute.data);
     }
 
     if (transaction.script) {
