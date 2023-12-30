@@ -15,8 +15,8 @@ const ClaimInterval = 0xb3;
 
 const TotalRegisteredPersons = 0x08;
 const TotalRegisteredCompanies = 0x09;
-const TotalCertifiers = 0x0a;
-const NewBol = 0xb6;
+const TotalCertifiers = 0x04;
+const NewBol = 0xb9;
 const DistributePerPerson = 0xb4;
 const Population = 0xb7;
 const TotalSupply = 0xb8;
@@ -48,6 +48,7 @@ class BolClient {
 
   transferFee;
   operationsFee;
+  claimInterval;
 
   constructor(endpoint) {
     this.rpc = new JsonRpcClient({
@@ -107,12 +108,14 @@ class BolClient {
   }
 
   async getClaimInterval() {
+    if (this.claimInterval) return this.claimInterval;
     const response = await this.rpc.request(
       "getstorage",
       this.bolHash,
       key(ClaimInterval)
     );
-    return leHexToDecimal(response);
+    this.claimInterval = leHexToDecimal(response);
+    return this.claimInterval;
   }
 
   async getStorageByBlock(storageKey, blockHeight) {
@@ -134,7 +137,13 @@ class BolClient {
   }
 
   async getTotalCertifiers(blockHeight) {
-    return await this.getStorageByBlock(TotalCertifiers, blockHeight);
+    const storageByBlockKey = key(TotalCertifiers) + dkey(5000257);
+    const response = await this.rpc.request(
+      "getstorage",
+      this.bolHash,
+      storageByBlockKey
+    );
+    return response.split("404b4c").filter((part) => part !== "").length;
   }
 
   async getNewBol(blockHeight) {
@@ -151,6 +160,36 @@ class BolClient {
 
   async getTotalSupply(blockHeight) {
     return await this.getStorageByBlock(TotalSupply, blockHeight);
+  }
+
+  async getBolDay(blockHeight) {
+    if (!blockHeight) return {};
+    const block = await this.getBlock(blockHeight);
+    const claimInterval = Number(await this.getClaimInterval());
+    blockHeight = Math.floor(block.index / claimInterval) * claimInterval;
+
+    const bolDay = {};
+    bolDay.TotalRegisteredPersons = (
+      await this.getTotalRegisteredPersons(blockHeight)
+    )?.toString();
+    bolDay.TotalRegisteredCompanies = (
+      await this.getTotalRegisteredCompanies(blockHeight)
+    )?.toString();
+    bolDay.TotalCertifiers = (
+      await this.getTotalCertifiers(blockHeight)
+    )?.toString();
+    bolDay.NewBol = toFixedPointDecimal(await this.getNewBol(blockHeight));
+    bolDay.DistributePerPerson = toFixedPointDecimal(
+      await this.getDistributePerPerson(blockHeight)
+    );
+    bolDay.Population = toFixedPointDecimal(
+      await this.getPopulation(blockHeight)
+    );
+    bolDay.TotalSupply = toFixedPointDecimal(
+      await this.getTotalSupply(blockHeight)
+    );
+
+    return bolDay;
   }
 
   async parseBolData(transaction) {
