@@ -37,6 +37,8 @@ const remarksTable = {
   payCertificationFees: ["CodeName"],
   requestCertification: ["RequesterCodeName", "CertifierCodeName"],
   migrate: ["ContractName", "ContractVersion", "ContractScriptHash"],
+  registerCertifier: ["CodeName", "CertificationFee"],
+  unregisterCertifier: ["CodeName"],
 };
 
 class BolClient {
