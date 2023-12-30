@@ -59,6 +59,7 @@ function decimalToLeHex(value) {
  * @returns {BigInt}
  */
 function leHexToDecimal(hexString) {
+  if (!hexString) return hexString;
   let reversedHexString = leHexToBeHex(hexString);
 
   // Convert reversed hex to decimal
@@ -88,6 +89,8 @@ const hexToAscii = (hex) =>
   Buffer.from(hex.toString(), "hex").toString("utf-8");
 
 function toFixedPointDecimal(numStr) {
+  if(!numStr) return numStr;
+  
   // Ensure the input is a string
   numStr = String(numStr);
 
