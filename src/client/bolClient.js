@@ -37,6 +37,8 @@ const remarksTable = {
   payCertificationFees: ["CodeName"],
   requestCertification: ["RequesterCodeName", "CertifierCodeName"],
   migrate: ["ContractName", "ContractVersion", "ContractScriptHash"],
+  registerCertifier: ["CodeName", "CertificationFee"],
+  unregisterCertifier: ["CodeName"],
 };
 
 class BolClient {
@@ -96,6 +98,11 @@ class BolClient {
   async getBlock(blockId) {
     const block = await this.rpc.request("getblock", blockId, 1);
     return block;
+  }
+
+  async getAccount(codeName) {
+    const account = await this.rpc.request("getaccount", codeName);
+    return account;
   }
 
   async getClaimInterval() {

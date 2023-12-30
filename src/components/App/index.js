@@ -89,7 +89,7 @@ class App extends Component {
                                     <Route exact path="/accounts" render={() => (
                                         <h3>Accounts page not found!</h3>
                                     )}/>
-                                    <Route path="/account/:accountHash" component={Account}/>
+                                    <Route path="/account/:codeName" component={Account}/>
                                     <Route exact path="/account" render={() => (
                                         <h3>Please select an accountHash!</h3>
                                     )}/>

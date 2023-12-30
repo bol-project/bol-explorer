@@ -171,7 +171,7 @@ class NavbarDocs extends React.Component {
                             <Form className="form-inline" onSubmit={this.initSearch}>
                                 <FormGroup className="no-border">
                                     <InputGroup className={this.state.focused}>
-                                        <InputGroupAddon addonType="prepend">
+                                        <InputGroupAddon addontype="prepend">
                                             <InputGroupText>
                                                 <i onClick={this.initSearch} className="tim-icons icon-zoom-split" />
                                             </InputGroupText>
