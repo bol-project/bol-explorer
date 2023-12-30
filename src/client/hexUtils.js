@@ -87,10 +87,31 @@ function leHexToBeHex(hexString) {
 const hexToAscii = (hex) =>
   Buffer.from(hex.toString(), "hex").toString("utf-8");
 
+function toFixedPointDecimal(numStr) {
+  // Ensure the input is a string
+  numStr = String(numStr);
+
+  // Remove leading zeros and ensure it's not empty
+  numStr = numStr.replace(/^0+/, "") || "0";
+
+  // Calculate how many zeros to add
+  const neededZeros = 8 - numStr.length;
+
+  // If neededZeros is positive, pad zeros on the left; otherwise, insert a dot at the correct position
+  if (neededZeros > 0) {
+    numStr = "0," + "0".repeat(neededZeros) + numStr;
+  } else {
+    numStr = numStr.slice(0, neededZeros) + "," + numStr.slice(neededZeros);
+  }
+
+  return numStr;
+}
+
 export {
   leHexToString,
   decimalToLeHex,
   leHexToDecimal,
   leHexToBeHex,
   hexToAscii,
+  toFixedPointDecimal
 };
