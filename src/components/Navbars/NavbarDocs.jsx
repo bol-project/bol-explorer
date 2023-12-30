@@ -158,8 +158,8 @@ class NavbarDocs extends React.Component {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/accounts/1">
-                                        Total Accounts
+                                    <NavLink href="/accounts">
+                                        Accounts
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
@@ -168,23 +168,6 @@ class NavbarDocs extends React.Component {
                                </NavLink>
                                 </NavItem>
                             </Nav>
-                            <Form className="form-inline" onSubmit={this.initSearch}>
-                                <FormGroup className="no-border">
-                                    <InputGroup className={this.state.focused}>
-                                        <InputGroupAddon addontype="prepend">
-                                            <InputGroupText>
-                                                <i onClick={this.initSearch} className="tim-icons icon-zoom-split" />
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input className={'search-field'}
-                                            type="text"
-                                            placeholder="Search"
-                                           value={this.state.searchValue}
-                                           onChange={this.handleSearchValueChange}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
-                            </Form>
                         </Collapse>
                     </Container>
                 </Navbar>
