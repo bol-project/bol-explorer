@@ -100,6 +100,11 @@ class BolClient {
     return block;
   }
 
+  async getAccount(codeName) {
+    const account = await this.rpc.request("getaccount", codeName);
+    return account;
+  }
+
   async getClaimInterval() {
     const response = await this.rpc.request(
       "getstorage",
