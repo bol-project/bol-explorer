@@ -94,14 +94,18 @@ function toFixedPointDecimal(numStr) {
   // Remove leading zeros and ensure it's not empty
   numStr = numStr.replace(/^0+/, "") || "0";
 
-  // Calculate how many zeros to add
-  const neededZeros = 8 - numStr.length;
+  // Determine where to place the decimal point
+  const decimalPointIndex = numStr.length - 8;
 
-  // If neededZeros is positive, pad zeros on the left; otherwise, insert a dot at the correct position
-  if (neededZeros > 0) {
-    numStr = "0," + "0".repeat(neededZeros) + numStr;
+  // If the number is shorter than 8 digits, pad zeros on the left
+  if (decimalPointIndex <= 0) {
+    numStr = "0," + "0".repeat(Math.abs(decimalPointIndex)) + numStr;
   } else {
-    numStr = numStr.slice(0, neededZeros) + "," + numStr.slice(neededZeros);
+    // Insert a dot 8 digits from the end
+    numStr =
+      numStr.slice(0, decimalPointIndex) +
+      "," +
+      numStr.slice(decimalPointIndex);
   }
 
   return numStr;
@@ -113,5 +117,5 @@ export {
   leHexToDecimal,
   leHexToBeHex,
   hexToAscii,
-  toFixedPointDecimal
+  toFixedPointDecimal,
 };
