@@ -5,6 +5,7 @@ import {
   leHexToString as key,
   leHexToBeHex,
   hexToAscii,
+  toFixedPointDecimal,
 } from "./hexUtils";
 import { scriptHashToAddress } from "./cryptoUtils";
 
@@ -175,7 +176,14 @@ class BolClient {
     bolData.BolTransactionType = bolTransactionType;
     const keys = remarksTable[bolTransactionType];
     keys.forEach((key, index) => {
-      bolData[key] = remarks[index + 1];
+      let remark = remarks[index + 1];
+      if (
+        key.toLowerCase().includes("fee") ||
+        key.toLowerCase().includes("value")
+      ) {
+        remark = toFixedPointDecimal(remark);
+      }
+      bolData[key] = remark;
     });
 
     bolData.TransactionFee = 0;
@@ -184,6 +192,9 @@ class BolClient {
     } else if (bolData.BolTransactionType === "transferClaim") {
       bolData.TransactionFee = (await this.getOperationsFee()).toString();
     }
+    bolData.TransactionFee = toFixedPointDecimal(
+      bolData.TransactionFee.toString()
+    );
 
     return bolData;
   }
