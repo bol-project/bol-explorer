@@ -23,7 +23,6 @@ class Transaction extends Component {
   }
 
   async componentDidMount() {
-    window.scrollTo(0, 0);
     const client = this.context;
     var transaction = await client.getTransaction(
       this.props.match.params.transactionHash
@@ -37,12 +36,14 @@ class Transaction extends Component {
     const invocationScript = transaction?.scripts?.[0]?.invocation;
     const verificationScript = transaction?.scripts?.[0]?.verification;
 
-    const TableRow = ({ label, value, valueStyle = {} }) => (
+    const TableRow = ({
+      label,
+      value,
+      valueStyle = { whiteSpace: "inherit", wordBreak: "break-word" },
+    }) => (
       <tr>
         <td className="tdLabel">{label}</td>
-        <td style={{ whiteSpace: "inherit", wordBreak: "break-word" }}>
-          {value}
-        </td>
+        <td style={valueStyle}>{value}</td>
       </tr>
     );
 
@@ -78,9 +79,16 @@ class Transaction extends Component {
 
               {Object.entries(transaction?.bolData ?? {})
                 .sort()
-                .map(([key, value], index) => (
-                  <TableRow key={key} label={key} value={value} />
-                ))}
+                .map(([key, value], index) => {
+                  if (key.includes("CodeName")) {
+                    value = (
+                      <Link to={"/account/" + value}>
+                        <span>{value}</span>
+                      </Link>
+                    );
+                  }
+                  return <TableRow key={key} label={key} value={value} />;
+                })}
             </tbody>
           </table>
         </div>
