@@ -14,9 +14,6 @@ var pageSize = 25;
 
 class Blocks extends Component {
 
-    _isMounted = false;
-    intervalId = null;
-
     constructor() {
         super();
         this.state = {
@@ -24,24 +21,26 @@ class Blocks extends Component {
         };
     }
 
-    componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-        this._isMounted = true;
+    componentDidUpdate (nextProps) {
+        if(this.props.match.params.page === nextProps.match.params.page){
+            return;
+        }
+        this.setState({ blockActivityList: [] });
+        this.getBlockCount();
+     }
+
+    componentDidMount() {         
         if (this.props.match.params.page <= 0) {
             return;
         }
 
         this.getBlockCount();
     }
-    componentWillUnmount() {
-        this._isMounted = false;
-        clearInterval(this.intervalId);
-    }
 
     getBlockCount() {
-
         api.request('getblockcount').then((response) => {
 
-            if (response && this._isMounted) {
+            if (response) {
                 this.setState({blockheight: response});
             }
         })
@@ -63,7 +62,7 @@ class Blocks extends Component {
 
         return api.request('getblock', height, 1).then((response) => {
 
-            if (response && this._isMounted) {
+            if (response) {
 
                 this.setState(function (previousState) {
 
@@ -105,17 +104,13 @@ class Blocks extends Component {
                 <br/>
                 <br/>
                 <Link className={((parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}
-                      onClick={this.forceUpdate}>Previous</Link>
+                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}>Previous</Link>
                 <span> </span>
-                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}
-                      onClick={this.forceUpdate}>Next</Link>
+                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}>Next</Link>
 
             </div>
         );
     }
-
 }
-
 
 export default Blocks;
