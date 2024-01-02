@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import BolContext from "../../bolContext";
-
+import TransactionBlockListElement from "../Home/TransactionBlockListElement";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
 
@@ -31,10 +31,15 @@ class Block extends Component {
       this.props.match.params.blockHash
     );
     this.setState({ block });
+    var bolDay = await client.getBolDay(block.index);
+    
+    this.setState({ bolDay });
   }
 
-  render() {
+ render() {
     const block = this.state.block;
+    const bolday = this.state.bolDay;
+    const transactionBlockActivityList = block?.tx.map(item => <TransactionBlockListElement key={item.txid} item={item}/>);
 
     const TableRow = ({
       label,
@@ -62,7 +67,7 @@ class Block extends Component {
                       new Date(0).setUTCSeconds(block?.time ?? 0)
                     ),
                 ],
-                ["Bol Day:", block?.index], 
+                ["Bol Day:", bolday?.Day], 
                 ["Size:", block?.size],
                 [
                 "Previous Block:",
@@ -81,7 +86,7 @@ class Block extends Component {
                 ["Version:", block?.version],   
                 ["Invocation Script:", block?.script.invocation],    
                 ["Verification Script:", block?.script.verification],    
-                ["Block Time:", block?.nextconsensus],    
+                ["Block Time:", bolday?.Time],    
                 ["Number of Transactions:", block?.tx.length],                   
                   
               ].map(([label, value], index) => (
@@ -103,6 +108,7 @@ class Block extends Component {
                 <Col sm><span>Transaction ID</span></Col>
             </Row>
         </div>
+        {transactionBlockActivityList}
 
       </div>
     );
