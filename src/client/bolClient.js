@@ -40,6 +40,7 @@ const remarksTable = {
   migrate: ["ContractName", "ContractVersion", "ContractScriptHash"],
   registerCertifier: ["CodeName", "CertificationFee"],
   unregisterCertifier: ["CodeName"],
+  addMultiCitizenship: ["ShortHash", "CodeName"],
 };
 
 class BolClient {
