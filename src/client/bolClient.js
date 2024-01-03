@@ -163,15 +163,17 @@ class BolClient {
     return await this.getStorageByBlock(TotalSupply, blockHeight);
   }
 
-
-  async getBolDay(blockHeight) {
-    if (!blockHeight) return {};
-    const block = await this.getBlock(blockHeight);
-    const previousBlock = await this.getBlock(blockHeight-1);
+  async getBlockDay(blockHeight) {
+    if (!blockHeight) return 0;
 
     const claimInterval = Number(await this.getClaimInterval());
-   
-    blockHeight = Math.floor(block.index / claimInterval) * claimInterval;
+    const blockDay = Math.floor(Number(blockHeight) / claimInterval);
+    return blockDay;
+  }
+
+  async getBolDay(bolDayIndex) {
+    const claimInterval = Number(await this.getClaimInterval());
+    const blockHeight = Number(bolDayIndex) * claimInterval;
 
     const bolDay = {};
     bolDay.TotalRegisteredPersons = (
@@ -193,11 +195,8 @@ class BolClient {
     bolDay.TotalSupply = toFixedPointDecimal(
       await this.getTotalSupply(blockHeight)
     );
-
-    bolDay.Day= Math.floor(block.index / claimInterval);
-
-    bolDay.Time = block.time - previousBlock.time;
-
+    bolDay.Day = bolDayIndex;
+    bolDay.Block = blockHeight;
 
     return bolDay;
   }

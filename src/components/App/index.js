@@ -83,7 +83,7 @@ class App extends Component {
                                     <Route exact path="/boldays" render={() => (
                                         <h3>BolDays page not found!</h3>
                                     )}/>
-                                    <Route path="/bolday/:blockHash" component={BolDay}/>
+                                    <Route path="/bolday/:bolDay" component={BolDay}/>
                                     <Route exact path="/bolday" render={() => (
                                         <h3>Bol Day page not found!</h3>
                                     )}/>

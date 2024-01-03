@@ -45,7 +45,7 @@ class Block extends Component {
     
     var block = await client.getBlock(blockId);
     this.setState({ block });
-    var bolDay = await client.getBolDay(block.index);
+    var bolDay = await client.getBlockDay(block.index);
     
     this.setState({ bolDay });
   }
@@ -81,7 +81,10 @@ class Block extends Component {
                       new Date(0).setUTCSeconds(block?.time ?? 0)
                     ),
                 ],
-                ["Bol Day:", bolday?.Day], 
+                ["Bol Day:", 
+                <Link to={"/bolday/"+bolday}>
+                    <span>{bolday}</span>
+                </Link>], 
                 ["Size:", block?.size],
                 [
                 "Previous Block:",
@@ -100,7 +103,6 @@ class Block extends Component {
                 ["Version:", block?.version],   
                 ["Invocation Script:", block?.script.invocation],    
                 ["Verification Script:", block?.script.verification],    
-                ["Block Time:", bolday?.Time],    
                 ["Number of Transactions:", block?.tx.length],                   
                   
               ].map(([label, value], index) => (
