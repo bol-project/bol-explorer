@@ -61,6 +61,10 @@ class BolClient {
     this.bolHash = await this.rpc.request("getbolhash");
   }
 
+  async getBlockHeight() {
+    return await this.rpc.request("getblockcount");
+  }
+
   async getTransferFee() {
     if (this.transferFee) return this.transferFee;
     const response = await this.rpc.request(
@@ -119,6 +123,11 @@ class BolClient {
     return this.claimInterval;
   }
 
+  async getCirculatingSupply() {
+    const response = await this.rpc.request("getstorage", this.bolHash, "");
+    return toFixedPointDecimal(leHexToDecimal(response));
+  }
+
   async getStorageByBlock(storageKey, blockHeight) {
     const storageByBlockKey = key(storageKey) + dkey(blockHeight);
     const response = await this.rpc.request(
@@ -129,15 +138,33 @@ class BolClient {
     return leHexToDecimal(response);
   }
 
-  async getTotalRegisteredPersons(blockHeight) {
+  async getTotalRegisteredPersonsByBlock(blockHeight) {
     return await this.getStorageByBlock(TotalRegisteredPersons, blockHeight);
   }
 
-  async getTotalRegisteredCompanies(blockHeight) {
+  async getTotalRegisteredPersons() {
+    const response = await this.rpc.request(
+      "getstorage",
+      this.bolHash,
+      key(TotalRegisteredPersons)
+    );
+    return leHexToDecimal(response);
+  }
+
+  async getTotalRegisteredCompaniesByBlock(blockHeight) {
     return await this.getStorageByBlock(TotalRegisteredCompanies, blockHeight);
   }
 
-  async getTotalCertifiers(blockHeight) {
+  async getTotalRegisteredCompanies() {
+    const response = await this.rpc.request(
+      "getstorage",
+      this.bolHash,
+      key(TotalRegisteredCompanies)
+    );
+    return leHexToDecimal(response);
+  }
+
+  async getTotalCertifiers() {
     const storageByBlockKey = key(TotalCertifiers) + dkey(5000257);
     const response = await this.rpc.request(
       "getstorage",
@@ -177,14 +204,12 @@ class BolClient {
 
     const bolDay = {};
     bolDay.TotalRegisteredPersons = (
-      await this.getTotalRegisteredPersons(blockHeight)
+      await this.getTotalRegisteredPersonsByBlock(blockHeight)
     )?.toString();
     bolDay.TotalRegisteredCompanies = (
-      await this.getTotalRegisteredCompanies(blockHeight)
+      await this.getTotalRegisteredCompaniesByBlock(blockHeight)
     )?.toString();
-    bolDay.TotalCertifiers = (
-      await this.getTotalCertifiers(blockHeight)
-    )?.toString();
+    bolDay.TotalCertifiers = (await this.getTotalCertifiers())?.toString();
     bolDay.NewBol = toFixedPointDecimal(await this.getNewBol(blockHeight));
     bolDay.DistributePerPerson = toFixedPointDecimal(
       await this.getDistributePerPerson(blockHeight)

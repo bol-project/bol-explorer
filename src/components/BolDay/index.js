@@ -6,19 +6,18 @@ import "./style.css";
 
 class BolDay extends Component {
   static contextType = BolContext;
-  _isMounted = false;
 
   constructor() {
     super();
     this.state = {};
   }
 
-  async componentDidUpdate (nextProps) {
-      if(this.props.match.params.bolDay === nextProps.match.params.bolDay){
-          return;
-      }
-      await this.fetchBolDay();
-   }
+  async componentDidUpdate(nextProps) {
+    if (this.props.match.params.bolDay === nextProps.match.params.bolDay) {
+      return;
+    }
+    await this.fetchBolDay();
+  }
 
   async componentDidMount() {
     await this.fetchBolDay();
@@ -67,7 +66,11 @@ class BolDay extends Component {
                 </tr>
                 <tr>
                   <td className="tdLabel">World Population:</td>
-                  <td>{bolDay?.Population ?? "0"}</td>
+                  <td>
+                    {Math.floor(
+                      Number(bolDay?.Population?.replace(",", ".") ?? 0)
+                    )}
+                  </td>
                 </tr>
                 <tr>
                   <td className="tdLabel">Total Registered Persons:</td>

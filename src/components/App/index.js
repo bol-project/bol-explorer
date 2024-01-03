@@ -13,7 +13,7 @@ import WorldPopulationDays from './../WorldPopulationDays';
 import TotalCommunityDays from './../TotalCommunityDays';
 import Accounts from './../Accounts';
 import Account from './../Account';
-import BolDays from './../BolDays';
+import {BolDays} from './../BolDays';
 import BolDay from './../BolDay';
 import Home from './../Home';
 
