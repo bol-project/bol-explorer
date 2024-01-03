@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
+import { FormGroup, Form, Input, InputGroup, Button } from "reactstrap";
 
 import './style.css';
 import BlockListElement from "../Home/BlockListElement";
@@ -14,34 +15,47 @@ var pageSize = 25;
 
 class Blocks extends Component {
 
-    _isMounted = false;
-    intervalId = null;
-
     constructor() {
         super();
+
+        this.searchValueChanged = this.searchValueChanged.bind(this);
+        this.navigateToBlock = this.navigateToBlock.bind(this);
+
         this.state = {
-            blockActivityList: []
+            blockActivityList: [],
+            searchValue: ""
         };
     }
 
-    componentWillMount() {          //the first true life cycle method: called one time, which is before the initial render
-        this._isMounted = true;
+    searchValueChanged(event) {
+        this.setState({ searchValue: event.target.value });
+    }
+
+    navigateToBlock(event) {
+        event.preventDefault();
+        this.props.history.push("/block/" + this.state.searchValue);
+    }
+
+    componentDidUpdate (nextProps) {
+        if(this.props.match.params.page === nextProps.match.params.page){
+            return;
+        }
+        this.setState({ blockActivityList: [] });
+        this.getBlockCount();
+     }
+
+    componentDidMount() {         
         if (this.props.match.params.page <= 0) {
             return;
         }
 
         this.getBlockCount();
     }
-    componentWillUnmount() {
-        this._isMounted = false;
-        clearInterval(this.intervalId);
-    }
 
     getBlockCount() {
-
         api.request('getblockcount').then((response) => {
 
-            if (response && this._isMounted) {
+            if (response) {
                 this.setState({blockheight: response});
             }
         })
@@ -63,7 +77,7 @@ class Blocks extends Component {
 
         return api.request('getblock', height, 1).then((response) => {
 
-            if (response && this._isMounted) {
+            if (response) {
 
                 this.setState(function (previousState) {
 
@@ -88,7 +102,23 @@ class Blocks extends Component {
     render() {
         return (
             <div className="view-page">
-                <h1>All blocks</h1>
+                <Form className="form-inline" onSubmit={this.navigateToBlock}>
+                <FormGroup style={{ width: '100%' }} className="no-border">
+                    <InputGroup>
+                    <Input
+                        className={"search-field"}
+                        style={{ width: '100%' }}
+                        type="text"
+                        placeholder="Enter Block Height or Hash"
+                        value={this.state.searchValue}
+                        onChange={this.searchValueChanged}
+                    />
+                    </InputGroup>
+                    <Button type="submit">Search</Button>
+                </FormGroup>
+                </Form>
+                <br/>
+                <h1>Latest blocks</h1>
 
                 <div className="table-header btn btn-twitter">
                     <Row>
@@ -105,17 +135,13 @@ class Blocks extends Component {
                 <br/>
                 <br/>
                 <Link className={((parseInt(this.props.match.params.page) > 1) ? '' : 'invisible')}
-                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}
-                      onClick={this.forceUpdate}>Previous</Link>
+                      to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}>Previous</Link>
                 <span> </span>
-                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}
-                      onClick={this.forceUpdate}>Next</Link>
+                <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}>Next</Link>
 
             </div>
         );
     }
-
 }
-
 
 export default Blocks;

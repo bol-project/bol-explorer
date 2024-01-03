@@ -45,10 +45,8 @@ class App extends Component {
 
                                     <Route exact path="/" component={Home}/>
 
-                                    <Route path="/transactions/:page" component={Transactions}/>
-                                    <Route exact path="/transactions" render={() => (
-                                        <h3>Transactions page not found!</h3>
-                                    )}/>
+                                    <Route path="/transactions" component={Transactions}/>
+                                    
                                     <Route path="/transaction/:transactionHash" component={Transaction}/>
                                     <Route exact path="/transaction" render={() => (
                                         <h3>Please select a transactionHash!</h3>
@@ -73,16 +71,6 @@ class App extends Component {
                                     <Route path="/address/:addressHash" component={Address}/>
                                     <Route exact path="/address" render={() => (
                                         <h3>Please select an addressHash!</h3>
-                                    )}/>
-
-                                    <Route path="/WPD/:page" component={WorldPopulationDays}/>
-                                    <Route exact path="/WPD" render={() => (
-                                        <h3>Current page not found!</h3>
-                                    )}/>
-
-                                    <Route path="/TCP/:page" component={TotalCommunityDays}/>
-                                    <Route exact path="/TCP" render={() => (
-                                        <h3>Current page not found!</h3>
                                     )}/>
 
                                     <Route path="/accounts" component={Accounts}/>
