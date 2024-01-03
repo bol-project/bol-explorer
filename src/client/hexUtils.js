@@ -41,7 +41,7 @@ function decimalToLeHex(value) {
 
   // Check if the first byte exceeds 7F and add an extra byte if needed
   if (parseInt(hexString.substring(0, 2), 16) > 0x7f) {
-    hexString = hexString + "00";
+    hexString = "00" + hexString ;
   }
 
   // Reverse the byte order to get little endian format
