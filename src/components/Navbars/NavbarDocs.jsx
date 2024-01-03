@@ -138,23 +138,18 @@ class NavbarDocs extends React.Component {
                         <Collapse isOpen={false} navbar toggler="#">
                             <Nav navbar>
                                 <NavItem className="active">
+                                    <NavLink href="/">
+                                        Home
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem className="active">
                                     <NavLink href="/blocks/1">
                                         Blocks
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
-                                    <NavLink href="/transactions/1">
+                                    <NavLink href="/transactions">
                                         Transactions
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem className="active">
-                                    <NavLink href="/WPD/1">
-                                        CWP
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem className="active">
-                                    <NavLink href="/TCP/1">
-                                        TCP
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="active">
