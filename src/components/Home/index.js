@@ -40,7 +40,7 @@ class Home extends Component {
     });
 
     let blocks = [];
-    for (let i = blockHeight - 1; i >= blockHeight - 5; i--) {
+    for (let i = blockHeight; i >= blockHeight - 5; i--) {
       const block = await client.getBlock(i);
       blocks.push(block);
     }
