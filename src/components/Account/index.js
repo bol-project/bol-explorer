@@ -22,7 +22,11 @@ const Transaction = ({ id, transaction }) => (
         <TableRow label="Transaction Number" value={id} />
         <TableRow
           label="TransactionHash"
-          value={transaction?.TransactionHash}
+          value={
+            <Link to={"/transaction/" + transaction?.TransactionHash}>
+              <span>{transaction?.TransactionHash}</span>
+            </Link>
+          }
         />
         <TableRow
           label="TransactionType"
@@ -113,7 +117,6 @@ class Account extends Component {
 
   render() {
     const account = this.state.account;
-    //var timestamp = new Date(account.timestamp).toLocaleString();
 
     return (
       <div className="view-page">
