@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
+import { FormGroup, Form, Input, InputGroup, Button } from "reactstrap";
 
 import './style.css';
 import BlockListElement from "../Home/BlockListElement";
@@ -16,9 +17,23 @@ class Blocks extends Component {
 
     constructor() {
         super();
+
+        this.searchValueChanged = this.searchValueChanged.bind(this);
+        this.navigateToBlock = this.navigateToBlock.bind(this);
+
         this.state = {
-            blockActivityList: []
+            blockActivityList: [],
+            searchValue: ""
         };
+    }
+
+    searchValueChanged(event) {
+        this.setState({ searchValue: event.target.value });
+    }
+
+    navigateToBlock(event) {
+        event.preventDefault();
+        this.props.history.push("/block/" + this.state.searchValue);
     }
 
     componentDidUpdate (nextProps) {
@@ -87,7 +102,23 @@ class Blocks extends Component {
     render() {
         return (
             <div className="view-page">
-                <h1>All blocks</h1>
+                <Form className="form-inline" onSubmit={this.navigateToBlock}>
+                <FormGroup style={{ width: '100%' }} className="no-border">
+                    <InputGroup>
+                    <Input
+                        className={"search-field"}
+                        style={{ width: '100%' }}
+                        type="text"
+                        placeholder="Enter Block Height or Hash"
+                        value={this.state.searchValue}
+                        onChange={this.searchValueChanged}
+                    />
+                    </InputGroup>
+                    <Button type="submit">Search</Button>
+                </FormGroup>
+                </Form>
+                <br/>
+                <h1>Latest blocks</h1>
 
                 <div className="table-header btn btn-twitter">
                     <Row>
