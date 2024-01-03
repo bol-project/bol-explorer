@@ -112,7 +112,7 @@ class Blocks extends Component {
         </div>
         <div className="table-list">
           {this.state.blocks.map((block) => (
-            <BlockListElement item={block} />
+            <BlockListElement key={block.hash} item={block} />
           ))}
         </div>
         <br />
