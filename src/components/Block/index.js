@@ -25,11 +25,25 @@ class Block extends Component {
     this.state = {};
   }
 
+  async componentDidUpdate (nextProps) {
+      if(this.props.match.params.blockHash === nextProps.match.params.blockHash){
+          return;
+      }
+      await this.fetchBlock();
+   }
+
   async componentDidMount() {
+    await this.fetchBlock();
+  }
+
+  async fetchBlock() {
     const client = this.context;
-    var block = await client.getBlock(
-      this.props.match.params.blockHash
-    );
+    let blockId = parseInt(this.props.match.params.blockHash);
+    blockId = blockId.toString() === this.props.match.params.blockHash
+        ? blockId
+        : this.props.match.params.blockHash;
+    
+    var block = await client.getBlock(blockId);
     this.setState({ block });
     var bolDay = await client.getBolDay(block.index);
     
@@ -39,7 +53,7 @@ class Block extends Component {
  render() {
     const block = this.state.block;
     const bolday = this.state.bolDay;
-    const transactionBlockActivityList = block?.tx.map(item => <TransactionBlockListElement key={item.txid} item={item}/>);
+    const transactionBlockActivityList = block?.tx?.map(item => <TransactionBlockListElement key={item.txid} item={item}/>);
 
     const TableRow = ({
       label,
