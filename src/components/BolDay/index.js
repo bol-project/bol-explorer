@@ -17,10 +17,12 @@ class BolDay extends Component {
       return;
     }
     await this.fetchBolDay();
+    await this.currentBolDay();
   }
 
   async componentDidMount() {
     await this.fetchBolDay();
+    await this.currentBolDay();
   }
 
   async fetchBolDay() {
@@ -31,8 +33,18 @@ class BolDay extends Component {
     this.setState({ bolDay });
   }
 
+  async currentBolDay() {
+    const client = this.context;
+    var height = Number(await client.getBlockHeight()) - 1;
+    var currentBolDay = await client.getBlockDay(height);
+
+    this.setState({ currentBolDay });
+  }
+
   render() {
     const bolDay = this.state.bolDay;
+    const currentBolDay = this.state.currentBolDay;
+
     return (
       <div className="view-page">
         <div className="Block">
@@ -61,7 +73,7 @@ class BolDay extends Component {
                   <td>{bolDay?.NewBol}</td>
                 </tr>
                 <tr>
-                  <td className="tdLabel">World Wallet Amount:</td>
+                  <td className="tdLabel">Total Supply:</td>
                   <td>{bolDay?.TotalSupply}</td>
                 </tr>
                 <tr>
@@ -73,16 +85,8 @@ class BolDay extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="tdLabel">Total Registered Persons:</td>
+                  <td className="tdLabel">Total Individual Accounts:</td>
                   <td>{bolDay?.TotalRegisteredPersons ?? "0"}</td>
-                </tr>
-                <tr>
-                  <td className="tdLabel">Total Registered Companies:</td>
-                  <td>{bolDay?.TotalRegisteredCompanies ?? "0"}</td>
-                </tr>
-                <tr>
-                  <td className="tdLabel">Total Registered Certifiers:</td>
-                  <td>{bolDay?.TotalCertifiers ?? "0"}</td>
                 </tr>
               </tbody>
             </table>
@@ -90,12 +94,13 @@ class BolDay extends Component {
         </div>
         <Link
           className={bolDay?.Day > 0 ? "" : "invisible"}
-          to={`/bolDay/${bolDay?.Day - 1}`}
-        >
-          Previous
+          to={`/bolDay/${bolDay?.Day - 1}`}>Previous
         </Link>
         <span> </span>
-        <Link to={`/bolDay/${bolDay?.Day + 1}`}>Next</Link>
+        <Link 
+          className={bolDay?.Day <currentBolDay ? "" : "invisible"}
+          to={`/bolDay/${bolDay?.Day + 1}`}>Next
+        </Link>
       </div>
     );
   }

@@ -68,6 +68,7 @@ class Block extends Component {
 
     return (
       <div className="view-page">
+        <div className="Block">
         <h2>Block Information</h2>
         <div>
           <table>
@@ -111,6 +112,7 @@ class Block extends Component {
 
             </tbody>
           </table>
+        </div>
         </div>
 
         <br/>
