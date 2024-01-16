@@ -1,7 +1,9 @@
 import React from "react"
 import {Link} from "react-router-dom";
-import Col from "reactstrap/lib/Col";
-import Row from "reactstrap/lib/Row";
+
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+
 
 class BlockListElement extends React.Component {
 
@@ -23,31 +25,36 @@ class BlockListElement extends React.Component {
         });
 
         return (
-
-            <div className="list-element">
-                <Row>
-                    <Col sm>
-                        <Link to={"/block/" + this.props.item.hash}>
-                            <span>{this.props.item.index}</span>
-                        </Link>
-                    </Col>
-                    <Col sm>
-                        <span>{this.props.item.size}</span>
-                    </Col>
-                    <Col sm>
-                        <span>{(this.props.item.tx && this.props.item.tx.length) ? this.props.item.tx.length : 0}</span>
-                    </Col>
-                    <Col sm>
-                        <span>{this.props.item.nextconsensus}</span>
-                    </Col>
-                    <Col sm>
-                        <span>{(!this.props.item.time) ? '' :
-                            dtFormat.format(new Date(0).setUTCSeconds(this.props.item.time))}</span>
-                    </Col>
-                </Row>
-            </div>
-
-        )
+            <Tr>
+              <Td>
+                <Link to={"/block/" + this.props.item.hash}>
+                  <span>{this.props.item.index}</span>
+                </Link>
+              </Td>
+              <Td>
+                <span>{this.props.item.size}</span>
+              </Td>
+              <Td>
+                <span>
+                  {(this.props.item.tx && this.props.item.tx.length)
+                    ? this.props.item.tx.length
+                    : 0}
+                </span>
+              </Td>
+              <Td>
+                <span>{this.props.item.nextconsensus}</span>
+              </Td>
+              <Td>
+                <span>
+                  {(!this.props.item.time)
+                    ? ""
+                    : dtFormat.format(
+                        new Date(0).setUTCSeconds(this.props.item.time)
+                      )}
+                </span>
+              </Td>
+            </Tr>
+          );
     }
 
 }

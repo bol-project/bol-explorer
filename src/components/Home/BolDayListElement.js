@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Col from "reactstrap/lib/Col";
-import Row from "reactstrap/lib/Row";
+import { Tr, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 class BolDayListElement extends React.Component {
   constructor() {
@@ -12,20 +12,18 @@ class BolDayListElement extends React.Component {
 
   render() {
     return (
-      <div className="list-element">
-        <Row>
-          <Col sm>
-            <Link to={"/bolday/" + this.props.item.index}>
-              <span>{this.props.item.index}</span>
-            </Link>
-          </Col>
-          <Col sm>
-            <Link to={"/block/" + this.props.item.block}>
-              <span>{this.props.item.block}</span>
-            </Link>
-          </Col>
-        </Row>
-      </div>
+      <Tr>
+        <Td>
+          <Link to={"/bolday/" + this.props.item.index}>
+            {this.props.item.index}
+          </Link>
+        </Td>
+        <Td>
+          <Link to={"/block/" + this.props.item.block}>
+            {this.props.item.block}
+          </Link>
+        </Td>
+      </Tr>
     );
   }
 }

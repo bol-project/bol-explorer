@@ -1,8 +1,10 @@
 import React from "react"
 import {Link} from "react-router-dom";
-import Row from "reactstrap/lib/Row";
-import Col from "reactstrap/lib/Col";
 import "../../assets/css/nucleo-icons.css";
+
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+
 
 class TransactionListElement extends React.Component {
 
@@ -25,25 +27,21 @@ class TransactionListElement extends React.Component {
         });
 
         return (
-
-            <div className="list-element">
-                <Row>
-                    <Col sm>
-                        <span>{this.props.item.type}</span>
-                    </Col>
-                    <Col sm>
-                        <Link to={"/transaction/" + this.props.item.txid}>
-                            <span>{this.props.item.txid}</span>
-                        </Link>
-                    </Col>
-                    <Col sm>
-                        <span>{dtFormat.format(this.props.item.timestamp)}</span>
-                    </Col>
-                </Row>
-               </div>
-        )
-    }
-
-}
+            <Tr>
+              <Td>
+                <span>{this.props.item.type}</span>
+              </Td>
+              <Td>
+                <Link to={"/transaction/" + this.props.item.txid}>
+                  <span>{this.props.item.txid}</span>
+                </Link>
+              </Td>
+              <Td>
+                <span>{dtFormat.format(this.props.item.timestamp)}</span>
+              </Td>
+            </Tr>
+          );
+        }
+      }
 
 export default TransactionListElement

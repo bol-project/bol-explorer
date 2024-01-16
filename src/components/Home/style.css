@@ -91,3 +91,8 @@ h1, h2, h3, body{
     background-color: #acbb24f7 !important;
 }
 
+.custom-header {
+    background-color: #3498db; /* Change the color to your desired background color */
+    color: #fff; /* Change the color of the text for better visibility */
+    /* Add any other styling as needed */
+  }

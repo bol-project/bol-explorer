@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import BolContext from "../../bolContext";
-
 import "./style.css";
 import BolDayListElement from "../Home/BolDayListElement";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
 
 class BolDays extends Component {
-
   render() {
     let page = Number(this.props?.match?.params?.page ?? 1);
 
@@ -19,10 +19,7 @@ class BolDays extends Component {
         <BolDaysTable page={page} />
         <br />
         <br />
-        <Link
-          className={page > 1 ? "" : "invisible"}
-          to={`/boldays/${page - 1}`}
-        >
+        <Link className={page > 1 ? "" : "invisible"} to={`/boldays/${page - 1}`}>
           Previous
         </Link>
         <span> </span>
@@ -78,23 +75,24 @@ class BolDaysTable extends Component {
 
   render() {
     return (
-      <>
-        <div className="table-header btn btn-twitter">
-          <Row>
-            <Col sm>
-              <span>Bol day</span>
-            </Col>
-            <Col sm>
-              <span>Block Height</span>
-            </Col>
-          </Row>
-        </div>
+      
+
         <div className="table-list">
-          {this.state.bolDays.map((day) => (
-            <BolDayListElement key={day.index} item={day} />
-          ))}
+          <Table>
+            <Thead>
+              <Tr>
+                <Th className="custom-header">Bol day</Th>
+                <Th className="custom-header">Block Height</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {this.state.bolDays.map((day) => (
+                <BolDayListElement key={day.index} item={day} />
+              ))}
+            </Tbody>
+          </Table>
         </div>
-      </>
+      
     );
   }
 }

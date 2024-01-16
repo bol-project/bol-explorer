@@ -1,5 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Button, Row, Col } from "reactstrap";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+} from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import BolContext from "../../bolContext";
 
 import "./style.css";
@@ -7,9 +17,6 @@ import BlockListElement from "./BlockListElement";
 import TransactionListElement from "./TransactionListElement";
 import TotalActivity from "./TotalActivity";
 import MarketActivity from "./MarketActivity";
-import Row from "reactstrap/lib/Row";
-import Col from "reactstrap/lib/Col";
-import Button from "reactstrap/lib/Button";
 import PageHeader from "../PageHeader/PageHeader";
 import { BolDaysTable } from "../BolDays";
 
@@ -83,24 +90,20 @@ class Home extends Component {
           <br />
 
           <p className="semi-title">Last 5 Transactions</p>
-          <div className="table-header btn btn-twitter ">
-            <Row>
-              <Col sm>
-                <span>Transaction Type</span>
-              </Col>
-              <Col sm>
-                <span>Transaction ID</span>
-              </Col>
-              <Col sm>
-                <span>Timestamp</span>
-              </Col>
-            </Row>
-          </div>
-          <div className="table-list">
+          <Table>
+          <Thead>
+            <Tr>
+              <Th className="custom-header">Transaction Type</Th>
+              <Th className="custom-header">Transaction ID</Th>
+              <Th className="custom-header">Timestamp</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {this.state.transactions.map((tx) => (
               <TransactionListElement key={tx.txid} item={tx} />
             ))}
-          </div>
+          </Tbody>
+        </Table>
           <Link to="/transactions/1">
             <Button color="twitter">See all transactions</Button>
           </Link>
@@ -108,30 +111,22 @@ class Home extends Component {
           <br />
 
           <p className="semi-title">Last 5 Blocks</p>
-          <div className="table-header btn btn-twitter">
-            <Row>
-              <Col sm>
-                <span>Height</span>
-              </Col>
-              <Col sm>
-                <span>Size</span>
-              </Col>
-              <Col sm>
-                <span>Transactions</span>
-              </Col>
-              <Col sm>
-                <span>Producer</span>
-              </Col>
-              <Col sm>
-                <span>Timestamp</span>
-              </Col>
-            </Row>
-          </div>
-          <div className="table-list">
-            {this.state.blocks.map((block) => (
-              <BlockListElement key={block.hash} item={block} />
-            ))}
-          </div>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th className="custom-header">Height</Th>
+                <Th className="custom-header">Size</Th>
+                <Th className="custom-header">Transactions</Th>
+                <Th className="custom-header">Producer</Th>
+                <Th className="custom-header">Timestamp</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {this.state.blocks.map((block) => (
+                <BlockListElement key={block.hash} item={block} />
+              ))}
+            </Tbody>
+          </Table>
           <Link to="/blocks/1">
             <Button color="twitter">See all blocks</Button>
           </Link>

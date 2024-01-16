@@ -8,6 +8,9 @@ import BlockListElement from "../Home/BlockListElement";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+
 var pageSize = 10;
 
 class Blocks extends Component {
@@ -91,30 +94,25 @@ class Blocks extends Component {
         <br />
         <h1>Latest blocks</h1>
 
-        <div className="table-header btn btn-twitter">
-          <Row>
-            <Col sm>
-              <span>Height</span>
-            </Col>
-            <Col sm>
-              <span>Size</span>
-            </Col>
-            <Col sm>
-              <span>Transactions</span>
-            </Col>
-            <Col sm>
-              <span>Producer</span>
-            </Col>
-            <Col sm>
-              <span>Timestamp</span>
-            </Col>
-          </Row>
-        </div>
         <div className="table-list">
-          {this.state.blocks.map((block) => (
+          <Table>
+            <Thead>
+              <Tr>
+                <Th className="custom-header">Height</Th>
+                <Th className="custom-header">Size</Th>
+                <Th className="custom-header">Transactions</Th>
+                <Th className="custom-header">Producer</Th>
+                <Th className="custom-header">Timestamp</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+            {this.state.blocks.map((block) => (
             <BlockListElement key={block.hash} item={block} />
           ))}
+            </Tbody>
+          </Table>
         </div>
+
         <br />
         <br />
         <Link
