@@ -13,12 +13,12 @@ class BolDayListElement extends React.Component {
   render() {
     return (
       <Tr>
-        <Td>
+        <Td className="long-word-cell">
           <Link to={"/bolday/" + this.props.item.index}>
             {this.props.item.index}
           </Link>
         </Td>
-        <Td>
+        <Td className="long-word-cell">
           <Link to={"/block/" + this.props.item.block}>
             {this.props.item.block}
           </Link>

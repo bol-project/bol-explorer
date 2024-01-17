@@ -26,7 +26,7 @@ class BlockListElement extends React.Component {
 
         return (
             <Tr>
-              <Td>
+              <Td className="long-word-cell">
                 <Link to={"/block/" + this.props.item.hash}>
                   <span>{this.props.item.index}</span>
                 </Link>
@@ -34,17 +34,17 @@ class BlockListElement extends React.Component {
               <Td>
                 <span>{this.props.item.size}</span>
               </Td>
-              <Td>
+              <Td className="long-word-cell">
                 <span>
                   {(this.props.item.tx && this.props.item.tx.length)
                     ? this.props.item.tx.length
                     : 0}
                 </span>
               </Td>
-              <Td>
+              <Td className="long-word-cell">
                 <span>{this.props.item.nextconsensus}</span>
               </Td>
-              <Td>
+              <Td className="long-word-cell">
                 <span>
                   {(!this.props.item.time)
                     ? ""

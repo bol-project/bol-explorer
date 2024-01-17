@@ -121,11 +121,11 @@ class Blocks extends Component {
           }
           to={`/blocks/${parseInt(this.props.match.params.page) - 1}`}
         >
-          Previous
+          <Button color="twitter">Previous</Button>
         </Link>
         <span> </span>
         <Link to={`/blocks/${parseInt(this.props.match.params.page) + 1}`}>
-          Next
+        <Button color="twitter">Next</Button>
         </Link>
       </div>
     );

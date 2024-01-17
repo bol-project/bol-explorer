@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Button from "reactstrap/lib/Button";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+
 class TotalActivity extends React.Component {
   constructor() {
     super();
@@ -12,26 +15,34 @@ class TotalActivity extends React.Component {
   render() {
     return (
       <div>
-        <table align="center">
-          <tbody>
-            <tr>
-              <th>
-                <h3>Total Bol Days</h3>
-                <h2>{this.props.item?.totalDays}</h2>
-                <Link to="/boldays/1">
+        <Table>
+        <Thead>
+          <Tr>
+            <Th className="custom-header">
+            <h3>Total Bol Days</h3>
+            </Th>
+            <Th className="custom-header">
+            <h3>Total Blocks</h3>
+            </Th>
+          </Tr>
+        </Thead>
+          <Tbody>
+            <Tr>
+              <Td>
+              <h2>{this.props.item?.totalDays}</h2>
+              <Link to="/boldays/1">
                   <Button color="twitter">See all days</Button>
-                </Link>
-              </th>
-              <th>
-                <h3>Total Blocks</h3>
+                </Link> 
+              </Td>
+              <Td>
                 <h2>{this.props.item?.totalBlocks}</h2>
                 <Link to="/blocks/1">
                   <Button color="twitter">See all blocks</Button>
                 </Link>
-              </th>
-            </tr>
-          </tbody>
-        </table>
+              </Td>
+            </Tr>           
+          </Tbody>
+        </Table>
       </div>
     );
   }

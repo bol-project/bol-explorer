@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import BolContext from "../../bolContext";
+import { FormGroup, Form, Input, InputGroup, Button } from "reactstrap";
 
 import "./style.css";
 
@@ -94,12 +95,12 @@ class BolDay extends Component {
         </div>
         <Link
           className={bolDay?.Day > 0 ? "" : "invisible"}
-          to={`/bolDay/${bolDay?.Day - 1}`}>Previous
+          to={`/bolDay/${bolDay?.Day - 1}`}><Button color="twitter">Previous</Button>
         </Link>
         <span> </span>
         <Link 
           className={bolDay?.Day <currentBolDay ? "" : "invisible"}
-          to={`/bolDay/${bolDay?.Day + 1}`}>Next
+          to={`/bolDay/${bolDay?.Day + 1}`}><Button color="twitter">Next</Button>
         </Link>
       </div>
     );

@@ -28,15 +28,15 @@ class TransactionListElement extends React.Component {
 
         return (
             <Tr>
-              <Td>
+              <Td className="long-word-cell">
                 <span>{this.props.item.type}</span>
               </Td>
-              <Td>
+              <Td className="long-word-cell">
                 <Link to={"/transaction/" + this.props.item.txid}>
                   <span>{this.props.item.txid}</span>
                 </Link>
-              </Td>
-              <Td>
+              </Td >
+              <Td className="long-word-cell">
                 <span>{dtFormat.format(this.props.item.timestamp)}</span>
               </Td>
             </Tr>

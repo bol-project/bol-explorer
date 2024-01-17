@@ -6,6 +6,9 @@ import TransactionBlockListElement from "../Home/TransactionBlockListElement";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+
 import "./style.css";
 
 const dtFormat = Intl.DateTimeFormat("en-GB", {
@@ -102,8 +105,14 @@ class Block extends Component {
                 ["Merkle Root:", block?.merkleroot], 
                 ["Block Producer:", block?.nextconsensus], 
                 ["Version:", block?.version],   
-                ["Invocation Script:", block?.script.invocation],    
-                ["Verification Script:", block?.script.verification],    
+                [
+                  "Invocation Script:", 
+                  <span className="long-word-cell">{block?.script.invocation}</span>,  
+                ],
+                [
+                  "Verification Script:",
+                  <span className="long-word-cell">{block?.script.verification}</span>,
+                ],   
                 ["Number of Transactions:", block?.tx.length],                   
                   
               ].map(([label, value], index) => (
@@ -120,13 +129,17 @@ class Block extends Component {
         <br/>
         <br/>
         <h3>Block transactions</h3>
-        <div className="table-header btn btn-twitter ">
-            <Row>
-                <Col sm> <span>Transaction Type</span></Col>
-                <Col sm><span>Transaction ID</span></Col>
-            </Row>
-        </div>
-        {transactionBlockActivityList}
+        <Table>
+            <Thead>
+              <Tr>
+                <Th className="custom-header">Transaction Type</Th>
+                <Th className="custom-header">Transaction ID</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+            {transactionBlockActivityList}
+            </Tbody>
+          </Table>
 
       </div>
     );

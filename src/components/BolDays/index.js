@@ -4,6 +4,7 @@ import BolContext from "../../bolContext";
 import "./style.css";
 import BolDayListElement from "../Home/BolDayListElement";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import { FormGroup, Form, Input, InputGroup, Button } from "reactstrap";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Row from "reactstrap/lib/Row";
 import Col from "reactstrap/lib/Col";
@@ -20,10 +21,10 @@ class BolDays extends Component {
         <br />
         <br />
         <Link className={page > 1 ? "" : "invisible"} to={`/boldays/${page - 1}`}>
-          Previous
+        <Button color="twitter">Previous</Button>
         </Link>
         <span> </span>
-        <Link to={`/boldays/${page + 1}`}>Next</Link>
+        <Link to={`/boldays/${page + 1}`}><Button color="twitter">Next</Button></Link>
       </div>
     );
   }
