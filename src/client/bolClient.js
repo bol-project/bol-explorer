@@ -41,6 +41,7 @@ const remarksTable = {
   registerCertifier: ["CodeName", "CertificationFee"],
   unregisterCertifier: ["CodeName"],
   addMultiCitizenship: ["ShortHash", "CodeName"],
+  setCertifierFee: ["CertifierCodeName", "CertifierFee"]
 };
 
 class BolClient {
@@ -264,6 +265,10 @@ class BolClient {
       bolData.TransactionFee = (await this.getTransferFee()).toString();
     } else if (bolData.BolTransactionType === "transferClaim") {
       bolData.TransactionFee = (await this.getOperationsFee()).toString();
+    } else if (bolData.BolTransactionType === "unregisterCertifier") {
+      bolData.TransactionFee = (await this.getTransferFee()).toString();
+    } else if (bolData.BolTransactionType === "setCertifierFee") {
+      bolData.TransactionFee = (await this.getTransferFee()).toString();
     }
     bolData.TransactionFee = toFixedPointDecimal(
       bolData.TransactionFee.toString()
