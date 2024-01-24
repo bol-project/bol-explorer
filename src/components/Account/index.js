@@ -78,6 +78,8 @@ const translateTransactionType = (type) => {
       return "UnRegister as Certifier";
     case 13:
       return "Add Multi Citizenship";
+    case 14:
+      return "Set Certification Fee";
   }
 };
 
