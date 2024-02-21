@@ -13,6 +13,7 @@ const TransferFee = 0xc0;
 const OperationsFee = 0xc1;
 const ClaimInterval = 0xb3;
 
+const CirculatingSupply = 0x06;
 const TotalRegisteredPersons = 0x08;
 const TotalRegisteredCompanies = 0x09;
 const TotalCertifiers = 0x04;
@@ -125,7 +126,7 @@ class BolClient {
   }
 
   async getCirculatingSupply() {
-    const response = await this.rpc.request("getstorage", this.bolHash, "");
+    const response = await this.rpc.request("getstorage", this.bolHash, key(CirculatingSupply));
     return toFixedPointDecimal(leHexToDecimal(response));
   }
 
