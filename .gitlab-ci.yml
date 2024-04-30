@@ -10,7 +10,6 @@ build:
   stage: build
   image: docker:latest
   only:
-    - develop
     - master
   script:
     - docker info
@@ -21,6 +20,24 @@ build:
     - IMAGE_TAG=$IMAGE_TAG.$CI_COMMIT_SHA
     - echo IMAGE_TAG=$IMAGE_TAG
     - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+  tags:
+    - build-internal
+
+build_testnet:
+  stage: build
+  image: docker:latest
+  only:
+    - develop
+  script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo CI_COMMIT_SHA=$CI_COMMIT_SHA
+    - echo CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA
+    - echo CI_BUILD_REF=$CI_BUILD_REF
+    - IMAGE_TAG=$IMAGE_TAG.$CI_COMMIT_SHA
+    - echo IMAGE_TAG=$IMAGE_TAG
+    - docker build -f Dockerfile.Testnet -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
   tags:
     - build-internal
@@ -46,7 +63,34 @@ deploy:
     - IMAGE_TAG=$IMAGE_TAG.$CI_COMMIT_SHA
     - echo IMAGE_TAG=$IMAGE_TAG
     - kubectl version
-    - kubectl cluster-info
+    - cd manifests/    
+    - sed -i -e "s~__CI_BUILD_REF_SLUG__~${CI_ENVIRONMENT_SLUG}~" -e "s~__CI_ENV_SLUG__~${ENV_SLUG}~" deployment.yaml service.yaml ingress.yaml
+    - sed -i "s~__VERSION__~${CI_COMMIT_REF_NAME}~" deployment.yaml ingress.yaml service.yaml
+    - sed -i "s~__CI_IMAGE_TAG__~${IMAGE_TAG}~" deployment.yaml
+    - kubectl apply -f deployment.yaml
+    - kubectl apply -f service.yaml
+    - kubectl apply -f ingress.yaml
+    - kubectl rollout status -f deployment.yaml
+    - kubectl get all,ing -l app=${CI_ENVIRONMENT_SLUG}
+
+deploy_testnet:
+  image: lachlanevenson/k8s-kubectl:latest
+  environment:
+    name: testnet
+    url: https://explorer.testnet.bolchain.net
+  tags:
+    - deploy-testnet
+  variables:
+    ENV_SLUG: testnet
+  only:
+    - master
+    - develop
+  stage: deploy
+  when: manual
+  script:
+    - IMAGE_TAG=$IMAGE_TAG.$CI_COMMIT_SHA
+    - echo IMAGE_TAG=$IMAGE_TAG
+    - kubectl version
     - cd manifests/    
     - sed -i -e "s~__CI_BUILD_REF_SLUG__~${CI_ENVIRONMENT_SLUG}~" -e "s~__CI_ENV_SLUG__~${ENV_SLUG}~" deployment.yaml service.yaml ingress.yaml
     - sed -i "s~__VERSION__~${CI_COMMIT_REF_NAME}~" deployment.yaml ingress.yaml service.yaml
