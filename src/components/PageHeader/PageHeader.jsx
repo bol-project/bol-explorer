@@ -16,9 +16,9 @@ class PageHeader extends React.Component {
         {/*<div className="squares square7" />*/}
         <Container>
           <div className="content-center brand">
-            <h1 className="h1-seo">BOL Chain</h1>
+            <h1 className="h1-seo">Bol Explorer</h1>
             <h3 className="d-none d-sm-block">
-                Your home for all BOL related blockchain information
+              Central hub for all Bol blockchain related information and statistics
             </h3>
           </div>
         </Container>
