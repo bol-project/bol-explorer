@@ -173,7 +173,8 @@ class BolClient {
       this.bolHash,
       storageByBlockKey
     );
-    return response.split("404b4c").filter((part) => part !== "").length;
+    const matches = response.match(/0026|0027|0028/g);
+    return matches ? matches.length : 0;
   }
 
   async getNewBol(blockHeight) {
