@@ -167,14 +167,13 @@ class BolClient {
   }
 
   async getTotalCertifiers() {
-    const storageByBlockKey = key(TotalCertifiers) + dkey(5000257);
+    const storageByBlockKey = key(TotalCertifiers);
     const response = await this.rpc.request(
       "getstorage",
       this.bolHash,
       storageByBlockKey
-    );
-    const matches = response.match(/0026|0027|0028/g);
-    return matches ? matches.length : 0;
+    );    
+    return leHexToDecimal(response);
   }
 
   async getNewBol(blockHeight) {
