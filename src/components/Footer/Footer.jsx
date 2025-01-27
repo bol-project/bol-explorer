@@ -33,18 +33,18 @@ class Footer extends React.Component {
             <Col md="3">
               <Nav>
                 <NavItem>
-                  <NavLink href="/">
+                  <NavLink href="https://www.1bol.org/contact-us/">
                     Contact Us
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/">
-                    About Us
+                  <NavLink href="https://www.1bol.org/about/">
+                    About Bol
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/">
-                    Blog
+                  <NavLink href="https://discord.gg/4WUrDFwHut">
+                    Discord
                   </NavLink>
                 </NavItem>
                 <NavItem>

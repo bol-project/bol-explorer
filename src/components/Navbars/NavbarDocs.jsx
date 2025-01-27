@@ -32,7 +32,7 @@ class NavbarDocs extends React.Component {
         color-on-scroll="100"
         expand="lg"
       >
-        <NavbarBrand href="/">
+        <NavbarBrand href="https://www.1bol.org/">
           <img
             alt="..."
             width={50}
